@@ -17,16 +17,5 @@ return [
             'identityClass' => 'mdm\admin\models\User',
             'loginUrl' => ['admin/user/login'],
         ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.gmail.com',
-                'username' => 'fitapp.noreply@gmail.com',
-                'password' => 'fitapp69',
-                'port' => '587', //'465',
-                'encryption' => 'tls', //'ssl',
-            ],
-        ],
     ],
 ];
