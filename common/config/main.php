@@ -4,6 +4,8 @@ return [
     'modules' => [
         'admin' => [
             'class' => 'mdm\admin\Module',
+            'layout' => 'right-menu', //'left-menu', //'top-menu', //'@app/views/layouts/user_login',
+            'mainLayout' => '@app/views/layouts/main.php',
         ],
     ],
     'components' => [
