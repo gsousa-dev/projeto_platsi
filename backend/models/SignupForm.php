@@ -3,17 +3,23 @@ namespace backend\models;
 
 use yii\base\Model;
 use common\models\User;
+use yii\web\UploadedFile;
+
 /**
  * Signup form
  */
 class SignupForm extends Model
 {
+
     public $username;
     public $email;
     public $password;
     public $name;
     public $birthday;
     public $gender;
+    /**
+     * @var UploadedFile
+     */
     public $profile_picture;
 
 
@@ -38,6 +44,12 @@ class SignupForm extends Model
             ['password', 'string', 'min' => 6],
 
             ['name', 'string', 'max' => 255],
+
+            ['birthday', 'string'],
+
+            ['gender', 'string', 'max' => 255],
+
+            [['profile_picture'], 'file', 'extensions' => ['png', 'jpg'], 'maxSize' => 1024*1024],
         ];
     }
 
@@ -58,7 +70,13 @@ class SignupForm extends Model
         $user->name = $this->name;
         $user->birthday = $this->birthday;
         $user->gender = $this->gender;
-        $user->profile_picture = $this->profile_picture;
+        if ($this->profile_picture = UploadedFile::getInstance($this, 'profile_picture'))
+        {
+            $this->profile_picture->saveAs('uploads/' . $this->username . '_' . 'avatar' . '.' . $this->profile_picture->extension); //save the file
+            $user->profile_picture = 'uploads/'.$this->username.'_'.'avatar'.'.'.$this->profile_picture->extension; //save the path in DB
+        } else {
+            $user->profile_picture = 'assets/pages/img/avatars/default-avatar.png'; //default user_avatar
+        }
         $user->setPassword($this->password);
         $user->generateAuthKey();
 

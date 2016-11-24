@@ -3,11 +3,11 @@
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \backend\models\SignupForm */
-/* @var $dateFormatter \backend\models\DateFormatter */
 
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
-use yii\jui\DatePicker;
+//use yii\bootstrap\ActiveForm;
+use yii\widgets\ActiveForm;
+use dosamigos\datepicker\DatePicker;
 
 $this->title = 'Signup';
 $this->params['breadcrumbs'][] = $this->title;
@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="row">
         <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
+            <?php $form = ActiveForm::begin(['id' => 'form-signup', 'options' => ['enctype' => 'multipart/form-data']]); ?>
 
             <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
 
@@ -31,17 +31,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?= $form->field($model, 'name') ?>
 
-            <?= $form->field($model, 'birthday')->widget(\yii\jui\DatePicker::className(), [
-                'class' => 'SignupForm',
+            <?= $form->field($model, 'birthday')->widget(DatePicker::className(), [
+                'inline' => false,
                 'clientOptions' => [
-                    'dateFormat' => 'php:Y-m-d',
-                    'changeYear' => true,
-                    'changeMonth' => true,
-                    'yearRange' => '1850:2017',
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd',
                 ],
             ]) ?>
 
-            <?= $form->field($model, 'gender')->dropDownList(['Female','Male']) ?>
+            <?= $form->field($model, 'gender')->dropDownList(['F' => 'Female', 'M' => 'Male'], ['prompt'=>'Select your Gender']) ?>
 
             <?= $form->field($model, 'profile_picture')->fileInput() ?>
 
