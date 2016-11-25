@@ -1,21 +1,20 @@
 <?php
 
-/* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \backend\models\SignupForm */
-
 use yii\helpers\Html;
-//use yii\bootstrap\ActiveForm;
 use yii\widgets\ActiveForm;
 use dosamigos\datepicker\DatePicker;
 
-$this->title = 'Signup';
+/* @var $this yii\web\View */
+/* @var $form yii\bootstrap\ActiveForm */
+/* @var $model backend\models\CreateUserForm */
+
+$this->title = 'Create user';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-signup">
+<div class="site-create-user">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to signup:</p>
+    <p>Please fill out the following fields to register a user:</p>
 
     <div class="row">
         <div class="col-lg-5">

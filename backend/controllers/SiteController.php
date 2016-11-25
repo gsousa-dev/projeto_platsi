@@ -10,7 +10,7 @@ use yii\filters\AccessControl;
 use common\models\LoginForm;
 use backend\models\PasswordResetRequestForm;
 use backend\models\ResetPasswordForm;
-use backend\models\SignupForm;
+use backend\models\CreateUserForm;
 
 /**
  * Site controller
@@ -25,6 +25,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
+                'only' => ['logout', 'signup'],
                 'rules' => [
                     [
                         'actions' => ['login', 'error'],
@@ -61,6 +62,10 @@ class SiteController extends Controller
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
+            ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
     }
@@ -109,27 +114,6 @@ class SiteController extends Controller
     }
 
     /**
-     * Signs user up.
-     *
-     * @return mixed
-     */
-    public function actionSignup()
-    {
-        $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
-                }
-            }
-        }
-
-        return $this->render('signup', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
      * Requests password reset.
      *
      * @return mixed
@@ -174,6 +158,25 @@ class SiteController extends Controller
         }
 
         return $this->render('resetPassword', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Creates new user.
+     *
+     * @return mixed
+     */
+    public function actionCreateUser()
+    {
+        $model = new CreateUserForm();
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->createUser()) {
+                return $this->goHome();
+            }
+        }
+
+        return $this->render('createUser', [
             'model' => $model,
         ]);
     }

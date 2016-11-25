@@ -1,16 +1,18 @@
 <?php
+
 namespace backend\models;
 
+use Yii;
+use yii\db\ActiveRecord;
 use yii\base\Model;
 use common\models\User;
 use yii\web\UploadedFile;
 
 /**
- * Signup form
+ * Create a user Form
  */
-class SignupForm extends Model
+class CreateUserForm extends Model
 {
-
     public $username;
     public $email;
     public $password;
@@ -22,6 +24,13 @@ class SignupForm extends Model
      */
     public $profile_picture;
 
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'user';
+    }
 
     /**
      * @inheritdoc
@@ -54,16 +63,65 @@ class SignupForm extends Model
     }
 
     /**
-     * Signs user up.
-     *
-     * @return User|null the saved model or null if saving fails
+     * @inheritdoc
      */
-    public function signup()
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'username' => 'Username',
+            'auth_key' => 'Auth Key',
+            'password_hash' => 'Password Hash',
+            'password_reset_token' => 'Password Reset Token',
+            'email' => 'Email',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'name' => 'Name',
+            'birthday' => 'Birthday',
+            'gender' => 'Gender',
+            'profile_picture' => 'Profile Picture',
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAdmins()
+    {
+        return $this->hasOne(Admins::className(), ['idAdmin' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClientes()
+    {
+        return $this->hasOne(Clientes::className(), ['idCliente' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPersonalTrainers()
+    {
+        return $this->hasOne(PersonalTrainers::className(), ['idPersonal_trainer' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSecretarias()
+    {
+        return $this->hasOne(Secretarias::className(), ['idSecretaria' => 'id']);
+    }
+
+    public function createUser()
     {
         if (!$this->validate()) {
             return null;
         }
-        
+
         $user = new User();
         $user->username = $this->username;
         $user->email = $this->email;
