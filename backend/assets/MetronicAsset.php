@@ -12,7 +12,8 @@ class MetronicAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all',
+        'https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all',
+        'https://fonts.googleapis.com/css?family=Oswald:400,300,700',
         'assets/global/plugins/font-awesome/css/font-awesome.min.css',
         'assets/global/plugins/simple-line-icons/simple-line-icons.min.css',
         'assets/global/plugins/bootstrap/css/bootstrap.min.css',
@@ -23,7 +24,6 @@ class MetronicAsset extends AssetBundle
         'assets/global/css/components.min.css',
         'assets/global/css/plugins.min.css',
         'assets/pages/css/login.min.css',
-        'fonts.googleapis.com/css?family=Oswald:400,300,700',
         'assets/layouts/layout5/css/layout.min.css',
         'assets/layouts/layout5/css/custom.min.css',
     ];
