@@ -71,14 +71,19 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays homepage.
+     * Displays Login page if user is a Guest.
+     * Displays Index (User dashboard) if user is authenticated.
      *
      * @return string
      */
 
     public function actionIndex()
     {
-        return $this->render('index');
+        if (Yii::$app->user->isGuest) {
+            return $this->actionLogin();
+        } else {
+            return $this->render('index');
+        }
     }
 
     /**
