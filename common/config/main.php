@@ -2,10 +2,10 @@
 return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'modules' => [
-        'admin' => [
-            'class' => 'mdm\admin\Module',
-            'layout' => 'right-menu', //'left-menu', //'top-menu',
-            'mainLayout' => '@app/views/layouts/main.php',
+            'admin' => [
+                'class' => 'mdm\admin\Module',
+                'layout' => 'right-menu', //'left-menu', //'top-menu',
+                'mainLayout' => '@app/views/layouts/main.php',
         ],
     ],
     'components' => [
