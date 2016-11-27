@@ -36,9 +36,9 @@ class SiteController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-                    /* Rules do signup  */
+                    /* Rules da action CreateUser  */
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['create-user'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -75,6 +75,7 @@ class SiteController extends Controller
      *
      * @return string
      */
+
     public function actionIndex()
     {
         return $this->render('index');
@@ -85,8 +86,10 @@ class SiteController extends Controller
      *
      * @return string
      */
+    /*
     public function actionLogin()
     {
+        $this->layout = 'login';
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -97,6 +100,36 @@ class SiteController extends Controller
         } else {
             return $this->render('login', [
                 'model' => $model,
+            ]);
+        }
+    }
+    */
+
+    public function actionLogin()
+    {
+        $this->layout = 'login';
+
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $loginModel = new LoginForm();
+        $passwordResetRequestModel = new PasswordResetRequestForm();
+
+        if ($loginModel->load(Yii::$app->request->post()) && $loginModel->login()) {
+            return $this->goHome();
+
+        } else if($passwordResetRequestModel->load(Yii::$app->request->post()) && $passwordResetRequestModel->validate()) {
+            if ($passwordResetRequestModel->sendEmail()) {
+                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+                return $this->goHome();
+            } else {
+                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+            }
+        } else {
+            return $this->render('login', [
+                'loginModel' => $loginModel,
+                'passwordResetRequestModel' => $passwordResetRequestModel,
             ]);
         }
     }
@@ -124,7 +157,6 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-
                 return $this->goHome();
             } else {
                 Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
@@ -145,6 +177,8 @@ class SiteController extends Controller
      */
     public function actionResetPassword($token)
     {
+        $this->layout = 'login';
+
         try {
             $model = new ResetPasswordForm($token);
         } catch (InvalidParamException $e) {
@@ -172,6 +206,7 @@ class SiteController extends Controller
         $model = new CreateUserForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->createUser()) {
+                Yii::$app->session->setFlash('success', 'The user was successfully created.');
                 return $this->goHome();
             }
         }

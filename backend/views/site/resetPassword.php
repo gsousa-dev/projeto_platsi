@@ -1,31 +1,25 @@
 <?php
 
-/* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \backend\models\ResetPasswordForm */
-
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use kartik\password\PasswordInput;
+
+/* @var $model \backend\models\ResetPasswordForm */
 
 $this->title = 'Reset password';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-reset-password">
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>Please choose your new password:</p>
-
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'reset-password-form']); ?>
-
-            <?= $form->field($model, 'password')->passwordInput(['autofocus' => true]) ?>
-
-            <div class="form-group">
-                <?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
-            </div>
-
-            <?php ActiveForm::end(); ?>
+<div class="content">
+    <?php $form = ActiveForm::begin(['id' => 'reset-password-form', 'options' => ['class' => 'login-form']]); ?>
+        <h3 class="form-title font-green"><?= Html::encode($this->title) ?></h3>
+        <p>Please choose your new password:</p>
+        <?= $form->field($model, 'password', [
+                'template' => '<input type="password" id="resetpasswordform-password" class="form-control form-control-solid placeholder-no-fix" name="ResetPasswordForm[password]" placeholder="Password">',
+            ]);
+        ?>
+        <div class="form-actions">
+            <?= Html::submitButton('Save', ['class' => 'btn green uppercase']) ?>
         </div>
-    </div>
+    <?php ActiveForm::end(); ?>
 </div>
+
