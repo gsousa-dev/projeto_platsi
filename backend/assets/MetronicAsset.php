@@ -26,6 +26,7 @@ class MetronicAsset extends AssetBundle
         'assets/pages/css/login.min.css',
         'assets/layouts/layout5/css/layout.min.css',
         'assets/layouts/layout5/css/custom.min.css',
+        'assets/pages/css/error.min.css',
     ];
     public $js = [
         'assets/global/plugins/jquery.min.js',
