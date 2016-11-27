@@ -25,7 +25,7 @@ MetronicAsset::register($this);
             <?= Html::a('<img src="../assets/pages/img/logo-big.png" />'); ?>
         </div>
         <?= $content ?>
-        <div class="copyright">2014 © Metronic. Admin Dashboard Template.</div>
+        <div class="copyright"><?= date('Y') ?> © FitApp.</div>
     <?php $this->endBody() ?>
     </body>
     </html>
