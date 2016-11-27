@@ -3,6 +3,8 @@
 use backend\assets\MetronicAsset;
 use yii\helpers\Html;
 
+/* @var $content string */
+
 MetronicAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
