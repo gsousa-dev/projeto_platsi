@@ -23,6 +23,8 @@ return [
         ],
         'user' => [
             'identityClass' => 'common\models\User',
+            'enableSession' => false,
+            'loginUrl' => null,
             'enableAutoLogin' => false,
         ],
         'log' => [
@@ -36,18 +38,9 @@ return [
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
-            'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => [
-                        'v1/user',
-                    ],
-                    'tokens' => [
-                        '{id}' => '<id:\\w+>'
-                    ]
-                ]
+                ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/user'], 'pluralize' => false],
             ],
         ]
     ],

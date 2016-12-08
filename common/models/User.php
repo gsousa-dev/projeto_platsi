@@ -12,17 +12,14 @@ use yii\web\IdentityInterface;
  *
  * @property integer $id
  * @property string $username
+ * @property string $auth_key
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $email
- * @property string $auth_key
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
- *
- * Variáveis adicionadas posteriormente
- *
  * @property string $name
  * @property string $birthday
  * @property string $gender
@@ -193,5 +190,12 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    /**
+     * @return string
+     */
+    public function generateSessionToken() {
+        return sha1($this->password_hash . $this->email . time() . $this->name);
     }
 }
