@@ -64,7 +64,7 @@ final class UserController extends ActiveController
 
         return (object) [
             'token' => $session->accessToken,
-            'account' => (object) [
+            'user' => (object) [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email
