@@ -1,9 +1,11 @@
 <?php
 
-namespace common\models;
+namespace api\modules\v1\models;
 
 use yii\db\ActiveRecord;
-
+//-
+use common\models\User;
+//-
 /**
  * This is the model class for table "session".
  *

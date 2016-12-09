@@ -10,7 +10,7 @@ use yii\web\ServerErrorHttpException;
 use yii\web\UnauthorizedHttpException;
 //-
 use common\models\User;
-use common\models\Session;
+use api\modules\v1\models\Session;
 //-
 use api\filters\RequestAuthorization;
 

@@ -7,7 +7,8 @@ use yii\base\ActionFilter;
 use yii\filters\auth\AuthInterface;
 use yii\web\UnauthorizedHttpException;
 //-
-use common\models\Session;
+use api\modules\v1\models\Session;
+//-
 
 final class RequestAuthorization extends ActionFilter implements AuthInterface {
 
@@ -30,7 +31,7 @@ final class RequestAuthorization extends ActionFilter implements AuthInterface {
         $headers = $request->getHeaders();
 
         if (empty($headers['ACCESS-TOKEN']) ||
-            !($session = Session::findOne(['accessToken' => $headers['ACCESS-TOKEN']]))) {
+            !($session = Session::findOne(['access_token' => $headers['ACCESS-TOKEN']]))) {
 
             throw new UnauthorizedHttpException('Wrong credentials.');
         }
