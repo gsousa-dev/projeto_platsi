@@ -1,2 +1,2 @@
-original-layouts
-original-site
+original-layouts/*
+original-site/*
