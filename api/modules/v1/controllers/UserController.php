@@ -55,7 +55,7 @@ final class UserController extends ActiveController
         }
 
         $session = new Session();
-        $session->accessToken = $user->generateSessionToken();
+        $session->access_token = $user->generateSessionToken();
         $session->userId = $user->id;
 
         if (!$session->save()) {
@@ -63,7 +63,7 @@ final class UserController extends ActiveController
         }
 
         return (object) [
-            'token' => $session->accessToken,
+            'token' => $session->access_token,
             'user' => (object) [
                 'id' => $user->id,
                 'name' => $user->name,

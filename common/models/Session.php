@@ -8,8 +8,8 @@ use yii\db\ActiveRecord;
  * This is the model class for table "session".
  *
  * @property integer $id
- * @property string $accessToken
- * @property string $creationDate
+ * @property string $access_token
+ * @property string $created_at
  * @property integer $valid
  * @property integer $userId
  *
@@ -39,7 +39,7 @@ class Session extends ActiveRecord
     public function beforeSave($insert) {
         if (parent::beforeSave($insert)) {
             if ($insert) {
-                $this->creationDate = date('Y-m-d H:i:s');
+                $this->created_at = date('Y-m-d H:i:s');
                 $this->valid = 1;
             }
             return true;
