@@ -7,14 +7,12 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+//-
 use common\models\LoginForm;
 use backend\models\PasswordResetRequestForm;
 use backend\models\ResetPasswordForm;
-use backend\models\CreateUserForm;
+//-
 
-/**
- * Site controller
- */
 class SiteController extends Controller
 {
     /**
@@ -25,24 +23,18 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['index', 'login', 'logout'],
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
-                        'allow' => true,
-                    ],
-                    [
-                        'actions' => ['logout', 'index'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                    /* Rules da action CreateUser  */
-                    [
-                        'actions' => ['create-user'],
+                        'actions' => ['login'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
-                    /* Fim */
+                    [
+                        'actions' => ['index', 'logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
             'verbs' => [
@@ -60,8 +52,10 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
+            'components' => [
+                'errorHandler' => [
+                    'errorAction' => 'site/error',
+                ],
             ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
@@ -70,46 +64,28 @@ class SiteController extends Controller
         ];
     }
 
+    public function actionError()
+    {
+        $exception = Yii::$app->errorHandler->exception;
+        if ($exception !== null) {
+            return $this->renderPartial('error', ['exception' => $exception]);
+        }
+    }
+
     /**
-     * Displays Login page if user is a Guest.
-     * Displays Index (User dashboard) if user is authenticated.
+     * Index action
      *
      * @return string
      */
-
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->actionLogin();
-        } else {
-            return $this->render('index');
-        }
+        return $this->render('index');
     }
 
     /**
      * Login action.
      *
-     * @return string
      */
-    /*
-    public function actionLogin()
-    {
-        $this->layout = 'login';
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
-        }
-    }
-    */
-
     public function actionLogin()
     {
         $this->layout = 'login';
@@ -123,7 +99,6 @@ class SiteController extends Controller
 
         if ($loginModel->load(Yii::$app->request->post()) && $loginModel->login()) {
             return $this->goHome();
-
         } else if($passwordResetRequestModel->load(Yii::$app->request->post()) && $passwordResetRequestModel->validate()) {
             if ($passwordResetRequestModel->sendEmail()) {
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
@@ -131,12 +106,13 @@ class SiteController extends Controller
             } else {
                 Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
             }
-        } else {
-            return $this->render('login', [
-                'loginModel' => $loginModel,
-                'passwordResetRequestModel' => $passwordResetRequestModel,
-            ]);
         }
+
+        return $this->render('login', [
+            'loginModel' => $loginModel,
+            'passwordResetRequestModel' => $passwordResetRequestModel,
+        ]);
+
     }
 
     /**
@@ -197,26 +173,6 @@ class SiteController extends Controller
         }
 
         return $this->render('resetPassword', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Creates new user.
-     *
-     * @return mixed
-     */
-    public function actionCreateUser()
-    {
-        $model = new CreateUserForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->createUser()) {
-                Yii::$app->session->setFlash('success', 'The user was successfully created.');
-                return $this->goHome();
-            }
-        }
-
-        return $this->render('createUser', [
             'model' => $model,
         ]);
     }
