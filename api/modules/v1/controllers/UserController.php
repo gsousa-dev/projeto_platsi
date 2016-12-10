@@ -28,13 +28,13 @@ final class UserController extends ActiveController
         $behaviors['corsFilter'] = ['class' => Cors::className()];
         $behaviors['authenticator'] = [
             'class' => RequestAuthorization::className(),
-            'except' => ['options', 'login']
+            'except' => ['options', 'authenticate']
         ];
 
         return $behaviors;
     }
 
-    public function actionLogin()
+    public function actionAuthenticate()
     {
         $request = Yii::$app->request;
 
