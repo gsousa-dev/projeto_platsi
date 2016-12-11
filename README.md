@@ -22,6 +22,7 @@ DIRECTORY STRUCTURE
 ```
 api
     config/
+    filters/
     modules/
     runtime/
     tests/
