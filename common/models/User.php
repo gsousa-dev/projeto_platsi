@@ -5,6 +5,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\web\BadRequestHttpException;
 use yii\web\IdentityInterface;
 
 /**
@@ -58,7 +59,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             ['user_type', 'exist'],
-            [['user_type', 'username', 'auth_key', 'password_hash', 'email', 'name', 'birthday', 'gender'], 'required'],
+            [['user_type', 'username', 'email', 'name', 'birthday', 'gender'], 'required'],
             [['user_type', 'status', 'created_at', 'updated_at'], 'integer'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
@@ -68,6 +69,24 @@ class User extends ActiveRecord implements IdentityInterface
             [['email'], 'unique'],
             [['username'], 'unique'],
         ];
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert)
+    {
+        $post = Yii::$app->request->post();
+        $password = $post['password'];
+
+        if (parent::beforeSave($insert)) {
+            $this->generateAuthKey();
+            $this->setPassword($password);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
