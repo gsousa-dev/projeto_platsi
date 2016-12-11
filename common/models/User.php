@@ -11,6 +11,7 @@ use yii\web\IdentityInterface;
  * User model
  *
  * @property integer $id
+ * @property integer $user_type
  * @property string $username
  * @property string $auth_key
  * @property string $password_hash
@@ -56,12 +57,16 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'auth_key', 'password_hash', 'email', 'created_at', 'updated_at', 'name', 'birthday', 'gender'], 'required'],
+            ['user_type', 'exist'],
+            [['user_type', 'username', 'auth_key', 'password_hash', 'email', 'name', 'birthday', 'gender'], 'required'],
+            [['user_type', 'status', 'created_at', 'updated_at'], 'integer'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
             [['birthday'], 'safe'],
             [['username', 'auth_key'], 'string', 'max' => 32],
             [['password_hash', 'password_reset_token', 'email', 'name', 'gender', 'profile_picture'], 'string', 'max' => 255],
+            [['email'], 'unique'],
+            [['username'], 'unique'],
         ];
     }
 
