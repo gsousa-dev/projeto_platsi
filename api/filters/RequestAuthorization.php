@@ -9,8 +9,8 @@ use yii\web\UnauthorizedHttpException;
 use api\modules\v1\models\Session;
 //-
 
-final class RequestAuthorization extends ActionFilter implements AuthInterface {
-
+final class RequestAuthorization extends ActionFilter implements AuthInterface
+{
     /**
      * @inheritdoc
      */
@@ -53,5 +53,4 @@ final class RequestAuthorization extends ActionFilter implements AuthInterface {
     public function handleFailure($response) {
         //NOTE: DO NOTHING
     }
-
 }
