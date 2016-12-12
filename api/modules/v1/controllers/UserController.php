@@ -37,10 +37,8 @@ final class UserController extends ActiveController
     public function actionAuthenticate()
     {
         $request = Yii::$app->request;
-
         $username = $request->post('username');
         $password = $request->post('password');
-
 
         if (empty($username) || empty($password)) {
             throw new UnauthorizedHttpException('Missing credentials.');
@@ -66,5 +64,10 @@ final class UserController extends ActiveController
             'access_token' => $session->access_token,
             'id' => $user->id
         ];
+    }
+
+    public function actionFilterByTypeOfUser() {
+        $user_type = Yii::$app->request->getHeaders()->get('USER-TYPE');
+        return User::find()->where(['user_type' => $user_type])->all();
     }
 }
