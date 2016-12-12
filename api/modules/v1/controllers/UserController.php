@@ -21,7 +21,8 @@ final class UserController extends ActiveController
     /**
      * @inheritdoc
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         $behaviors = parent::behaviors();
         unset($behaviors['authenticator']);
 
@@ -66,8 +67,10 @@ final class UserController extends ActiveController
         ];
     }
 
-    public function actionFilterByTypeOfUser() {
+    public function actionFilterByTypeOfUser()
+    {
         $user_type = Yii::$app->request->getHeaders()->get('USER-TYPE');
+
         return User::find()->where(['user_type' => $user_type])->all();
     }
 }
