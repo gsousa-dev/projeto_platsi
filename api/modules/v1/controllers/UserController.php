@@ -70,6 +70,10 @@ final class UserController extends ActiveController
     {
         $user_type = Yii::$app->request->getHeaders()->get('USER-TYPE');
 
+        if (empty($user_type)) {
+            throw new UnauthorizedHttpException('Missing user type');
+        }
+
         return User::find()->where(['user_type' => $user_type])->all();
     }
 }
