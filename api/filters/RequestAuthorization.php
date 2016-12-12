@@ -1,5 +1,4 @@
 <?php
-
 namespace api\filters;
 
 use Yii;

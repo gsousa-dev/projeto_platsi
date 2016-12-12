@@ -8,8 +8,6 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
- * User model
- *
  * @property integer $id
  * @property integer $user_type
  * @property string $username
@@ -25,8 +23,8 @@ use yii\web\IdentityInterface;
  * @property string $birthday
  * @property string $gender
  * @property string $profile_picture
- *
  */
+
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;

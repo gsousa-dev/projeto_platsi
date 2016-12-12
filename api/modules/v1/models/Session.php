@@ -1,14 +1,12 @@
 <?php
-
 namespace api\modules\v1\models;
 
 use yii\db\ActiveRecord;
 //-
 use common\models\User;
 //-
+
 /**
- * This is the model class for table "session".
- *
  * @property integer $id
  * @property string $access_token
  * @property string $created_at
@@ -17,6 +15,7 @@ use common\models\User;
  *
  * @property User $user
  */
+
 class Session extends ActiveRecord
 {
     /**
