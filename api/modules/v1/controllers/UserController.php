@@ -62,7 +62,8 @@ final class UserController extends ActiveController
 
         return (object) [
             'access_token' => $session->access_token,
-            'id' => $user->id
+            'id' => $user->id,
+            'user_type' => $user->user_type,
         ];
     }
 
