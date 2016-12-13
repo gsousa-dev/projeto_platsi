@@ -4,7 +4,6 @@ namespace api\modules\v1\controllers;
 use yii\rest\ActiveController;
 use yii\filters\Cors;
 //-
-//-
 use api\filters\RequestAuthorization;
 
 class ExercicioController extends ActiveController
