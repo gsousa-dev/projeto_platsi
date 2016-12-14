@@ -37,7 +37,8 @@ class Session extends ActiveRecord
     /**
      * @inheritdoc
      */
-    public function beforeSave($insert) {
+    public function beforeSave($insert)
+    {
         if (parent::beforeSave($insert)) {
             if ($insert) {
                 $this->created_at = date('Y-m-d H:i:s');
