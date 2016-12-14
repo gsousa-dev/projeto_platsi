@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
  *
  * @property ExerciciosPlano[] $exerciciosPlano
  */
+
 class PlanoPessoal extends ActiveRecord
 {
     /**

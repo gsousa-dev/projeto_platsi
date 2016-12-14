@@ -1,6 +1,7 @@
 <?php
 namespace common\models;
 
+use Codeception\Module\Cli;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -67,9 +68,10 @@ class User extends ActiveRecord implements IdentityInterface
             [['username'], 'unique'],
         ];
     }
-    
+
     /**
-     * @inheritdoc
+     * @param bool $insert
+     * @return bool
      */
     public function beforeSave($insert)
     {
@@ -84,6 +86,34 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         return false;
+    }
+
+    /**
+     * @param bool $insert
+     * @param array $changedAttributes
+     * @return bool
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        if ($this->user_type == 4) {
+            $cliente = new Cliente();
+            $cliente->idCliente = $this->id;
+            return $cliente->save();
+        }
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function beforeDelete()
+    {
+        if (parent::beforeDelete()) {
+            Cliente::deleteAll(['idCliente' => $this->id]);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

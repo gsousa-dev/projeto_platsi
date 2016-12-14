@@ -8,9 +8,9 @@ use yii\db\ActiveRecord;
  * @property string $descricao
  * @property string $data_foto
  * @property string $path
- *
  * @property Cliente $idCliente
  */
+
 class FotoDeProgresso extends ActiveRecord
 {
     /**

@@ -7,9 +7,9 @@ use yii\db\ActiveRecord;
  * @property integer $idObjetivo
  * @property string $objetivo
  * @property integer $peso_pretendido
- *
  * @property Cliente $idCliente
  */
+
 class Objetivo extends ActiveRecord
 {
     /**

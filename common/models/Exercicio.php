@@ -6,10 +6,9 @@ use yii\db\ActiveRecord;
 /**
  * @property integer $idExercicio
  * @property string $descricao
- * @property integer $tipo_exercicio
+ * @property TipoExercicio $tipo_exercicio
  *
- * @property TipoExercicio $tipoExercicio
- * @property ExerciciosPlano[] $exerciciosPlanos
+ * @property ExerciciosPlano[] $exerciciosPlano
  */
 
 class Exercicio extends ActiveRecord
