@@ -29,7 +29,7 @@ class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-    
+
     /**
      * @inheritdoc
      */
@@ -73,21 +73,13 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function beforeSave($insert)
     {
-        $post = Yii::$app->request->post();
-        $password = $post['password'];
-
-        if (parent::beforeSave($insert)) {
-            $this->generateAuthKey();
-            $this->setPassword($password);
-
-            if ($post['user_type'] == 4) {
-                $idPersonal_trainer = Yii::$app->request->post('idPersonal_trainer');
-                $personal_trainer = User::findOne(['id' => $idPersonal_trainer]);
-                if (!empty($personal_trainer) && $personal_trainer->user_type == 3) {
-                    return true;
-                } else {
-                    return false;
-                }
+        if (parent::beforeSave($insert))
+        {
+            if ($this->isNewRecord) {
+                $this->generateAuthKey();
+                $this->setPassword(Yii::$app->request->post('password'));
+            } else if (!empty($this->password_hash)) {
+                $this->setPassword(Yii::$app->request->post('password'));
             }
 
             return true;
@@ -95,21 +87,17 @@ class User extends ActiveRecord implements IdentityInterface
 
         return false;
     }
-
-    /**
-     * @param bool $insert
-     * @param array $changedAttributes
-     * @return bool
-     */
+    /*
     public function afterSave($insert, $changedAttributes)
     {
         $cliente = new Cliente();
         $cliente->idCliente = $this->id;
         $cliente->idPersonal_trainer = $this->idPersonal_trainer;
-        //$cliente->idPersonal_trainer = Yii::$app->request->post(['idPersonal_trainer']);
 
+        //$cliente->idPersonal_trainer = Yii::$app->request->post(['idPersonal_trainer']);
         return $cliente->save();
     }
+    */
 
     /**
      * @inheritdoc
@@ -247,5 +235,36 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function generateSessionToken() {
         return sha1($this->password_hash . $this->email . time() . $this->name);
+    }
+
+    public function sendEmail()
+    {
+        /* @var $user User */
+        $user = User::findOne([
+            'status' => User::STATUS_ACTIVE,
+            'email' => $this->email,
+        ]);
+
+        if (!$user) {
+            return false;
+        }
+
+        if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
+            $user->generatePasswordResetToken();
+            if (!$user->save()) {
+                return false;
+            }
+        }
+
+        return Yii::$app
+            ->mailer
+            ->compose(
+                ['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'],
+                ['user' => $user]
+            )
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+            ->setTo($this->email)
+            ->setSubject('Password reset for ' . Yii::$app->name)
+            ->send();
     }
 }
