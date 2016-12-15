@@ -1,7 +1,6 @@
 <?php
 namespace common\models;
 
-use Codeception\Module\Cli;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -30,8 +29,7 @@ class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-
-
+    
     /**
      * @inheritdoc
      */
@@ -82,6 +80,16 @@ class User extends ActiveRecord implements IdentityInterface
             $this->generateAuthKey();
             $this->setPassword($password);
 
+            if ($post['user_type'] == 4) {
+                $idPersonal_trainer = Yii::$app->request->post('idPersonal_trainer');
+                $personal_trainer = User::findOne(['id' => $idPersonal_trainer]);
+                if (!empty($personal_trainer) && $personal_trainer->user_type == 3) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
             return true;
         }
 
@@ -95,25 +103,12 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function afterSave($insert, $changedAttributes)
     {
-        if ($this->user_type == 4) {
-            $cliente = new Cliente();
-            $cliente->idCliente = $this->id;
-            return $cliente->save();
-        }
-        return false;
-    }
+        $cliente = new Cliente();
+        $cliente->idCliente = $this->id;
+        $cliente->idPersonal_trainer = $this->idPersonal_trainer;
+        //$cliente->idPersonal_trainer = Yii::$app->request->post(['idPersonal_trainer']);
 
-    /**
-     * @return bool
-     */
-    public function beforeDelete()
-    {
-        if (parent::beforeDelete()) {
-            Cliente::deleteAll(['idCliente' => $this->id]);
-            return true;
-        } else {
-            return false;
-        }
+        return $cliente->save();
     }
 
     /**
