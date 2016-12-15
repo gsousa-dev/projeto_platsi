@@ -3,6 +3,7 @@ namespace api\modules\v1\controllers;
 
 use Yii;
 use yii\filters\Cors;
+use yii\filters\VerbFilter;
 use yii\rest\ActiveController;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
@@ -19,7 +20,7 @@ final class UserController extends ActiveController
     public $modelClass = 'common\models\User';
 
     /**
-     * @inheritdoc
+     * @return array
      */
     public function behaviors()
     {
@@ -35,6 +36,23 @@ final class UserController extends ActiveController
         return $behaviors;
     }
 
+    /**
+     * @return array
+     */
+    public function actions()
+    {
+        $actions = parent::actions();
+        unset($actions['delete']);
+
+        return $actions;
+    }
+
+    /**
+     * @return object
+     * @throws NotFoundHttpException
+     * @throws ServerErrorHttpException
+     * @throws UnauthorizedHttpException
+     */
     public function actionAuthenticate()
     {
         $request = Yii::$app->request;
@@ -75,6 +93,10 @@ final class UserController extends ActiveController
         ];
     }
 
+    /**
+     * @return array|\yii\db\ActiveRecord[]
+     * @throws UnauthorizedHttpException
+     */
     public function actionFilterByTypeOfUser()
     {
         $user_type = Yii::$app->request->getHeaders()->get('USER-TYPE');
@@ -83,6 +105,16 @@ final class UserController extends ActiveController
             throw new UnauthorizedHttpException('Missing user type');
         }
 
-        return User::find()->where(['user_type' => $user_type])->all();
+        return User::find()->where(['user_type' => $user_type])->andWhere(['status' => 10])->all();
+    }
+
+    public function actionRequestPasswordReset()
+    {
+        $request = Yii::$app->request;
+        $email = $request->post('email');
+
+        if ($user = User::findOne(['email' => $email])) {
+            $user->sendEmail();
+        }
     }
 }
