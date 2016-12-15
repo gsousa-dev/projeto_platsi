@@ -9,6 +9,7 @@ use yii\web\ServerErrorHttpException;
 use yii\web\UnauthorizedHttpException;
 //-
 use common\models\User;
+use common\models\Cliente;
 use api\modules\v1\models\Session;
 //-
 use api\filters\RequestAuthorization;
@@ -60,10 +61,17 @@ final class UserController extends ActiveController
             throw new ServerErrorHttpException('Server error. Unable to create session id.');
         }
 
+        if ($cliente = Cliente::findOne(['idCliente' => $user->id])) {
+            $idPersonal_trainer = $cliente->idPersonal_trainer;
+        } else {
+            $idPersonal_trainer = null;
+        }
+
         return (object) [
             'access_token' => $session->access_token,
             'id' => $user->id,
             'user_type' => $user->user_type,
+            'idPersonal_trainer' => $idPersonal_trainer,
         ];
     }
 
