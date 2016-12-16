@@ -13,7 +13,7 @@ class ExercicioController extends ActiveController
     public $modelClass = 'common\models\Exercicio';
 
     /**
-     * @inheritdoc
+     * @return array
      */
     public function behaviors()
     {
@@ -29,6 +29,9 @@ class ExercicioController extends ActiveController
         return $behaviors;
     }
 
+    /**
+     * @return int|string
+     */
     public function actionCount()
     {
         return Exercicio::find()->count();
