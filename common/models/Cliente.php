@@ -2,16 +2,18 @@
 namespace common\models;
 
 use yii\db\ActiveRecord;
+use yii\web\ServerErrorHttpException;
 
 /**
  * @property User $idCliente
  * @property User $idPersonal_trainer
+ *
  * @property DadosAvaliacao $dadosAvaliacao
+ * @property Objetivo $objetivo
  *
  * @property Feedback[] $feedbacks
  * @property FotoDeProgresso[] $fotosDeProgresso
  * @property Mensagem[] $mensagens
- * @property Objetivo[] $objetivos
  * @property Pesagem[] $pesagens
  * @property PlanoPessoal[] $planosPessoais
  */
@@ -36,8 +38,24 @@ class Cliente extends ActiveRecord
             [['idCliente', 'idPersonal_trainer'], 'integer'],
             [['idCliente'], 'unique'],
             [['idCliente'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['idCliente' => 'id']],
-            //[['idPersonal_trainer'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['idPersonal_trainer' => 'id']],
+            [['idPersonal_trainer'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['idPersonal_trainer' => 'id']],
+            [['idPersonal_trainer'], 'validatePersonalTrainer'],
         ];
+    }
+
+    /**
+     * @return bool
+     * @throws ServerErrorHttpException
+     */
+    public function validatePersonalTrainer()
+    {
+        $user = User::findOne(['id' => $this->idPersonal_trainer]);
+
+        if (!($user->user_type == 3)) {
+            throw new ServerErrorHttpException('Server error. The user must be a personal trainer.');
+        }
+
+        return true;
     }
 
     /**
@@ -104,7 +122,7 @@ class Cliente extends ActiveRecord
      */
     public function getObjetivos()
     {
-        return $this->hasMany(Objetivo::className(), ['idCliente' => 'idCliente']);
+        return $this->hasOne(Objetivo::className(), ['idCliente' => 'idCliente']);
     }
 
     /**
