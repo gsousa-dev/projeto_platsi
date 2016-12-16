@@ -87,17 +87,6 @@ class User extends ActiveRecord implements IdentityInterface
 
         return false;
     }
-    /*
-    public function afterSave($insert, $changedAttributes)
-    {
-        $cliente = new Cliente();
-        $cliente->idCliente = $this->id;
-        $cliente->idPersonal_trainer = $this->idPersonal_trainer;
-
-        //$cliente->idPersonal_trainer = Yii::$app->request->post(['idPersonal_trainer']);
-        return $cliente->save();
-    }
-    */
 
     /**
      * @inheritdoc
