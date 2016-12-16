@@ -4,10 +4,9 @@ namespace common\models;
 use yii\db\ActiveRecord;
 
 /**
- * @property integer $idObjetivo
+ * @property Cliente $idCliente
  * @property string $objetivo
  * @property integer $peso_pretendido
- * @property Cliente $idCliente
  */
 
 class Objetivo extends ActiveRecord
@@ -26,8 +25,8 @@ class Objetivo extends ActiveRecord
     public function rules()
     {
         return [
-            [['objetivo', 'peso_pretendido', 'idCliente'], 'required'],
-            [['peso_pretendido', 'idCliente'], 'integer'],
+            [['idCliente', 'objetivo', 'peso_pretendido'], 'required'],
+            [['idCliente', 'peso_pretendido'], 'integer'],
             [['objetivo'], 'string', 'max' => 45],
             [['idCliente'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['idCliente' => 'idCliente']],
         ];
@@ -49,7 +48,7 @@ class Objetivo extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdCliente0()
+    public function getIdCliente()
     {
         return $this->hasOne(Cliente::className(), ['idCliente' => 'idCliente']);
     }
