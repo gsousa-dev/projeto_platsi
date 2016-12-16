@@ -31,7 +31,7 @@ return [
             'showScriptName' => false,
             'rules' => [
                 ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/user', 'v1/feedback'], 'pluralize' => false],
-                ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/cliente', 'v1/exercicio', 'v1/objetivo']],
+                ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/cliente', 'v1/objetivo', 'v1/exercicio']],
             ],
         ]
     ],

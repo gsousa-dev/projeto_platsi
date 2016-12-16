@@ -4,6 +4,8 @@ namespace api\modules\v1\controllers;
 use yii\rest\ActiveController;
 use yii\filters\Cors;
 //-
+use common\models\Exercicio;
+//-
 use api\filters\RequestAuthorization;
 
 class ExercicioController extends ActiveController
@@ -21,8 +23,14 @@ class ExercicioController extends ActiveController
         $behaviors['corsFilter'] = ['class' => Cors::className()];
         $behaviors['authenticator'] = [
             'class' => RequestAuthorization::className(),
+            'except' => ['options', 'count']
         ];
 
         return $behaviors;
+    }
+
+    public function actionCount()
+    {
+        return Exercicio::find()->count();
     }
 }
