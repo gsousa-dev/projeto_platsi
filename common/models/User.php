@@ -88,6 +88,16 @@ class User extends ActiveRecord implements IdentityInterface
         return false;
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        if ($this->user_type == 4)
+        {
+            $cliente = new Cliente();
+            $cliente->idCliente = $this->id;
+            $cliente->save();
+        }
+    }
+
     /**
      * @inheritdoc
      */

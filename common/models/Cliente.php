@@ -1,6 +1,8 @@
 <?php
 namespace common\models;
 
+use GuzzleHttp\Client;
+use Yii;
 use yii\db\ActiveRecord;
 use yii\web\ServerErrorHttpException;
 
@@ -39,23 +41,36 @@ class Cliente extends ActiveRecord
             [['idCliente'], 'unique'],
             [['idCliente'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['idCliente' => 'id']],
             [['idPersonal_trainer'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['idPersonal_trainer' => 'id']],
-            [['idPersonal_trainer'], 'validatePersonalTrainer'],
+            [['idPersonal_trainer'], 'validatePersonalTrainer']
         ];
     }
 
     /**
-     * @return bool
-     * @throws ServerErrorHttpException
+     * @param $attribute
+     * @param $params
      */
-    public function validatePersonalTrainer()
+    public function validatePersonalTrainer ($attribute, $params)
     {
-        $user = User::findOne(['id' => $this->idPersonal_trainer]);
-
-        if (!($user->user_type == 3)) {
-            throw new ServerErrorHttpException('Server error. The user must be a personal trainer.');
+        $personal_trainer = User::findOne(['id' => $this->idPersonal_trainer]);
+        if (!($personal_trainer->user_type == 3)) {
+            $this->addError($attribute, 'User must be a personal trainer.');
         }
+    }
 
-        return true;
+    /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        $personal_trainer = User::findOne(['id' => Yii::$app->request->post('idPersonal_trainer')]);
+        if ($personal_trainer->user_type == 3) {
+            $this->idPersonal_trainer = $personal_trainer->id;
+            return true;
+        } else {
+            User::deleteAll(['id' => $this->idCliente]);
+            return false;
+        }
     }
 
     /**
