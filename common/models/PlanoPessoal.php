@@ -2,9 +2,8 @@
 namespace common\models;
 
 use yii\db\ActiveRecord;
+
 /**
- * This is the model class for table "plano_pessoal".
- *
  * @property integer $idPlano
  * @property string $descricao
  * @property Cliente $idCliente
