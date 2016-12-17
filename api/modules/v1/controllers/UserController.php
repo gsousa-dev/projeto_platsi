@@ -116,4 +116,13 @@ final class UserController extends ActiveController
             $user->sendEmail();
         }
     }
+
+    public function actionLogout ()
+    {
+        $access_token = Yii::$app->request->headers->get('ACCESS-TOKEN');
+
+        if ($session = Session::findOne(['access_token' => $access_token])) {
+            $session->delete();
+        }
+    }
 }
