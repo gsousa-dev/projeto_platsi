@@ -21,8 +21,7 @@ $this->title = 'Dashboard';
 <div class="note note-info">
     <p> A black page template with a minimal dependency assets to use as a base for any custom page you create </p>
 </div>
-<?= Html::beginForm(['/site/logout'], 'post')
-    . Html::submitButton('Logout (' . Yii::$app->user->identity->username . ')', ['class' => 'btn btn-link logout'])
+<?=   Html::beginForm(['/site/logout'], 'post')
+    . Html::submitButton('Logout', ['class' => 'btn btn-link logout'])
     . Html::endForm();
 ?>
-
