@@ -78,6 +78,9 @@ final class UserController extends ActiveController
             throw new ServerErrorHttpException('Server error. Unable to create session id.');
         }
 
+        /**
+         * returns client's personal trainer
+         */
         if ($cliente = Cliente::findOne(['idCliente' => $user->id])) {
             $idPersonal_trainer = $cliente->idPersonal_trainer;
         } else {
