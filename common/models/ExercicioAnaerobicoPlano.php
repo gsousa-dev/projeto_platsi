@@ -5,6 +5,7 @@ use yii\db\ActiveRecord;
 
 /**
  * @property ExerciciosPlano $idExercicio
+ *
  * @property integer $series
  * @property integer $repeticoes
  */

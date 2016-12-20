@@ -5,6 +5,7 @@ use yii\db\ActiveRecord;
 
 /**
  * @property Cliente $idCliente
+ *
  * @property string $objetivo
  * @property integer $peso_pretendido
  */
@@ -27,7 +28,8 @@ class Objetivo extends ActiveRecord
         return [
             [['idCliente', 'objetivo', 'peso_pretendido'], 'required'],
             [['idCliente', 'peso_pretendido'], 'integer'],
-            [['objetivo'], 'string', 'max' => 45],
+            [['objetivo'], 'string', 'max' => 255],
+            [['idCliente'], 'unique'],
             [['idCliente'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['idCliente' => 'idCliente']],
         ];
     }
@@ -38,10 +40,9 @@ class Objetivo extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'idObjetivo' => 'Id Objetivo',
+            'idCliente' => 'Id Cliente',
             'objetivo' => 'Objetivo',
             'peso_pretendido' => 'Peso Pretendido',
-            'idCliente' => 'Id Cliente',
         ];
     }
 

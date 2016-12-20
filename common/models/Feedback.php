@@ -5,6 +5,7 @@ use yii\db\ActiveRecord;
 
 /**
  * @property integer $idFeedback
+ *
  * @property string $mensagem
  * @property string $rating
  * @property Cliente $idCliente

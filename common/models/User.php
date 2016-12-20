@@ -9,6 +9,7 @@ use yii\web\IdentityInterface;
 
 /**
  * @property integer $id
+ *
  * @property integer $user_type
  * @property string $username
  * @property string $auth_key

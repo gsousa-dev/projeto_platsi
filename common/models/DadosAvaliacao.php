@@ -5,6 +5,7 @@ use yii\db\ActiveRecord;
 
 /**
  * @property Cliente $idCliente
+ *
  * @property string $altura
  * @property string $massa_gorda
  * @property string $massa_muscular

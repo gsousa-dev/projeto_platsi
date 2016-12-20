@@ -5,6 +5,7 @@ use yii\db\ActiveRecord;
 
 /**
  * @property integer $idPlano
+ *
  * @property string $descricao
  * @property Cliente $idCliente
  *

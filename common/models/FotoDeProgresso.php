@@ -5,6 +5,7 @@ use yii\db\ActiveRecord;
 
 /**
  * @property integer $idFoto
+ *
  * @property string $descricao
  * @property string $data_foto
  * @property string $path

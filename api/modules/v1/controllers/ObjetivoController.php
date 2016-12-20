@@ -11,7 +11,7 @@ class ObjetivoController extends ActiveController
     public $modelClass = 'common\models\Objetivo';
 
     /**
-     * @inheritdoc
+     * @return array
      */
     public function behaviors()
     {

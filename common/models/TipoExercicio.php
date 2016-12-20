@@ -5,6 +5,7 @@ use yii\db\ActiveRecord;
 
 /**
  * @property integer $id
+ *
  * @property string $Tipo
  *
  * @property Exercicio[] $exercicios

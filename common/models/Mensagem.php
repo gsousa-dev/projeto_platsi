@@ -5,6 +5,7 @@ use yii\db\ActiveRecord;
 
 /**
  * @property integer $idMensagem
+ *
  * @property string $mensagem
  * @property string $data_envio
  * @property Cliente $idCliente

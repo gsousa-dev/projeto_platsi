@@ -5,6 +5,7 @@ use yii\db\ActiveRecord;
 
 /**
  * @property integer $idPesagem
+ *
  * @property string $data_pesagem
  * @property integer $peso
  * @property Cliente $idCliente

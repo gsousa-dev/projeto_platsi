@@ -11,7 +11,7 @@ class ClienteController extends ActiveController
     public $modelClass = 'common\models\Cliente';
 
     /**
-     * @inheritdoc
+     * @return array
      */
     public function behaviors()
     {

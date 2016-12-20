@@ -6,6 +6,7 @@ use yii\db\ActiveRecord;
 
 /**
  * @property integer $id
+ *
  * @property string $user_type
  */
 

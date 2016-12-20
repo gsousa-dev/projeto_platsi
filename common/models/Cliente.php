@@ -135,7 +135,7 @@ class Cliente extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getObjetivos()
+    public function getObjetivo()
     {
         return $this->hasOne(Objetivo::className(), ['idCliente' => 'idCliente']);
     }
