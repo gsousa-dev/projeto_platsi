@@ -29,7 +29,7 @@ final class UserController extends ActiveController
         $behaviors['corsFilter'] = ['class' => Cors::className()];
         $behaviors['authenticator'] = [
             'class' => RequestAuthorization::className(),
-            'except' => ['options', 'authenticate']
+            'except' => ['options', 'authenticate', 'request-password-reset']
         ];
 
         return $behaviors;
@@ -117,6 +117,9 @@ final class UserController extends ActiveController
 
         if ($user = User::findOne(['email' => $email])) {
             $user->sendEmail();
+            return true;
+        } else {
+            throw new UnauthorizedHttpException("Este email não existe.");
         }
     }
 
