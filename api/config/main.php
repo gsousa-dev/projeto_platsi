@@ -30,7 +30,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/user', 'v1/feedback', 'v1/dados-avaliacao'], 'pluralize' => false],
+                ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/user', 'v1/feedback', 'v1/dados-avaliacao', 'v1/pesagem'], 'pluralize' => false],
                 ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/cliente', 'v1/objetivo', 'v1/exercicio']],
             ],
         ]

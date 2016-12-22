@@ -6,9 +6,9 @@ use yii\filters\Cors;
 //-
 use api\filters\RequestAuthorization;
 
-class DadosAvaliacaoController extends ActiveController
+class PesagemController extends ActiveController
 {
-    public $modelClass = 'common\models\DadosAvaliacao';
+    public $modelClass = 'common\models\Pesagem';
 
     /**
      * @return array
