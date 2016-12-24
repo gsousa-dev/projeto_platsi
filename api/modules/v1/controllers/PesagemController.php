@@ -1,8 +1,13 @@
 <?php
 namespace api\modules\v1\controllers;
 
+use Yii;
 use yii\rest\ActiveController;
 use yii\filters\Cors;
+//-
+use yii\web\UnauthorizedHttpException;
+//-
+use common\models\Pesagem;
 //-
 use api\filters\RequestAuthorization;
 
@@ -24,5 +29,16 @@ class PesagemController extends ActiveController
         ];
 
         return $behaviors;
+    }
+
+    public function actionFilterByUser()
+    {
+        $user_id = Yii::$app->request->getHeaders()->get('USER-ID');
+
+        if (empty($user_id)) {
+            throw new UnauthorizedHttpException('Missing user id');
+        }
+
+        return Pesagem::find()->where(['idCliente' => $user_id])->all();
     }
 }

@@ -41,7 +41,7 @@ class Pesagem extends ActiveRecord
     {
         return [
             'idPesagem' => 'Id Pesagem',
-            'data_pesagem' => 'Data Pesagem',
+            'data_pesagem' => 'Data da Pesagem',
             'peso' => 'Peso',
             'idCliente' => 'Id Cliente',
         ];
@@ -50,7 +50,7 @@ class Pesagem extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdCliente0()
+    public function getIdCliente()
     {
         return $this->hasOne(Cliente::className(), ['idCliente' => 'idCliente']);
     }
