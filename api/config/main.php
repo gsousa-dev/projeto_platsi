@@ -30,8 +30,26 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/user', 'v1/feedback', 'v1/dados-avaliacao', 'v1/pesagem', 'v1/foto-de-progresso'], 'pluralize' => false],
-                ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/cliente', 'v1/objetivo', 'v1/exercicio']],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => [
+                        'v1/user',
+                        'v1/feedback',
+                        'v1/dados-avaliacao',
+                        'v1/pesagem',
+                        'v1/foto-de-progresso',
+                        'v1/plano-pessoal'
+                    ],
+                    'pluralize' => false
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => [
+                        'v1/cliente',
+                        'v1/objetivo',
+                        'v1/exercicio'
+                    ]
+                ],
             ],
         ]
     ],
