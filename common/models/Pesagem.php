@@ -27,7 +27,7 @@ class Pesagem extends ActiveRecord
     public function rules()
     {
         return [
-            [['data_pesagem', 'peso', 'idCliente'], 'required'],
+            [['peso', 'idCliente'], 'required'],
             [['data_pesagem'], 'safe'],
             [['peso', 'idCliente'], 'integer'],
             [['idCliente'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['idCliente' => 'idCliente']],

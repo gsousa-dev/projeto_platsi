@@ -28,7 +28,7 @@ class FotosDeProgresso extends ActiveRecord
     public function rules()
     {
         return [
-            [['descricao', 'data_foto', 'path', 'idCliente'], 'required'],
+            [['descricao', 'path', 'idCliente'], 'required'],
             [['data_foto'], 'safe'],
             [['idCliente'], 'integer'],
             [['descricao'], 'string', 'max' => 100],
