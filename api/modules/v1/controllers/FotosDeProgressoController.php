@@ -39,6 +39,6 @@ class FotosDeProgressoController extends ActiveController
             throw new UnauthorizedHttpException('Missing user id');
         }
 
-        return FotosDeProgresso::find()->where(['idCliente' => $user_id])->all();
+        return FotosDeProgresso::find()->where(['idCliente' => $user_id])->orderBy('data_foto')->all();
     }
 }

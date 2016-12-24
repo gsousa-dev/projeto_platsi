@@ -39,6 +39,6 @@ class PesagemController extends ActiveController
             throw new UnauthorizedHttpException('Missing user id');
         }
 
-        return Pesagem::find()->where(['idCliente' => $user_id])->all();
+        return Pesagem::find()->where(['idCliente' => $user_id])->orderBy('data_pesagem')->all();
     }
 }
