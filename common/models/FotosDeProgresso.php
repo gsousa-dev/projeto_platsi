@@ -12,14 +12,14 @@ use yii\db\ActiveRecord;
  * @property Cliente $idCliente
  */
 
-class FotoDeProgresso extends ActiveRecord
+class FotosDeProgresso extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'foto_de_progresso';
+        return 'fotos_de_progresso';
     }
 
     /**

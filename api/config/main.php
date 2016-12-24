@@ -37,8 +37,8 @@ return [
                         'v1/feedback',
                         'v1/dados-avaliacao',
                         'v1/pesagem',
-                        'v1/foto-de-progresso',
-                        'v1/plano-pessoal'
+                        'v1/fotos-de-progresso',
+                        'v1/plano-pessoal',
                     ],
                     'pluralize' => false
                 ],

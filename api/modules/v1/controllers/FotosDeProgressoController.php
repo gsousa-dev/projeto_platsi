@@ -7,13 +7,13 @@ use yii\filters\Cors;
 //-
 use yii\web\UnauthorizedHttpException;
 //-
-use common\models\FotoDeProgresso;
+use common\models\FotosDeProgresso;
 //-
 use api\filters\RequestAuthorization;
 
-class FotoDeProgressoController extends ActiveController
+class FotosDeProgressoController extends ActiveController
 {
-    public $modelClass = 'common\models\FotoDeProgresso';
+    public $modelClass = 'common\models\FotosDeProgresso';
 
     /**
      * @return array
@@ -39,6 +39,6 @@ class FotoDeProgressoController extends ActiveController
             throw new UnauthorizedHttpException('Missing user id');
         }
 
-        return FotoDeProgresso::find()->where(['idCliente' => $user_id])->all();
+        return FotosDeProgresso::find()->where(['idCliente' => $user_id])->all();
     }
 }
