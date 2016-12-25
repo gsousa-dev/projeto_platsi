@@ -51,7 +51,7 @@ class Feedback extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdCliente0()
+    public function getIdCliente()
     {
         return $this->hasOne(Cliente::className(), ['idCliente' => 'idCliente']);
     }
