@@ -26,11 +26,16 @@ class FotosDeProgressoController extends ActiveController
         $behaviors['corsFilter'] = ['class' => Cors::className()];
         $behaviors['authenticator'] = [
             'class' => RequestAuthorization::className(),
+            'except' => ['options']
         ];
 
         return $behaviors;
     }
 
+    /**
+     * @return array|\yii\db\ActiveRecord[]
+     * @throws UnauthorizedHttpException
+     */
     public function actionFilterByUser()
     {
         $user_id = Yii::$app->request->getHeaders()->get('USER-ID');

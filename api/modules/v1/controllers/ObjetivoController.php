@@ -21,6 +21,7 @@ class ObjetivoController extends ActiveController
         $behaviors['corsFilter'] = ['class' => Cors::className()];
         $behaviors['authenticator'] = [
             'class' => RequestAuthorization::className(),
+            'except' => ['options']
         ];
 
         return $behaviors;
