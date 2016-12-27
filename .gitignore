@@ -29,7 +29,7 @@ phpunit.phar
 /phpunit.xml
 
 # frontend dir
-/frontend
+/frontend/
 
 # original files dir
 /original_files
