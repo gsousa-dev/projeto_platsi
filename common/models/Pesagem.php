@@ -7,7 +7,7 @@ use yii\db\ActiveRecord;
  * @property integer $idPesagem
  *
  * @property string $data_pesagem
- * @property integer $peso
+ * @property string $peso
  * @property Cliente $idCliente
  */
 
@@ -29,7 +29,8 @@ class Pesagem extends ActiveRecord
         return [
             [['peso', 'idCliente'], 'required'],
             [['data_pesagem'], 'safe'],
-            [['peso', 'idCliente'], 'integer'],
+            [['peso'], 'number'],
+            [['idCliente'], 'integer'],
             [['idCliente'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['idCliente' => 'idCliente']],
         ];
     }
