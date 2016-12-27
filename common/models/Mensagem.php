@@ -8,8 +8,8 @@ use yii\db\ActiveRecord;
  *
  * @property string $mensagem
  * @property string $data_envio
- * @property Cliente $idCliente
- * @property User $idPersonal_trainer
+ * @property User $idEmissor
+ * @property User $idReceptor
  */
 
 class Mensagem extends ActiveRecord
@@ -28,12 +28,12 @@ class Mensagem extends ActiveRecord
     public function rules()
     {
         return [
-            [['mensagem', 'data_envio', 'idCliente', 'idPersonal_trainer'], 'required'],
+            [['mensagem', 'idEmissor', 'idReceptor'], 'required'],
             [['mensagem'], 'string'],
             [['data_envio'], 'safe'],
-            [['idCliente', 'idPersonal_trainer'], 'integer'],
-            [['idCliente'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['idCliente' => 'idCliente']],
-            [['idPersonal_trainer'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['idPersonal_trainer' => 'id']],
+            [['idEmissor', 'idReceptor'], 'integer'],
+            [['idEmissor'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['idEmissor' => 'id']],
+            [['idReceptor'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['idReceptor' => 'id']],
         ];
     }
 
@@ -45,25 +45,25 @@ class Mensagem extends ActiveRecord
         return [
             'idMensagem' => 'Id Mensagem',
             'mensagem' => 'Mensagem',
-            'data_envio' => 'Data Envio',
-            'idCliente' => 'Id Cliente',
-            'idPersonal_trainer' => 'Id Personal Trainer',
+            'data_envio' => 'Data de Envio',
+            'idEmissor' => 'Id Emissor',
+            'idReceptor' => 'Id Receptor',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdCliente()
+    public function getIdEmissor()
     {
-        return $this->hasOne(Cliente::className(), ['idCliente' => 'idCliente']);
+        return $this->hasOne(User::className(), ['id' => 'idEmissor']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdPersonalTrainer()
+    public function getIdReceptor()
     {
-        return $this->hasOne(User::className(), ['id' => 'idPersonal_trainer']);
+        return $this->hasOne(User::className(), ['id' => 'idReceptor']);
     }
 }

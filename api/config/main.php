@@ -39,6 +39,8 @@ return [
                         'v1/pesagem',
                         'v1/fotos-de-progresso',
                         'v1/plano-pessoal',
+                        'v1/mensagem',
+                        'v1/exercicios-plano' //TODO
                     ],
                     'pluralize' => false
                 ],
