@@ -30,7 +30,8 @@ class ExerciciosPlano extends ActiveRecord
     {
         return [
             [['idPlano', 'idExercicio'], 'required'],
-            [['idPlano', 'idExercicio'], 'integer'],
+            [['idExercicio_plano', 'idPlano', 'idExercicio'], 'integer'],
+            [['idExercicio_plano'], 'unique'],
             [['idExercicio'], 'exist', 'skipOnError' => true, 'targetClass' => Exercicio::className(), 'targetAttribute' => ['idExercicio' => 'idExercicio']],
             [['idPlano'], 'exist', 'skipOnError' => true, 'targetClass' => PlanoPessoal::className(), 'targetAttribute' => ['idPlano' => 'idPlano']],
         ];
@@ -42,7 +43,7 @@ class ExerciciosPlano extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'idExercicio_plano' => 'Id Exercicio Plano',
+            'idExercicio_plano' => 'Id Exercício Plano',
             'idPlano' => 'Id Plano',
             'idExercicio' => 'Id Exercício',
         ];
