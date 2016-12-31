@@ -4,6 +4,7 @@ namespace api\modules\v1\controllers;
 use Yii;
 use yii\filters\Cors;
 use yii\rest\ActiveController;
+//-
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 use yii\web\UnauthorizedHttpException;
@@ -18,9 +19,6 @@ final class UserController extends ActiveController
 {
     public $modelClass = 'common\models\User';
 
-    /**
-     * @return array
-     */
     public function behaviors()
     {
         $behaviors = parent::behaviors();
@@ -35,9 +33,6 @@ final class UserController extends ActiveController
         return $behaviors;
     }
 
-    /**
-     * @return array
-     */
     public function actions()
     {
         $actions = parent::actions();
@@ -46,12 +41,33 @@ final class UserController extends ActiveController
         return $actions;
     }
 
-    /**
-     * @return object
-     * @throws NotFoundHttpException
-     * @throws ServerErrorHttpException
-     * @throws UnauthorizedHttpException
-     */
+    public function actionChangePassword()
+    {
+        $request = Yii::$app->request;
+        $user_id = $request->getHeaders()->get('USER-ID');
+        $old_password = $request->post('old_password');
+        $new_password = $request->post('password');
+
+        if (empty($user_id)) {
+            throw new UnauthorizedHttpException('Missing user id');
+        }
+
+        if (empty($old_password) || empty($new_password)){
+            throw new UnauthorizedHttpException('Missing credentials.');
+        }
+
+        if (!($user = User::findOne(['id' => $user_id])) || ($user->status == 0)) {
+            throw new NotFoundHttpException('Invalid user account.');
+        }
+
+        if (!$user->validatePassword($old_password)) {
+            throw new UnauthorizedHttpException('Wrong credentials.');
+        }
+
+        $user->setPassword($new_password);
+        $user->save();
+    }
+
     public function actionAuthenticate()
     {
         $request = Yii::$app->request;
@@ -62,7 +78,10 @@ final class UserController extends ActiveController
             throw new UnauthorizedHttpException('Missing credentials.');
         }
 
-        if (!($user = User::findOne(['username' => $username]))) {
+        /**
+         * Checks if user exists or if user was deleted
+         */
+        if (!($user = User::findOne(['username' => $username])) || ($user->status == 0)) {
             throw new NotFoundHttpException('Invalid user account.');
         }
 
@@ -80,12 +99,9 @@ final class UserController extends ActiveController
 
         /**
          * returns client's personal trainer
+         * returns null if user's not a client
          */
-        if ($cliente = Cliente::findOne(['idCliente' => $user->id])) {
-            $idPersonal_trainer = $cliente->idPersonal_trainer;
-        } else {
-            $idPersonal_trainer = null;
-        }
+        $idPersonal_trainer = ($cliente = Cliente::findOne(['idCliente' => $user->id])) ? $cliente->idPersonal_trainer : null;
 
         return (object) [
             'access_token' => $session->access_token,
@@ -95,10 +111,15 @@ final class UserController extends ActiveController
         ];
     }
 
-    /**
-     * @return array|\yii\db\ActiveRecord[]
-     * @throws UnauthorizedHttpException
-     */
+    public function actionLogout ()
+    {
+        $access_token = Yii::$app->request->getHeaders()->get('ACCESS-TOKEN');
+
+        if ($session = Session::findOne(['access_token' => $access_token])) {
+            $session->delete();
+        }
+    }
+
     public function actionFilterByTypeOfUser()
     {
         $user_type = Yii::$app->request->getHeaders()->get('USER-TYPE');
@@ -117,18 +138,6 @@ final class UserController extends ActiveController
 
         if ($user = User::findOne(['email' => $email])) {
             $user->sendEmail();
-            return true;
-        } else {
-            throw new UnauthorizedHttpException("Este email não existe.");
-        }
-    }
-
-    public function actionLogout ()
-    {
-        $access_token = Yii::$app->request->headers->get('ACCESS-TOKEN');
-
-        if ($session = Session::findOne(['access_token' => $access_token])) {
-            $session->delete();
         }
     }
 }

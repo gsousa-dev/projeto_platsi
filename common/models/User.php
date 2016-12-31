@@ -79,8 +79,6 @@ class User extends ActiveRecord implements IdentityInterface
             if ($this->isNewRecord) {
                 $this->generateAuthKey();
                 $this->setPassword(Yii::$app->request->post('password'));
-            } else if (!empty($this->password_hash)) {
-                $this->setPassword(Yii::$app->request->post('password'));
             }
 
             return true;
