@@ -36,9 +36,14 @@ final class UserController extends ActiveController
     public function actions()
     {
         $actions = parent::actions();
+        unset($actions['index']);
         unset($actions['delete']);
 
         return $actions;
+    }
+
+    public function actionIndex() {
+        return User::find()->where(['status' => 10])->all();
     }
 
     public function actionChangePassword()
