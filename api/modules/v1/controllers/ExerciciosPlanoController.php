@@ -4,9 +4,8 @@ namespace api\modules\v1\controllers;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\Cors;
-use yii\helpers\ArrayHelper;
 //-
-use yii\web\UnauthorizedHttpException;
+use yii\web\NotFoundHttpException;
 //-
 use common\models\ExerciciosPlano;
 use common\models\ExercicioAerobicoPlano;
@@ -36,81 +35,42 @@ class ExerciciosPlanoController extends ActiveController
         return $behaviors;
     }
 
+    /**
+     * @return array
+     * @throws NotFoundHttpException
+     */
     public function actionRoutine ()
     {
-        /*
-        $idExercicio_plano = Yii::$app->request->getHeaders()->get('EXERCISE-ID');
-        $exercicio_plano = ExerciciosPlano::findOne(['idExercicio_plano' => $idExercicio_plano]);
-        $exercicio = Exercicio::findOne(['idExercicio' => $exercicio_plano->idExercicio]);
-        $tipo_exercicio = $exercicio->tipo_exercicio;
-        $exercicio_aerobico = ExercicioAerobicoPlano::findOne(['idExercicio' => $exercicio_plano->idExercicio_plano]);
-        $exercicio_anaerobico = ExercicioAnaerobicoPlano::findOne(['idExercicio' => $exercicio_plano->idExercicio_plano]);
-        */
+        $plan_id = Yii::$app->request->getHeaders()->get('PLAN-ID'); //Plano que o cliente escolheu
 
+        if (!($exercicios_plano = ExerciciosPlano::find()->where(['idPlano' => $plan_id])->all())) {
+            throw new NotFoundHttpException('Invalid plan.');
+        }
 
-        $plan_id = Yii::$app->request->getHeaders()->get('PLAN-ID');
-        $exercises = ExerciciosPlano::find()->where(['idPlano' => $plan_id])->asArray()->all();
-        //$exercises = ExerciciosPlano::find()->asArray()->all();
-
-        foreach ($exercises as $exercise)
+        foreach ($exercicios_plano as $exercicio_plano)
         {
+            $exercicio = Exercicio::findOne(['idExercicio' => $exercicio_plano->idExercicio]); //Objeto do tipo Exercicio
+            if ($exercicio->tipo_exercicio == 1) {
+                $exercicio_aerobico = ExercicioAerobicoPlano::findOne(['idExercicio' => $exercicio_plano->idExercicio_plano]); //Objeto do tipo ExercicioAerobicoPlano
+                $duracao = $exercicio_aerobico->duracao;
+                $reps = -1;
+                $series = -1;
+            } else if ($exercicio->tipo_exercicio == 2) {
+                $exercicio_anaerobico = ExercicioAnaerobicoPlano::findOne(['idExercicio' => $exercicio_plano->idExercicio_plano]); //Objeto do tipo ExercicioAnaerobicoPlano
+                $duracao = -1;
+                $series = $exercicio_anaerobico->series;
+                $reps = $exercicio_anaerobico->repeticoes;
+            }
 
-        }
-        /*
-        $ids = ArrayHelper::map($exercises, 'idExercicio_plano', 'idExercicio');
-        $ids_exercicios_plano = ArrayHelper::getColumn($exercises, 'idExercicio_plano');
-        $ids_exercicios = ArrayHelper::getColumn($exercises, 'idExercicio');
-
-        //return $ids;
-
-        //return $ids_exercicios_plano;
-        /*
-        foreach ($ids_exercicios_plano as $idExercicio_plano) {
-            echo 'idExercicio_plano - '.$idExercicio_plano.PHP_EOL;
-        }
-        */
-
-        //return $ids_exercicios;
-        /*
-        foreach ($ids_exercicios as $idExercicio) {
-            echo $idExercicio.' - ';
-            $exercicio = Exercicio::findOne(['idExercicio' => $idExercicio]);
-            echo $exercicio->descricao.PHP_EOL;
+            $result[] = [
+                'idExercicio_plano' => $exercicio_plano->idExercicio_plano,
+                'descricao' => $exercicio->descricao,
+                'duracao' => $duracao,
+                'series' => $series,
+                'repeticoes' => $reps
+            ];
         }
 
-        return null;
-
-
-        if ($tipo_exercicio == 1) {
-            return array(
-                'Descrição' => $exercicio->descricao,
-                'Duração' => $exercicio_aerobico->duracao
-            );
-        } else if ($tipo_exercicio == 2){
-            return array(
-                'Descrição' => $exercicio->descricao,
-                'Séries' => $exercicio_anaerobico->series,
-                'Repetições' => $exercicio_anaerobico->repeticoes
-            );
-        } else {
-            return null;
-        }
-
-*/
-    }
-
-    /**
-     * @return array|\yii\db\ActiveRecord[]
-     * @throws UnauthorizedHttpException
-     */
-    public function actionFilterByPlan()
-    {
-        $plan_id = Yii::$app->request->getHeaders()->get('PLAN-ID');
-
-        if (empty($plan_id)) {
-            throw new UnauthorizedHttpException('Missing plan id');
-        }
-
-        return ExerciciosPlano::find()->where(['idPlano' => $plan_id])->all();
+        return $result;
     }
 }
