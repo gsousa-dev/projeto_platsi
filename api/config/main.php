@@ -8,6 +8,7 @@ $params = array_merge(
 return [
     'id' => 'app-api',
     'basePath' => dirname(__DIR__),
+    'defaultRoute' => 'default/index',
     'bootstrap' => ['log'],
     'modules' => [
         'v1' => [
@@ -41,8 +42,9 @@ return [
                         'v1/fotos-de-progresso',
                         'v1/plano-pessoal',
                         'v1/mensagem',
-                        'v1/exercicios-plano' //TODO
+                        'v1/exercicios-plano'
                     ],
+                    'except' => ['delete'],
                     'pluralize' => false
                 ],
                 [
@@ -51,7 +53,8 @@ return [
                         'v1/cliente',
                         'v1/objetivo',
                         'v1/exercicio'
-                    ]
+                    ],
+                    'except' => ['delete'],
                 ],
             ],
         ]

@@ -14,7 +14,7 @@ use yii\web\ServerErrorHttpException;
  * @property Objetivo $objetivo
  *
  * @property Feedback[] $feedbacks
- * @property FotoDeProgresso[] $fotosDeProgresso
+ * @property FotosDeProgresso[] $fotosDeProgresso
  * @property Mensagem[] $mensagens
  * @property Pesagem[] $pesagens
  * @property PlanoPessoal[] $planosPessoais
@@ -121,7 +121,7 @@ class Cliente extends ActiveRecord
      */
     public function getFotosDeProgresso()
     {
-        return $this->hasMany(FotoDeProgresso::className(), ['idCliente' => 'idCliente']);
+        return $this->hasMany(FotosDeProgresso::className(), ['idCliente' => 'idCliente']);
     }
 
     /**
