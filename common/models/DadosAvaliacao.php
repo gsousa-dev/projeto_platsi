@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
  * @property Cliente $idCliente
  *
  * @property string $altura
+ * @property string $massa_corporal
  * @property string $massa_gorda
  * @property string $massa_muscular
  * @property string $agua_no_organismo
@@ -30,7 +31,7 @@ class DadosAvaliacao extends ActiveRecord
         return [
             [['idCliente', 'altura', 'massa_gorda', 'massa_muscular', 'agua_no_organismo'], 'required'],
             [['idCliente'], 'integer'],
-            [['altura', 'massa_gorda', 'massa_muscular', 'agua_no_organismo'], 'number'],
+            [['altura', 'massa_corporal', 'massa_gorda', 'massa_muscular', 'agua_no_organismo'], 'number'],
             [['idCliente'], 'unique'],
             [['idCliente'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['idCliente' => 'idCliente']],
         ];
@@ -44,6 +45,7 @@ class DadosAvaliacao extends ActiveRecord
         return [
             'idCliente' => 'Id Cliente',
             'altura' => 'Altura',
+            'massa_corporal' => 'Massa Corporal',
             'massa_gorda' => 'Massa Gorda',
             'massa_muscular' => 'Massa Muscular',
             'agua_no_organismo' => 'Água No Organismo',
