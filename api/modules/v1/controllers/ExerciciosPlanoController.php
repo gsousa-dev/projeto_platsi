@@ -4,6 +4,7 @@ namespace api\modules\v1\controllers;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\Cors;
+use yii\helpers\ArrayHelper;
 //-
 use yii\web\NotFoundHttpException;
 //-
@@ -69,8 +70,8 @@ class ExerciciosPlanoController extends ActiveController
                 'series' => $series,
                 'repeticoes' => $reps
             ];
+            ArrayHelper::multisort($result, ['idExercicio_plano'], [SORT_ASC]);
         }
-
         return $result;
     }
 }
