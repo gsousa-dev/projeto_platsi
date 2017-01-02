@@ -29,7 +29,7 @@ class DadosAvaliacao extends ActiveRecord
     public function rules()
     {
         return [
-            [['idCliente', 'altura', 'massa_gorda', 'massa_muscular', 'agua_no_organismo'], 'required'],
+            [['idCliente', 'altura', 'massa_corporal', 'massa_gorda', 'massa_muscular', 'agua_no_organismo'], 'required'],
             [['idCliente'], 'integer'],
             [['altura', 'massa_corporal', 'massa_gorda', 'massa_muscular', 'agua_no_organismo'], 'number'],
             [['idCliente'], 'unique'],
