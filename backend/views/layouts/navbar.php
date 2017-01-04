@@ -1,6 +1,5 @@
 <?php
 use yii\widgets\Menu;
-use yii\helpers\Url;
 
 echo Menu::widget([
         'options' => ['class' => 'nav navbar-nav'],
@@ -9,7 +8,7 @@ echo Menu::widget([
                 [
                     'options' => ['class' => 'dropdown dropdown-fw dropdown-fw-disabled  active open selected'],
                     'label' => '<i class="fa fa-database" aria-hidden="true"></i>RBAC',
-                    'url' => Url::to('javascript:;'),
+                    'url' => 'javascript:;',
                     'items' => [
                         ['label' => '<i class="fa fa-address-card"></i> Assignments', 'url' => ['admin/assignment']],
                         ['label' => '<i class="fa fa-user"></i> Roles', 'url' => ['admin/role']],
@@ -21,28 +20,28 @@ echo Menu::widget([
                 [
                     'options' => ['class' => 'dropdown dropdown-fw'],
                     'label' => '<i class="fa fa-users"></i>UTILIZADORES',
-                    'url' => Url::to('javascript:;'),
+                    'url' => 'javascript:;',
                     'items' => [],
                     'visible' => Yii::$app->user->can('admin')
                 ],
                 [
                     'options' => ['class' => 'dropdown dropdown-fw dropdown-fw-disabled  active open selected'],
                     'label' => '<i class="fa fa-users"></i>UTILIZADORES',
-                    'url' => Url::to('javascript:;'),
+                    'url' => 'javascript:;',
                     'items' => [],
                     'visible' => Yii::$app->user->can('secretaria')
                 ],
                 [
                     'options' => ['class' => 'dropdown dropdown-fw dropdown-fw-disabled  active open selected'],
                     'label' => '<i class="fa fa-users"></i>OS MEUS CLIENTES',
-                    'url' => Url::to('javascript:;'),
+                    'url' => 'javascript:;',
                     'items' => [],
                     'visible' => Yii::$app->user->can('personal_trainer')
                 ],
                 [
                     'options' => ['class' => 'dropdown dropdown-fw'],
                     'label' => '<i class="fa fa-list-alt"></i>EXERCÍCIOS',
-                    'url' => Url::to('javascript:;'),
+                    'url' => 'javascript:;',
                     'items' => [],
                     'visible' => Yii::$app->user->can('personal_trainer')
                 ],
