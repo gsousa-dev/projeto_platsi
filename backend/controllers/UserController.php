@@ -10,11 +10,8 @@ use yii\filters\VerbFilter;
 //-
 use common\models\User;
 //-
-use backend\models\UserForm as Form;
+use backend\models\forms\UserForm as Form;
 
-/**
- * UserController implements the CRUD actions for User model.
- */
 class UserController extends Controller
 {
     /**
@@ -76,26 +73,13 @@ class UserController extends Controller
     {
         $form = new Form();
 
-        if ($form->load(Yii::$app->request->post())) {
-            if ($form->save()) {
-                Yii::$app->session->setFlash('success', 'New user created.');
-                return $this->goHome();
-            }
+        if ($form->load(Yii::$app->request->post()) && $form->save()) {
+            return $this->goHome();
         }
 
         return $this->render('create', ['model' => $form,]);
     }
-        /*
-        $model = new User();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-        */
     /**
      * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.

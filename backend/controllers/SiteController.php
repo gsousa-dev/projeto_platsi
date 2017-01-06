@@ -8,16 +8,12 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 //-
-use common\models\LoginForm;
-use backend\models\PasswordResetRequestForm;
-use backend\models\ResetPasswordForm;
-//-
+use backend\models\forms\LoginForm;
+use backend\models\forms\PasswordResetRequestForm;
+use backend\models\forms\ResetPasswordForm;
 
 class SiteController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
     public function behaviors()
     {
         return [
@@ -46,9 +42,6 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function actions()
     {
         return [
@@ -72,20 +65,11 @@ class SiteController extends Controller
         }
     }
 
-    /**
-     * Index action
-     *
-     * @return string
-     */
     public function actionIndex()
     {
         return $this->render('index');
     }
 
-    /**
-     * Login action.
-     *
-     */
     public function actionLogin()
     {
         $this->layout = 'login';
@@ -94,10 +78,10 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
-        $loginModel = new LoginForm();
+        $form = new LoginForm();
         $passwordResetRequestModel = new PasswordResetRequestForm();
 
-        if ($loginModel->load(Yii::$app->request->post()) && $loginModel->login()) {
+        if ($form->load(Yii::$app->request->post()) && $form->login()) {
             return $this->goHome();
         } else if($passwordResetRequestModel->load(Yii::$app->request->post()) && $passwordResetRequestModel->validate()) {
             if ($passwordResetRequestModel->sendEmail()) {
@@ -109,17 +93,11 @@ class SiteController extends Controller
         }
 
         return $this->render('login', [
-            'loginModel' => $loginModel,
+            'loginModel' => $form,
             'passwordResetRequestModel' => $passwordResetRequestModel,
         ]);
-
     }
 
-    /**
-     * Logout action.
-     *
-     * @return string
-     */
     public function actionLogout()
     {
         Yii::$app->user->logout();
@@ -127,11 +105,6 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    /**
-     * Requests password reset.
-     *
-     * @return mixed
-     */
     public function actionRequestPasswordReset()
     {
         $model = new PasswordResetRequestForm();
@@ -149,13 +122,6 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Resets password.
-     *
-     * @param string $token
-     * @return mixed
-     * @throws BadRequestHttpException
-     */
     public function actionResetPassword($token)
     {
         $this->layout = 'login';

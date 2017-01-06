@@ -1,12 +1,10 @@
 <?php
-namespace common\models;
+namespace backend\models\forms;
 
 use Yii;
 use yii\base\Model;
-
-/**
- * Login form
- */
+//-
+use common\models\User;
 
 class LoginForm extends Model
 {
@@ -16,18 +14,14 @@ class LoginForm extends Model
 
     private $_user;
 
-
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            // username and password are both required
             [['username', 'password'], 'required'],
-            // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
             ['password', 'validatePassword'],
         ];
     }
@@ -56,11 +50,17 @@ class LoginForm extends Model
      */
     public function login()
     {
-        if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
-        } else {
-            return false;
+        if ($this->validate())
+        {
+            $user = $this->getUser();
+            $user_permissions = Yii::$app->authManager->getPermissionsByUser($user->id);
+
+            if (array_key_exists('login', $user_permissions)) {
+                return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+            }
         }
+
+        return false;
     }
 
     /**
