@@ -1,5 +1,4 @@
 <?php
-
 namespace backend\assets;
 
 use yii\web\AssetBundle;
@@ -47,5 +46,7 @@ class MetronicAsset extends AssetBundle
         'assets/layouts/global/scripts/quick-sidebar.min.js',
     ];
     public $depends = [
+        'yii\web\YiiAsset',
+        'yii\bootstrap\BootstrapAsset',
     ];
 }

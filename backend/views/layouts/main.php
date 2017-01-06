@@ -38,7 +38,7 @@ MetronicAsset::register($this);
                             </button>
                             <!-- End Toggle Button -->
                             <!-- BEGIN LOGO -->
-                            <a id="index" class="page-logo" href="index.html">
+                            <a id="index" class="page-logo" href="<?= Yii::$app->homeUrl ?>">
                                 <img src="../assets/layouts/layout5/img/logo.png" alt="Logo"> </a>
                             <!-- END LOGO -->
                             <!-- BEGIN TOPBAR ACTIONS -->

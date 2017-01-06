@@ -7,14 +7,14 @@ use yii\filters\auth\AuthInterface;
 use yii\web\UnauthorizedHttpException;
 //-
 use api\modules\v1\models\Session;
-//-
 
 final class RequestAuthorization extends ActionFilter implements AuthInterface
 {
     /**
      * @inheritdoc
      */
-    public function beforeAction($action) {
+    public function beforeAction($action)
+    {
         $response = Yii::$app->getResponse();
         if ($this->authenticate(Yii::$app->getUser(), Yii::$app->getRequest(), $response) !== null) {
             return true;
@@ -26,7 +26,8 @@ final class RequestAuthorization extends ActionFilter implements AuthInterface
     /**
      * @inheritdoc
      */
-    public function authenticate($_user, $request, $response) {
+    public function authenticate($_user, $request, $response)
+    {
         $headers = $request->getHeaders();
 
         if (empty($headers['ACCESS-TOKEN']) ||
