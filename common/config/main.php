@@ -6,11 +6,6 @@ return [
         'debug' => [
             'class' => 'yii\debug\Module',
         ],
-        'admin' => [
-            'class' => 'mdm\admin\Module',
-            'layout' => 'right-menu', //'left-menu', //'top-menu',
-            'mainLayout' => '@vendor/mdmsoft/yii2-admin/views/layouts/main.php',
-        ],
     ],
     'components' => [
         'authManager' => [
@@ -21,8 +16,6 @@ return [
         ],
         'user' => [
             'identityClass' => 'common\models\User',
-            'loginUrl' => ['admin/user/login'],
-            //'loginUrl' => ['site/login'],
         ],
     ],
 ];
