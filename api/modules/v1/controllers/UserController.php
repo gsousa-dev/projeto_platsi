@@ -33,6 +33,49 @@ final class UserController extends ActiveController
         return $behaviors;
     }
 
+    public function actions()
+    {
+        $actions = parent::actions();
+        unset($actions['create']);
+
+        return $actions;
+    }
+
+    public function actionCreate()
+    {
+        $request = Yii::$app->request;
+
+        $user_type = $request->post('user_type');
+        $name = $request->post('name');
+        $username = $request->post('username');
+        $email = $request->post('email');
+        $password = $request->post('password');
+        $birthday = $request->post('birthday');
+        $gender = $request->post('gender');
+        $profile_picture = $request->post('profile_picture');
+
+        if (empty($user_type) || empty($name) || empty($username) || empty($email) || empty($password) || empty($gender) || empty($profile_picture)) {
+            throw new UnauthorizedHttpException('Missing credentials.');
+        }
+
+        $user = new User();
+        $user->user_type = $user_type;
+        $user->name = $name;
+        $user->username = $username;
+        $user->email = $email;
+        $user->generateAuthKey();
+        $user->setPassword($password);
+        $user->birthday = $birthday;
+        $user->gender = $gender;
+        $user->profile_picture = $profile_picture;
+
+        if (!$user->save()) {
+            throw new ServerErrorHttpException('Server error. Unable to create session id.');
+        }
+
+        return $user;
+    }
+
     public function actionChangePassword()
     {
         $request = Yii::$app->request;
@@ -86,11 +129,11 @@ final class UserController extends ActiveController
         $session->userId = $user->id;
 
         if (!$session->save()) {
-            throw new ServerErrorHttpException('Server error. Unable to create session id.');
+            throw new ServerErrorHttpException('Server error. Unable to create session.');
         }
 
         /**
-         * returns client's personal trainer
+         * returns client's personal trainer id
          * returns null if user's not a client
          */
         $idPersonal_trainer = ($cliente = Cliente::findOne(['idCliente' => $user->id])) ? $cliente->idPersonal_trainer : null;
@@ -107,6 +150,10 @@ final class UserController extends ActiveController
     {
         $access_token = Yii::$app->request->getHeaders()->get('ACCESS-TOKEN');
 
+        if (empty($access_token)) {
+            throw new UnauthorizedHttpException('Missing access token.');
+        }
+
         if ($session = Session::findOne(['access_token' => $access_token])) {
             $session->delete();
         }
@@ -117,7 +164,7 @@ final class UserController extends ActiveController
         $user_type = Yii::$app->request->getHeaders()->get('USER-TYPE');
 
         if (empty($user_type)) {
-            throw new UnauthorizedHttpException('Missing user type');
+            throw new UnauthorizedHttpException('Missing user type.');
         }
 
         return User::find()->where(['user_type' => $user_type])->andWhere(['status' => 10])->all();
@@ -127,6 +174,10 @@ final class UserController extends ActiveController
     {
         $request = Yii::$app->request;
         $email = $request->post('email');
+
+        if (empty($email)) {
+            throw new UnauthorizedHttpException('Missing email.');
+        }
 
         if ($user = User::findOne(['email' => $email])) {
             $user->sendEmail();
