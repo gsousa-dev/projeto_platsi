@@ -24,7 +24,7 @@ class UserController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     ['allow' => false, 'roles' => ['?']],
-                    ['allow' => true, 'roles' => ['@']],
+                    ['allow' => true, 'roles' => ['admin', 'secretaria']], //Só utilizadores com estas roles têm acesso a este controller
                     ['allow' => false]
                 ]
             ],
