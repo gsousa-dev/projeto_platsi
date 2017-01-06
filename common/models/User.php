@@ -56,7 +56,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             ['user_type', 'exist'],
-            [['user_type', 'username', 'email', 'name', 'birthday', 'gender'], 'required'],
+            [['user_type', 'name', 'username', 'email', 'birthday', 'gender', 'profile_picture'], 'required'],
             [['user_type', 'status', 'created_at', 'updated_at'], 'integer'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
@@ -68,33 +68,44 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
-    /**
-     * @param bool $insert
-     * @return bool
-     */
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert))
-        {
-            if ($this->isNewRecord) {
-                $this->generateAuthKey();
-                $this->setPassword(Yii::$app->request->post('password'));
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
     public function afterSave($insert, $changedAttributes)
     {
-        if ($this->user_type == 4)
+        if ($insert)
         {
-            $cliente = new Cliente();
-            $cliente->idCliente = $this->id;
-            $cliente->save();
+            $auth = \Yii::$app->authManager;
+
+            if ($this->user_type == 2) {
+                $role = $auth->getRole('secretaria');
+                $auth->assign($role, $this->getId());
+            } elseif ($this->user_type == 3) {
+                $role = $auth->getRole('personal_trainer');
+                $auth->assign($role, $this->getId());
+            } elseif ($this->user_type == 4) {
+                $cliente = new Cliente();
+                $cliente->idCliente = $this->id;
+                $cliente->save();
+            }
         }
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'user_type' => 'Tipo de Utilizador',
+            'username' => 'Username',
+            'auth_key' => 'Auth Key',
+            'password_hash' => 'Password Hash',
+            'password_reset_token' => 'Password Reset Token',
+            'email' => 'Email',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'name' => 'Nome',
+            'birthday' => 'Data de Nascimento',
+            'gender' => 'Género',
+            'profile_picture' => 'Foto de Perfil',
+        ];
     }
 
     /**
