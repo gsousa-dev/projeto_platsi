@@ -3,8 +3,8 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-/* @var $loginModel \common\models\LoginForm*/
-/* @var $passwordResetRequestModel \backend\models\PasswordResetRequestForm */
+/* @var $loginModel \backend\models\forms\LoginForm*/
+/* @var $passwordResetRequestModel \backend\models\forms\PasswordResetRequestForm */
 
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;

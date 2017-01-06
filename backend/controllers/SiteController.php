@@ -78,10 +78,10 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
-        $form = new LoginForm();
+        $loginModel = new LoginForm();
         $passwordResetRequestModel = new PasswordResetRequestForm();
 
-        if ($form->load(Yii::$app->request->post()) && $form->login()) {
+        if ($loginModel->load(Yii::$app->request->post()) && $loginModel->login()) {
             return $this->goHome();
         } else if($passwordResetRequestModel->load(Yii::$app->request->post()) && $passwordResetRequestModel->validate()) {
             if ($passwordResetRequestModel->sendEmail()) {
@@ -93,7 +93,7 @@ class SiteController extends Controller
         }
 
         return $this->render('login', [
-            'loginModel' => $form,
+            'loginModel' => $loginModel,
             'passwordResetRequestModel' => $passwordResetRequestModel,
         ]);
     }

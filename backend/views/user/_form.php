@@ -5,21 +5,20 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 //-
 use common\models\UserType;
-//-
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\UserForm */
+/* @var $model backend\models\forms\UserForm */
 /* @var $form yii\widgets\ActiveForm */
 
-$items = ArrayHelper::map(UserType::find()->where('user_type != "Admin"')->all(), 'id', 'user_type');
+$user_types = ArrayHelper::map(UserType::find()->where('user_type != "Admin"')->all(), 'id', 'user_type'); //Apanhar o id do tipo de utilizador
 ?>
 
 <div class="user-form">
-    <p>Please fill out the following fields to register a user:</p>
+    <p>Preencha os seguintes campos para criar um novo utilizador:</p>
 
     <?php $form = ActiveForm::begin(['options' => ['role' => 'form']]); ?>
 
-    <?= $form->field($model, 'user_type')->dropDownList($items) ?>
+    <?= $form->field($model, 'user_type')->dropDownList($user_types) ?>
 
     <?= $form->field($model, 'username')->textInput() ?>
 
@@ -31,12 +30,12 @@ $items = ArrayHelper::map(UserType::find()->where('user_type != "Admin"')->all()
 
     <?= $form->field($model, 'birthday')->textInput() ?>
 
-    <?= $form->field($model, 'gender')->dropDownList(['F' => 'Female', 'M' => 'Male'], ['prompt'=>'Select your Gender']) ?>
+    <?= $form->field($model, 'gender')->dropDownList(['F' => 'Feminino', 'M' => 'Masculino']) ?>
 
     <?= $form->field($model, 'profile_picture')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton('Submeter', ['class' => 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

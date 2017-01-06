@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-/* @var $model \backend\models\ResetPasswordForm */
+/* @var $model \backend\models\forms\ResetPasswordForm */
 
 $this->title = 'Reset password';
 $this->params['breadcrumbs'][] = $this->title;
