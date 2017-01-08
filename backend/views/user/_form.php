@@ -10,7 +10,12 @@ use common\models\UserType;
 /* @var $model backend\models\forms\UserForm */
 /* @var $form yii\widgets\ActiveForm */
 
-$user_types = ArrayHelper::map(UserType::find()->where('user_type != "Admin"')->all(), 'id', 'user_type'); //Apanhar o id do tipo de utilizador
+if (Yii::$app->user->can('admin')) {
+    $user_types = ArrayHelper::map(UserType::find()->where('user_type != "Admin"')->andWhere('user_type != "Cliente"')->all(), 'id', 'user_type');
+} else if (Yii::$app->user->can('secretaria')) {
+    $user_types = ArrayHelper::map(UserType::find()->where('user_type != "Admin"')->all(), 'id', 'user_type');
+}
+
 ?>
 
 <div class="user-form">
@@ -28,11 +33,17 @@ $user_types = ArrayHelper::map(UserType::find()->where('user_type != "Admin"')->
 
     <?= $form->field($model, 'name')->textInput() ?>
 
-    <?= $form->field($model, 'birthday')->textInput() ?>
+    <?= $form->field($model, 'birthday')->widget(dosamigos\datepicker\DatePicker::className(), [
+        'inline' => false,
+        'clientOptions' => [
+            'autoclose' => true,
+            'format' => 'yyyy-mm-dd',
+        ],
+    ]) ?>
 
     <?= $form->field($model, 'gender')->dropDownList(['F' => 'Feminino', 'M' => 'Masculino']) ?>
 
-    <?= $form->field($model, 'profile_picture')->textInput() ?>
+    <?= $form->field($model, 'imageFile')->fileInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Submeter', ['class' => 'btn btn-primary']) ?>

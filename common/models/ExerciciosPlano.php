@@ -68,7 +68,7 @@ class ExerciciosPlano extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdExercicio()
+    public function getExercicio()
     {
         return $this->hasOne(Exercicio::className(), ['idExercicio' => 'idExercicio']);
     }
@@ -76,7 +76,7 @@ class ExerciciosPlano extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdPlano()
+    public function getPlano()
     {
         return $this->hasOne(PlanoPessoal::className(), ['idPlano' => 'idPlano']);
     }

@@ -58,7 +58,7 @@ class PlanoPessoal extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdCliente()
+    public function getCliente()
     {
         return $this->hasOne(Cliente::className(), ['idCliente' => 'idCliente']);
     }

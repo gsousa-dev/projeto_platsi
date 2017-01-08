@@ -1,10 +1,8 @@
 <?php
 namespace common\models;
 
-use GuzzleHttp\Client;
 use Yii;
 use yii\db\ActiveRecord;
-use yii\web\ServerErrorHttpException;
 
 /**
  * @property User $idCliente
@@ -17,7 +15,7 @@ use yii\web\ServerErrorHttpException;
  * @property FotosDeProgresso[] $fotosDeProgresso
  * @property Mensagem[] $mensagens
  * @property Pesagem[] $pesagens
- * @property PlanoPessoal[] $planosPessoais
+ * @property PlanoPessoal[] $planos
  */
 
 class Cliente extends ActiveRecord
@@ -87,15 +85,21 @@ class Cliente extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdCliente()
+    public function getCliente()
     {
         return $this->hasOne(User::className(), ['id' => 'idCliente']);
+    }
+
+    public function getImageurl()
+    {
+        $profile_picture = $this->getCliente()->select('profile_picture')->all();
+        return Yii::$app->basePath.'/'.$profile_picture;
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdPersonalTrainer()
+    public function getPersonalTrainer()
     {
         return $this->hasOne(User::className(), ['id' => 'idPersonal_trainer']);
     }
@@ -151,7 +155,7 @@ class Cliente extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPlanosPessoais()
+    public function getPlanos()
     {
         return $this->hasMany(PlanoPessoal::className(), ['idCliente' => 'idCliente']);
     }

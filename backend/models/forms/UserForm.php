@@ -15,7 +15,10 @@ class UserForm extends Model
     public $password;
     public $birthday;
     public $gender;
-    public $profile_picture;
+    /**
+     * @var UploadedFile
+     */
+    public $imageFile;
 
     /**
      * @inheritdoc
@@ -30,7 +33,8 @@ class UserForm extends Model
             ['username', 'string', 'min' => 2, 'max' => 32],
             ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
             ['password', 'string', 'min' => 6],
-            [['email', 'name', 'gender', 'birthday', 'profile_picture'], 'string', 'max' => 255],
+            [['email', 'name', 'gender', 'birthday'], 'string', 'max' => 255],
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
         ];
     }
 
@@ -49,7 +53,6 @@ class UserForm extends Model
         $user->setPassword($this->password);
         $user->birthday = $this->birthday;
         $user->gender = $this->gender;
-        $user->profile_picture = $this->profile_picture;
 
         return $user->save() ? $user : null;
     }

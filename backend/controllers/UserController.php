@@ -24,14 +24,8 @@ class UserController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     ['allow' => false, 'roles' => ['?']],
-                    ['allow' => true, 'roles' => ['admin', 'secretaria']], //Só utilizadores com estas roles têm acesso a este controller
+                    ['allow' => true, 'roles' => ['admin', 'secretaria']],
                     ['allow' => false]
-                ]
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
                 ],
             ],
         ];
@@ -100,19 +94,6 @@ class UserController extends Controller
     }
 
     /**
-     * Deletes an existing User model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
@@ -126,5 +107,20 @@ class UserController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionMeusClientes()
+    {
+        $query = User::find()->select('id, name, username, email, birthday, gender, profile_picture');
+        $query->joinWith('clientes',[], 'INNER JOIN')->orderBy('name');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'key' => 'name',
+        ]);
+
+        return $this->render('meus-clientes', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 }

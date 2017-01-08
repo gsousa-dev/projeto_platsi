@@ -24,6 +24,9 @@ use yii\web\IdentityInterface;
  * @property string $birthday
  * @property string $gender
  * @property string $profile_picture
+ *
+ * @property Cliente[] $clientes
+ * @property Mensagem[] $mensagens
  */
 
 class User extends ActiveRecord implements IdentityInterface
@@ -56,7 +59,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             ['user_type', 'exist'],
-            [['user_type', 'name', 'username', 'email', 'birthday', 'gender', 'profile_picture'], 'required'],
+            [['user_type', 'name', 'username', 'email', 'birthday', 'gender'], 'required'],
             [['user_type', 'status', 'created_at', 'updated_at'], 'integer'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
@@ -106,6 +109,27 @@ class User extends ActiveRecord implements IdentityInterface
             'gender' => 'Género',
             'profile_picture' => 'Foto de Perfil',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClientes()
+    {
+        return $this->hasMany(Cliente::className(), ['idPersonal_trainer' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMensagens()
+    {
+        return $this->hasMany(Mensagem::className(), ['idReceptor' => 'id']);
+    }
+
+    public function getImageurl()
+    {
+        return '/'.$this->profile_picture;
     }
 
     /**
@@ -176,6 +200,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function getId()
     {
         return $this->getPrimaryKey();
+    }
+
+    public function getUserType()
+    {
+        return $this->user_type;
     }
 
     /**

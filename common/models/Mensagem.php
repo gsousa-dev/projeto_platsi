@@ -6,8 +6,9 @@ use yii\db\ActiveRecord;
 /**
  * @property integer $idMensagem
  *
- * @property string $mensagem
  * @property string $data_envio
+ * @property string $mensagem
+ * @property string estado
  * @property User $idEmissor
  * @property User $idReceptor
  */
@@ -29,7 +30,7 @@ class Mensagem extends ActiveRecord
     {
         return [
             [['mensagem', 'idEmissor', 'idReceptor'], 'required'],
-            [['mensagem'], 'string'],
+            [['mensagem', 'estado'], 'string'],
             [['data_envio'], 'safe'],
             [['idEmissor', 'idReceptor'], 'integer'],
             [['idEmissor'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['idEmissor' => 'id']],
@@ -48,13 +49,14 @@ class Mensagem extends ActiveRecord
             'data_envio' => 'Data de Envio',
             'idEmissor' => 'Id Emissor',
             'idReceptor' => 'Id Receptor',
+            'estado' => 'Estado',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdEmissor()
+    public function getEmissor()
     {
         return $this->hasOne(User::className(), ['id' => 'idEmissor']);
     }
@@ -62,7 +64,7 @@ class Mensagem extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdReceptor()
+    public function getReceptor()
     {
         return $this->hasOne(User::className(), ['id' => 'idReceptor']);
     }

@@ -14,7 +14,15 @@ return [
     'modules' => [
         'admin' => [
             'class' => 'mdm\admin\Module',
-            'mainLayout' => '@app/views/layouts/main.php',
+            'as access' => [
+                'class' => 'yii\filters\AccessControl',
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ]
+            ],
         ],
     ],
     'components' => [

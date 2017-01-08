@@ -3,9 +3,6 @@ namespace backend\assets;
 
 use yii\web\AssetBundle;
 
-/**
- * Metronic backend application assets.
- */
 class MetronicAsset extends AssetBundle
 {
     public $basePath = '@webroot';
@@ -29,7 +26,7 @@ class MetronicAsset extends AssetBundle
         'assets/pages/css/error.min.css',
     ];
     public $js = [
-        'assets/global/plugins/jquery.min.js',
+        //'assets/global/plugins/jquery.min.js', //TODO:
         'assets/global/plugins/bootstrap/js/bootstrap.min.js',
         'assets/global/plugins/js.cookie.min.js',
         'assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js',

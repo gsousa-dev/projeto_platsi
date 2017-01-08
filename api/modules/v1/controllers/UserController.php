@@ -1,6 +1,7 @@
 <?php
 namespace api\modules\v1\controllers;
 
+use backend\models\forms\UserForm;
 use Yii;
 use yii\filters\Cors;
 use yii\rest\ActiveController;
@@ -54,7 +55,7 @@ final class UserController extends ActiveController
         $gender = $request->post('gender');
         $profile_picture = $request->post('profile_picture');
 
-        if (empty($user_type) || empty($name) || empty($username) || empty($email) || empty($password) || empty($gender) || empty($profile_picture)) {
+        if (empty($user_type) || empty($name) || empty($username) || empty($email) || empty($password) || empty($gender)) {
             throw new UnauthorizedHttpException('Missing credentials.');
         }
 
@@ -67,7 +68,9 @@ final class UserController extends ActiveController
         $user->setPassword($password);
         $user->birthday = $birthday;
         $user->gender = $gender;
-        $user->profile_picture = $profile_picture;
+        if (!empty($profile_picture)) {
+            $user->profile_picture = $profile_picture;
+        }
 
         if (!$user->save()) {
             throw new ServerErrorHttpException('Server error. Unable to create session id.');

@@ -6,7 +6,7 @@ use yii\db\ActiveRecord;
 /**
  * @property integer $id
  *
- * @property string $Tipo
+ * @property string $tipo
  *
  * @property Exercicio[] $exercicios
  */
@@ -27,8 +27,8 @@ class TipoExercicio extends ActiveRecord
     public function rules()
     {
         return [
-            [['Tipo'], 'required'],
-            [['Tipo'], 'string', 'max' => 45],
+            [['tipo'], 'required'],
+            [['tipo'], 'string', 'max' => 45],
         ];
     }
 
@@ -39,7 +39,7 @@ class TipoExercicio extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'Tipo' => 'Tipo',
+            'tipo' => 'Tipo',
         ];
     }
 
