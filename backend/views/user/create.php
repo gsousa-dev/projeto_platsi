@@ -1,9 +1,9 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 //-
+use common\models\User;
 use common\models\UserType;
 
 /* @var $this yii\web\View */
@@ -14,6 +14,7 @@ if (Yii::$app->user->can('admin')) {
     $this->params['user_types'] = ArrayHelper::map(UserType::find()->where('user_type != "Admin"')->andWhere('user_type != "Cliente"')->all(), 'id', 'user_type');
 } else if (Yii::$app->user->can('secretaria')) {
     $this->params['user_types'] = ArrayHelper::map(UserType::find()->where('user_type != "Admin"')->all(), 'id', 'user_type');
+    $this->params['personal_trainers'] = ArrayHelper::map(User::find()->where(['user_type' => 3])->all(), 'id', 'name');
 }
 ?>
 <div class="breadcrumbs">
@@ -30,7 +31,7 @@ if (Yii::$app->user->can('admin')) {
 
     <?php $form = ActiveForm::begin(['options' => ['role' => 'form']]); ?>
 
-    <?= $form->field($model, 'user_type')->dropDownList(Yii::$app->view->params['user_types']) ?>
+    <?= $form->field($model, 'user_type')->dropDownList(Yii::$app->view->params['personal_trainers'])->label('Tipo de Utilizador') ?>
 
     <?= $form->field($model, 'username')->textInput() ?>
 

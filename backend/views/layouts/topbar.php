@@ -1,7 +1,11 @@
 <?php
 use common\models\Mensagem;
 $unreadMessages = Mensagem::find()->where(['idReceptor' => Yii::$app->user->id])->andWhere(['estado' => 'por responder'])->count();
-$this->params['unread_messages'] = $unreadMessages;
+if ($unreadMessages > 0) {
+    $this->params['unread_messages'] = $unreadMessages;
+} else {
+    $this->params['unread_messages'] = "";
+}
 ?>
 <div class="topbar-actions">
     <div class="btn-group-img btn-group">
