@@ -58,7 +58,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['user_type', 'exist'],
+            [['user_type'], 'exist', 'skipOnError' => true, 'targetClass' => UserType::className(), 'targetAttribute' => ['user_type' => 'id']],
             [['user_type', 'name', 'username', 'email', 'birthday', 'gender'], 'required'],
             [['user_type', 'status', 'created_at', 'updated_at'], 'integer'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],

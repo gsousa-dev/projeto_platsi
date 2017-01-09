@@ -5,9 +5,7 @@ namespace backend\tests\functional;
 use \backend\tests\FunctionalTester;
 use common\fixtures\User as UserFixture;
 
-/**
- * Class LoginCest
- */
+
 class LoginCest
 {
     public function _before(FunctionalTester $I)

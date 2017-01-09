@@ -143,14 +143,14 @@ class UserController extends Controller
 
     public function actionInbox()
     {
-        $current_user = $this->findModel(Yii::$app->user->id);
+        $current_user = $this->findModel(Yii::$app->getUser()->id);
         $inbox_messages = $current_user->getInbox()->where(['estado' => 'por responder'])->orderBy('data_envio DESC');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $inbox_messages,
         ]);
 
-        return $this->render('mensagens/inbox', [
+        return $this->render('/mensagens/inbox', [
             'dataProvider' => $dataProvider,
         ]);
     }
