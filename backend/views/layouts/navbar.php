@@ -42,7 +42,7 @@ echo Menu::widget([
                     'label' => '<i class="fa fa-users"></i> CLIENTES',
                     'url' => 'javascript:;',
                     'items' => [
-                        ['label' => 'Os Meus Clientes', 'url' => ['/cliente/meus-clientes']],
+                        ['label' => 'Os Meus Clientes', 'url' => ['/cliente']],
                     ],
                     'visible' => Yii::$app->user->can('personal_trainer')
                 ],

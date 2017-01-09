@@ -31,8 +31,9 @@ class MensagemForm extends Model
         $mensagem = new Mensagem();
         $mensagem->mensagem = $this->mensagem;
         $mensagem->idEmissor = \Yii::$app->user->id;
-        $mensagem->idReceptor = 40;
-        $mensagem->estado = 'respondida';
+        $mensagem->idReceptor = $this->idReceptor;
+        $mensagem->estado = 'por responder';
+        Mensagem::updateAll(['estado' => 'respondida'],['idEmissor' => $this->idReceptor]);
 
         return $mensagem->save() ? $mensagem : null;
     }

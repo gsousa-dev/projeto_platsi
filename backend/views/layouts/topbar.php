@@ -1,3 +1,8 @@
+<?php
+use common\models\Mensagem;
+$unreadMessages = Mensagem::find()->where(['idReceptor' => Yii::$app->user->id])->andWhere(['estado' => 'por responder'])->count();
+$this->params['unread_messages'] = $unreadMessages;
+?>
 <div class="topbar-actions">
     <div class="btn-group-img btn-group">
         <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -13,11 +18,11 @@
                 'items' => [
                         [
                             'label' => '<i class="icon-user"></i> Meu Perfil',
-                            'url' => ['/user/view?id='.Yii::$app->user->identity->getId()],
+                            'url' => ['/user/perfil?id='.Yii::$app->user->identity->getId()],
                         ],
                         [
-                            'label' => '<i class="icon-envelope-open"></i> Caixa de Entrada <span class="badge badge-danger">1</span>',
-                            'url' => ['/mensagem/inbox'],
+                            'label' => '<i class="icon-envelope-open"></i> Caixa de Entrada <span class="badge badge-danger">'.Yii::$app->view->params['unread_messages'].'</span>',
+                            'url' => ['/user/inbox'],
                             'visible' => Yii::$app->user->can('personal_trainer')
                         ],
                         [

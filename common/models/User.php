@@ -91,24 +91,9 @@ class User extends ActiveRecord implements IdentityInterface
         }
     }
 
-    public function attributeLabels()
+    public function getUserType()
     {
-        return [
-            'id' => 'ID',
-            'user_type' => 'Tipo de Utilizador',
-            'username' => 'Username',
-            'auth_key' => 'Auth Key',
-            'password_hash' => 'Password Hash',
-            'password_reset_token' => 'Password Reset Token',
-            'email' => 'Email',
-            'status' => 'Status',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'name' => 'Nome',
-            'birthday' => 'Data de Nascimento',
-            'gender' => 'Género',
-            'profile_picture' => 'Foto de Perfil',
-        ];
+        return $this->hasOne(UserType::className(), ['id' => 'user_type']);
     }
 
     /**
@@ -122,14 +107,9 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getMensagens()
+    public function getInbox()
     {
         return $this->hasMany(Mensagem::className(), ['idReceptor' => 'id']);
-    }
-
-    public function getImageurl()
-    {
-        return '/'.$this->profile_picture;
     }
 
     /**
@@ -200,11 +180,6 @@ class User extends ActiveRecord implements IdentityInterface
     public function getId()
     {
         return $this->getPrimaryKey();
-    }
-
-    public function getUserType()
-    {
-        return $this->user_type;
     }
 
     /**

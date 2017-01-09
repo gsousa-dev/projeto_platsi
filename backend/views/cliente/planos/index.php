@@ -6,10 +6,10 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\filters\ClienteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $idCliente */
 
-$this->title = 'Planos';
+$this->title = 'Planos de Treino';
 $this->params['breadcrumbs'][] = $this->title;
-$_POST['idPlano'] = function ($dataProvider) { return $dataProvider->idPlano; };
 ?>
 <div class="cliente-index">
     <div class="breadcrumbs">
@@ -24,9 +24,12 @@ $_POST['idPlano'] = function ($dataProvider) { return $dataProvider->idPlano; };
             <li>
                 <a href="#">Cliente</a>
             </li>
-            <li class="active">Planos</li>
+            <li class="active"><?= Html::encode($this->title) ?></li>
         </ol>
     </div>
+    <p>
+        <?= Html::a('Criar Plano de Treino', ['/cliente/novo-plano?idCliente='.$idCliente], ['class' => 'btn btn-success']) ?>
+    </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [

@@ -25,10 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
         //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            [
-                'format' => 'image',
-                //'value' => 'cliente.imageUrl',
-            ],
             //'idCliente',
             'cliente.name',
             'cliente.username',
@@ -40,7 +36,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
-                        return Html::a('Ver Planos', '/plano-pessoal/planos?idCliente='.$key, []);
+                        return Html::a('Ficha do Cliente', '/cliente/ficha?idCliente='.$key, []);
+                    }
+                ],
+                'template' => '{view}'
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttons' => [
+                    'view' => function ($url, $model, $key) {
+                        return Html::a('Ver Planos', '/cliente/planos?idCliente='.$key, []);
                     }
                 ],
                 'template' => '{view}'

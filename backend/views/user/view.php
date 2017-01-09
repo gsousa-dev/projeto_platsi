@@ -7,8 +7,6 @@ use yii\widgets\DetailView;
 /* @var $model common\models\User */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Utilizadores', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-view">
     <div class="breadcrumbs">
@@ -24,19 +22,20 @@ $this->params['breadcrumbs'][] = $this->title;
         </ol>
     </div>
     <p>
-        <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Editar', ['editar', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Apagar', ['apagar', 'id' => $model->id], ['class' => 'btn btn-danger']) ?>
     </p>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+            //'id',
             'name',
             'username',
             //'auth_key',
             //'password_hash',
             //'password_reset_token',
             'email:email',
-            'status',
+            //'status',
             'birthday',
             'gender',
             // 'created_at',

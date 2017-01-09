@@ -6,11 +6,13 @@ use yii\filters\AccessControl;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 //-
 use common\models\User;
+use common\models\Mensagem;
 //-
 use backend\models\forms\UserForm as Form;
+use backend\models\forms\MensagemForm;
 
 class UserController extends Controller
 {
@@ -23,9 +25,19 @@ class UserController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    ['allow' => false, 'roles' => ['?']],
-                    ['allow' => true, 'roles' => ['admin', 'secretaria']],
-                    ['allow' => false]
+                    [
+                        'allow' => false,
+                        'roles' => ['?']
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['view', 'update', 'inbox', 'conversa'],
+                        'roles' => ['personal_trainer']
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['admin', 'secretaria'],
+                    ],
                 ],
             ],
         ];
@@ -38,7 +50,7 @@ class UserController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => User::find(),
+            'query' => User::find()->where(['<>', 'id', Yii::$app->user->id])->andWhere(['status' => 10]),
         ]);
 
         return $this->render('index', [
@@ -51,7 +63,7 @@ class UserController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
+    public function actionPerfil($id)
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -67,11 +79,21 @@ class UserController extends Controller
     {
         $form = new Form();
 
-        if ($form->load(Yii::$app->request->post()) && $form->save()) {
-            return $this->goHome();
+        if ($form->load(Yii::$app->request->post())) {
+            $form->imageFile = UploadedFile::getInstance($form, 'imageFile');
+            if ($form->save()) {
+                if($form->upload()) {
+                    return $this->goHome();
+                } else {
+
+                }
+
+            }
         }
 
-        return $this->render('create', ['model' => $form,]);
+        return $this->render('create', [
+            'model' => $form,
+        ]);
     }
 
     /**
@@ -93,6 +115,16 @@ class UserController extends Controller
         }
     }
 
+    public function actionApagar($id)
+    {
+        $model = $this->findModel($id);
+        $model->status = 0;
+
+        if($model->save()) {
+            return $this->goHome();
+        }
+    }
+
     /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -109,18 +141,38 @@ class UserController extends Controller
         }
     }
 
-    public function actionMeusClientes()
+    public function actionInbox()
     {
-        $query = User::find()->select('id, name, username, email, birthday, gender, profile_picture');
-        $query->joinWith('clientes',[], 'INNER JOIN')->orderBy('name');
+        $current_user = $this->findModel(Yii::$app->user->id);
+        $inbox_messages = $current_user->getInbox()->where(['estado' => 'por responder'])->orderBy('data_envio DESC');
 
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'key' => 'name',
+            'query' => $inbox_messages,
         ]);
 
-        return $this->render('meus-clientes', [
+        return $this->render('mensagens/inbox', [
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionConversa($idCliente)
+    {
+        $chat = Mensagem::find()->where(['idEmissor' => $idCliente])->orWhere(['idReceptor' => $idCliente])->orderBy('data_envio DESC');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $chat,
+        ]);
+
+        $form = new MensagemForm();
+        $form->idReceptor = $idCliente;
+
+        if ($form->load(Yii::$app->request->post()) && $form->save()) {
+            return $this->refresh();
+        }
+
+        return $this->render('mensagens/chat', [
+            'dataProvider' => $dataProvider,
+            'model' => $form,
         ]);
     }
 }

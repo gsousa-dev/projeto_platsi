@@ -6,9 +6,8 @@ use yii\web\UploadedFile;
 //-
 use common\models\User;
 
-class UserForm extends Model
+class EditarUserForm extends Model
 {
-    public $user_type;
     public $name;
     public $username;
     public $email;
@@ -27,7 +26,6 @@ class UserForm extends Model
     public function rules()
     {
         return [
-            [['user_type', 'username', 'password', 'email', 'name', 'birthday', 'gender'], 'required'],
             [['username', 'email', 'name'], 'trim'],
             ['user_type', 'integer'],
             ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
@@ -58,7 +56,6 @@ class UserForm extends Model
         }
 
         $user = new User();
-        $user->user_type = $this->user_type;
         $user->name = $this->name;
         $user->username = $this->username;
         $user->email = $this->email;

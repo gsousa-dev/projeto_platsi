@@ -11,19 +11,17 @@ use common\models\UserType;
 /* @var $form yii\widgets\ActiveForm */
 
 if (Yii::$app->user->can('admin')) {
-    $user_types = ArrayHelper::map(UserType::find()->where('user_type != "Admin"')->andWhere('user_type != "Cliente"')->all(), 'id', 'user_type');
+    $this->params['user_types'] = ArrayHelper::map(UserType::find()->where('user_type != "Admin"')->andWhere('user_type != "Cliente"')->all(), 'id', 'user_type');
 } else if (Yii::$app->user->can('secretaria')) {
-    $user_types = ArrayHelper::map(UserType::find()->where('user_type != "Admin"')->all(), 'id', 'user_type');
+    $this->params['user_types'] = ArrayHelper::map(UserType::find()->where('user_type != "Admin"')->all(), 'id', 'user_type');
 }
-
 ?>
-
 <div class="user-form">
     <p>Preencha os seguintes campos para criar um novo utilizador:</p>
 
     <?php $form = ActiveForm::begin(['options' => ['role' => 'form']]); ?>
 
-    <?= $form->field($model, 'user_type')->dropDownList($user_types) ?>
+    <?= $form->field($model, 'user_type')->dropDownList(Yii::$app->view->params['user_types']) ?>
 
     <?= $form->field($model, 'username')->textInput() ?>
 
