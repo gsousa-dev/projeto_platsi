@@ -3,16 +3,25 @@ namespace backend\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
-use yii\data\ActiveDataProvider;
+use yii\filters\VerbFilter;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
+
+use yii\base\InvalidParamException;
+use yii\web\BadRequestHttpException;
+
+use yii\data\ActiveDataProvider;
 //-
 use common\models\User;
 use common\models\Mensagem;
 //-
-use backend\models\forms\UserForm as Form;
+use backend\models\forms\UserForm;
 use backend\models\forms\MensagemForm;
+use backend\models\forms\LoginForm;
+use backend\models\forms\PasswordResetRequestForm;
+use backend\models\forms\ResetPasswordForm;
 
 class UserController extends Controller
 {
@@ -25,19 +34,21 @@ class UserController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    [
-                        'allow' => false,
-                        'roles' => ['?']
-                    ],
+                    ['allow' => true, 'actions' => ['login', 'reset-password'], 'roles' => ['?']],
+                    ['allow' => true, 'actions' => ['logout'], 'roles' => ['@']],
+                    ['allow' => true, 'roles' => ['admin', 'secretaria']],
                     [
                         'allow' => true,
                         'actions' => ['view', 'update', 'inbox', 'conversa'],
                         'roles' => ['personal_trainer']
                     ],
-                    [
-                        'allow' => true,
-                        'roles' => ['admin', 'secretaria'],
-                    ],
+
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'logout' => ['post'],
                 ],
             ],
         ];
@@ -59,15 +70,19 @@ class UserController extends Controller
     }
 
     /**
-     * Displays a single User model.
+     * Finds the User model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return mixed
+     * @return User the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionPerfil($id)
+    protected function findModel($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if (($model = User::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 
     /**
@@ -77,17 +92,15 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-        $form = new Form();
+        $form = new UserForm();
 
         if ($form->load(Yii::$app->request->post())) {
             $form->imageFile = UploadedFile::getInstance($form, 'imageFile');
             if ($form->save()) {
                 if($form->upload()) {
                     return $this->goHome();
-                } else {
-
                 }
-
+                return $this->goHome();
             }
         }
 
@@ -126,19 +139,72 @@ class UserController extends Controller
     }
 
     /**
-     * Finds the User model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * Displays a single User model.
      * @param integer $id
-     * @return User the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return mixed
      */
-    protected function findModel($id)
+    public function actionPerfil($id)
     {
-        if (($model = User::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    public function actionLogin()
+    {
+        $this->layout = 'login';
+
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
         }
+
+        $loginForm = new LoginForm();
+        $passwordResetRequestForm = new PasswordResetRequestForm();
+
+        if ($loginForm->load(Yii::$app->request->post()) && $loginForm->login()) {
+            return $this->goBack();
+        } elseif ($passwordResetRequestForm->load(Yii::$app->request->post()) && $passwordResetRequestForm->validate()) {
+            if ($passwordResetRequestForm->sendEmail()) {
+                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+
+                return $this->goHome();
+            } else {
+                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+            }
+        } else {
+            return $this->render('login', [
+                'loginForm' => $loginForm,
+                'passwordResetRequestForm' => $passwordResetRequestForm,
+            ]);
+        }
+    }
+
+    public function actionLogout()
+    {
+        Yii::$app->user->logout();
+
+        return $this->goHome();
+    }
+
+    public function actionResetPassword($token)
+    {
+        $this->layout = 'login';
+
+        try {
+            $resetPasswordForm = new ResetPasswordForm($token);
+        } catch (InvalidParamException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+        if ($resetPasswordForm->load(Yii::$app->request->post()) && $resetPasswordForm->validate() && $resetPasswordForm->resetPassword()) {
+            Yii::$app->session->setFlash('success', 'New password was saved.');
+
+            return $this->goHome();
+        }
+
+        return $this->render('resetPassword', [
+            'resetPasswordForm' => $resetPasswordForm,
+        ]);
     }
 
     public function actionInbox()
@@ -150,7 +216,7 @@ class UserController extends Controller
             'query' => $inbox_messages,
         ]);
 
-        return $this->render('/mensagens/inbox', [
+        return $this->render('mensagens/inbox', [
             'dataProvider' => $dataProvider,
         ]);
     }

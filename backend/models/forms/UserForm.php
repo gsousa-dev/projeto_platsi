@@ -9,7 +9,6 @@ use common\models\User;
 class UserForm extends Model
 {
     public $user_type;
-    public $idPersonal_trainer;
     public $name;
     public $username;
     public $email;

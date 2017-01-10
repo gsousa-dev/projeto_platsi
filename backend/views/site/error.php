@@ -26,7 +26,7 @@ MetronicAsset::register($this);
         <h2>Houston, we have a problem.</h2>
         <p> Actually, the page you are looking for does not exist. </p>
         <p>
-            <?= Html::a('Return home', '', ['class' => 'btn red btn-outline'])?><br>
+            <?= Html::a('Return home', Yii::$app->getHomeUrl(), ['class' => 'btn red btn-outline'])?><br>
         </p>
     </div>
     <?php $this->endBody() ?>

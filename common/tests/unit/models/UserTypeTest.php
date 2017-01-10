@@ -1,33 +1,40 @@
 <?php
 namespace common\tests\unit\models;
 
-use Codeception\Test\Unit;
-//-
 use common\models\UserType;
 
-class UserTypeTest extends Unit
+class UserTypeTest extends \Codeception\Test\Unit
 {
-    protected function tearDown()
+    /**
+     * @var \common\tests\UnitTester
+     */
+    protected $tester;
+
+    public function testValidation()
     {
-        UserType::deleteAll();
+        $user_type = new UserType();
+
+        $user_type->user_type = null;
+        $this->assertFalse($user_type->validate(['user_type']));
+
+        $user_type->user_type = 'toolooooongnaaaaaaameeeeddddddddddddddddddddddddddsssssssssssssssssssssddddddddddddddddddd';
+        $this->assertFalse($user_type->validate(['user_type']));
+
+        $user_type->user_type = 'Cliente';
+        $this->assertFalse($user_type->validate(['user_type']));
+
+        $user_type->user_type = 'Novo User Type';
+        $this->assertTrue($user_type->validate(['user_type']));
     }
 
-    public function testCRUD()
+
+    public function testSaveModel()
     {
         $model = new UserType();
-        $model->user_type = "Testing";
+        $model->user_type = "Novo User Type";
+        expect('User Type criado com sucesso.', $model->save())->true();
 
-        expect('Criar UserType', $model->save())->true();
-
-        $model = UserType::findOne(['user_type' => "Testing"]);
+        $model = UserType::findOne(['user_type' => "Novo User Type"]);
         expect('Encontrar UserType', $model !== null)->true();
-    }
-
-    public function testValidate()
-    {
-        $model = new UserType();
-        $model->user_type = null;
-
-        expect('tipo obrigatório', $model->save())->false();
     }
 }

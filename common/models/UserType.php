@@ -1,6 +1,7 @@
 <?php
-
 namespace common\models;
+
+use frontend\tests\FunctionalTester;
 
 use yii\db\ActiveRecord;
 
@@ -39,7 +40,7 @@ class UserType extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_type' => 'User Type',
+            'user_type' => 'Tipo de Utilizador',
         ];
     }
 }

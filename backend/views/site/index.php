@@ -1,25 +1,13 @@
 <?php $this->title = 'Dashboard'; ?>
 <div class="breadcrumbs">
-    <h1>Blank Page Layout</h1>
+    <h1>Dashboard em construção</h1>
     <ol class="breadcrumb">
         <li>
-            <a href="#">Home</a>
+            <a href="#">Utilizador</a>
         </li>
-        <li>
-            <a href="#">Pages</a>
-        </li>
-        <li class="active">System</li>
+        <li class="active">Dashboard</li>
     </ol>
 </div>
 <div class="note note-info">
     <p> A black page template with a minimal dependency assets to use as a base for any custom page you create </p>
 </div>
-<?php
-use yii\helpers\Html;
-echo Html::beginForm(['/site/logout'], 'post')
-. Html::submitButton(
-    'Logout (' . Yii::$app->user->identity->username . ')',
-    ['class' => 'btn btn-link logout']
-)
-. Html::endForm()
-?>

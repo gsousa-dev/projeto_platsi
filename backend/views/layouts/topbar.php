@@ -1,5 +1,7 @@
 <?php
+
 use common\models\Mensagem;
+
 $unreadMessages = Mensagem::find()->where(['idReceptor' => Yii::$app->user->id])->andWhere(['estado' => 'por responder'])->count();
 if ($unreadMessages > 0) {
     $this->params['unread_messages'] = $unreadMessages;
@@ -31,7 +33,7 @@ if ($unreadMessages > 0) {
                         ],
                         [
                             'label' => '<i class="icon-key"></i> Logout',
-                            'url' => ['/site/logout'],
+                            'url' => ['/user/logout'],
                             'template' => '<a href="{url}" data-method="post">{label}</a>',
                         ],
                 ]

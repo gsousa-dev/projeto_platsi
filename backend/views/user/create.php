@@ -14,8 +14,8 @@ if (Yii::$app->user->can('admin')) {
     $this->params['user_types'] = ArrayHelper::map(UserType::find()->where('user_type != "Admin"')->andWhere('user_type != "Cliente"')->all(), 'id', 'user_type');
 } else if (Yii::$app->user->can('secretaria')) {
     $this->params['user_types'] = ArrayHelper::map(UserType::find()->where('user_type != "Admin"')->all(), 'id', 'user_type');
-    $this->params['personal_trainers'] = ArrayHelper::map(User::find()->where(['user_type' => 3])->all(), 'id', 'name');
 }
+$this->title = 'Novo Utilizador';
 ?>
 <div class="breadcrumbs">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -29,9 +29,9 @@ if (Yii::$app->user->can('admin')) {
 <div class="create-user-form">
     <p>Preencha os seguintes campos para criar um novo utilizador:</p>
 
-    <?php $form = ActiveForm::begin(['options' => ['role' => 'form']]); ?>
+    <?php $form = ActiveForm::begin(['options' => ['id' => 'create-user-form', 'role' => 'form', ]]); ?>
 
-    <?= $form->field($model, 'user_type')->dropDownList(Yii::$app->view->params['personal_trainers'])->label('Tipo de Utilizador') ?>
+    <?= $form->field($model, 'user_type')->dropDownList(Yii::$app->view->params['user_types'])->label('Tipo de Utilizador') ?>
 
     <?= $form->field($model, 'username')->textInput() ?>
 

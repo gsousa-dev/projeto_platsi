@@ -29,6 +29,7 @@ class TipoExercicio extends ActiveRecord
         return [
             [['tipo'], 'required'],
             [['tipo'], 'string', 'max' => 45],
+            [['tipo'], 'unique'],
         ];
     }
 
@@ -39,7 +40,7 @@ class TipoExercicio extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'tipo' => 'Tipo',
+            'tipo' => 'Tipo de Exercício',
         ];
     }
 

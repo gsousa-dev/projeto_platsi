@@ -1,5 +1,5 @@
 <?php
-namespace common\tests\unit\models;
+namespace backend\tests\unit\models;
 
 use Yii;
 use backend\models\forms\LoginForm;
