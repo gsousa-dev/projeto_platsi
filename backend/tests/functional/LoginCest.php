@@ -2,19 +2,24 @@
 namespace backend\tests\functional;
 
 use frontend\tests\FunctionalTester;
-use common\fixtures\UserFixture;
+use backend\tests\fixtures\UserTypeFixture;
+use backend\tests\fixtures\UserFixture;
 
 class LoginCest
 {
     public function _before(FunctionalTester $I)
     {
         $I->haveFixtures([
+            'user_type' => [
+                'class' => UserTypeFixture::className(),
+                'dataFile' => codecept_data_dir() . 'user_type.php'
+            ],
             'user' => [
                 'class' => UserFixture::className(),
-                'dataFile' => codecept_data_dir() . 'login_data.php'
+                'dataFile' => codecept_data_dir() . 'user.php'
             ]
         ]);
-        $I->amOnRoute('site/login');
+        $I->amOnRoute('/user/login');
     }
 
     protected function formParams($login, $password)
@@ -52,7 +57,7 @@ class LoginCest
      */
     public function loginUser(FunctionalTester $I)
     {
-        //$I->amOnPage('/site/login');
+        $I->amOnPage('/user/login');
         $I->fillField('Username', 'admin');
         $I->fillField('Password', '123456');
         $I->click('login-button');
