@@ -1,7 +1,7 @@
 <?php
 namespace backend\tests\functional;
 
-use frontend\tests\FunctionalTester;
+use backend\tests\FunctionalTester;
 use common\fixtures\UserFixture;
 
 class CreateUserCest
