@@ -39,7 +39,7 @@ class UserController extends Controller
                     ['allow' => true, 'roles' => ['admin', 'secretaria']],
                     [
                         'allow' => true,
-                        'actions' => ['view', 'update', 'inbox', 'conversa'],
+                        'actions' => ['perfil', 'update', 'inbox', 'conversa'],
                         'roles' => ['personal_trainer']
                     ],
 

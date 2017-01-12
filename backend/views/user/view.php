@@ -6,18 +6,12 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\User */
 
-$this->title = $model->name;
+$this->title = 'Meu perfil';
 ?>
 <div class="user-view">
     <div class="breadcrumbs">
         <h1><?= Html::encode($this->title) ?></h1>
         <ol class="breadcrumb">
-            <li>
-                <a href="#">Utilizadores</a>
-            </li>
-            <li>
-                <a href="/user/">Ver Utilizadores</a>
-            </li>
             <li class="active"><?= Html::encode($this->title) ?></li>
         </ol>
     </div>

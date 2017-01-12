@@ -29,6 +29,7 @@ class Exercicio extends ActiveRecord
     {
         return [
             [['descricao', 'tipo_exercicio'], 'required'],
+            [['descricao'], 'unique'],
             [['tipo_exercicio'], 'integer'],
             [['descricao'], 'string', 'max' => 45],
             [['tipo_exercicio'], 'exist', 'skipOnError' => true, 'targetClass' => TipoExercicio::className(), 'targetAttribute' => ['tipo_exercicio' => 'id']],

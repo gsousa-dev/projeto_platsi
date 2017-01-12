@@ -5,6 +5,7 @@ use yii\base\Model;
 use yii\web\UploadedFile;
 //-
 use common\models\User;
+use common\models\UserType;
 
 class UserForm extends Model
 {
@@ -27,6 +28,7 @@ class UserForm extends Model
     public function rules()
     {
         return [
+            [['user_type'], 'exist', 'skipOnError' => true, 'targetClass' => UserType::className(), 'targetAttribute' => ['user_type' => 'id']],
             [['user_type', 'username', 'password', 'email', 'name', 'birthday', 'gender'], 'required'],
             [['username', 'email', 'name'], 'trim'],
             ['user_type', 'integer'],

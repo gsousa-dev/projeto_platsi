@@ -4,6 +4,7 @@ namespace backend\models\forms;
 use yii\base\Model;
 //-
 use common\models\Exercicio;
+use common\models\TipoExercicio;
 
 class ExercicioForm extends Model
 {
@@ -18,8 +19,10 @@ class ExercicioForm extends Model
         return [
             [['descricao', 'tipo_exercicio'], 'required'],
             [['descricao'], 'trim'],
+            //[['descricao'], 'unique'],
             [['descricao'], 'string', 'max' => 45],
             [['tipo_exercicio'], 'integer'],
+            [['tipo_exercicio'], 'exist', 'skipOnError' => true, 'targetClass' => TipoExercicio::className(), 'targetAttribute' => ['tipo_exercicio' => 'id']],
         ];
     }
 

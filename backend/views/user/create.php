@@ -33,13 +33,13 @@ $this->title = 'Novo Utilizador';
 
     <?= $form->field($model, 'user_type')->dropDownList(Yii::$app->view->params['user_types'])->label('Tipo de Utilizador') ?>
 
+    <?= $form->field($model, 'name')->textInput()->label('Nome') ?>
+
     <?= $form->field($model, 'username')->textInput() ?>
 
     <?= $form->field($model, 'password')->passwordInput() ?>
 
     <?= $form->field($model, 'email')->textInput() ?>
-
-    <?= $form->field($model, 'name')->textInput() ?>
 
     <?= $form->field($model, 'birthday')->widget(dosamigos\datepicker\DatePicker::className(), [
         'inline' => false,
@@ -47,11 +47,11 @@ $this->title = 'Novo Utilizador';
             'autoclose' => true,
             'format' => 'yyyy-mm-dd',
         ],
-    ]) ?>
+    ])->label('Data de Nascimento') ?>
 
-    <?= $form->field($model, 'gender')->dropDownList(['F' => 'Feminino', 'M' => 'Masculino']) ?>
+    <?= $form->field($model, 'gender')->dropDownList(['F' => 'Feminino', 'M' => 'Masculino'])->label('Género') ?>
 
-    <?= $form->field($model, 'imageFile')->fileInput() ?>
+    <?= $form->field($model, 'imageFile')->fileInput()->label('Foto de Perfil') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Submeter', ['class' => 'btn btn-primary']) ?>

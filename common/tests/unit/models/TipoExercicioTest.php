@@ -5,9 +5,6 @@ use common\models\TipoExercicio;
 
 class TipoExercicioTest extends \Codeception\Test\Unit
 {
-    /**
-     * @var \common\tests\UnitTester
-     */
     protected $tester;
 
     public function testValidation()

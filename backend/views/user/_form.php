@@ -23,13 +23,13 @@ if (Yii::$app->user->can('admin')) {
 
     <?= $form->field($model, 'user_type')->dropDownList(Yii::$app->view->params['user_types']) ?>
 
+    <?= $form->field($model, 'name')->textInput() ?>
+
     <?= $form->field($model, 'username')->textInput() ?>
 
     <?= $form->field($model, 'password')->passwordInput() ?>
 
     <?= $form->field($model, 'email')->textInput() ?>
-
-    <?= $form->field($model, 'name')->textInput() ?>
 
     <?= $form->field($model, 'birthday')->widget(dosamigos\datepicker\DatePicker::className(), [
         'inline' => false,

@@ -1,9 +1,14 @@
 <?php
 namespace common\tests\unit\models;
 
-use common\fixtures\DadosAvaliacaoFixture;
+use common\fixtures\UserFixture;
+use common\fixtures\ClienteFixture;
 //-
 use backend\models\forms\DadosAvaliacaoForm;
+//-
+use common\models\DadosAvaliacao;
+use common\models\Cliente;
+use common\models\User;
 
 class DadosAvaliacaoFormTest extends \Codeception\Test\Unit
 {
@@ -12,37 +17,52 @@ class DadosAvaliacaoFormTest extends \Codeception\Test\Unit
      */
     protected $tester;
 
-    public function fixtures ()
+    public function _before()
     {
-        return [
-            'avaliacoes' => DadosAvaliacaoFixture::className(),
-        ];
+        $this->tester->haveFixtures([
+            'user' => [
+                'class' => UserFixture::className(),
+                'dataFile' => codecept_data_dir() . 'user.php',
+            ],
+            'cliente' => [
+                'class' => ClienteFixture::className(),
+                'dataFile' => codecept_data_dir() . 'cliente.php',
+            ],
+        ]);
+    }
+
+    protected function _after()
+    {
+        DadosAvaliacao::deleteAll();
+        Cliente::deleteAll();
+        User::deleteAll();
     }
 
     public function testCorrectDadosAvaliacao()
     {
         $model = new DadosAvaliacaoForm([
-            'altura' => 'some_altura',
-            'massa_corporal' => 'some_massa_corporal',
-            'massa_gorda' => 'some_massa_gorda',
-            'massa_muscular' => 'some_massa_muscular',
-            'agua_no_organismo' => 'some_agua_no_organismo',
+            'idCliente' => 2,
+            'altura' => 1.89,
+            'massa_corporal' => 24.3,
+            'massa_gorda' => 30.1,
+            'massa_muscular' => 23.2,
+            'agua_no_organismo' => 60.7,
         ]);
 
         $dadosAvaliacao = $model->save();
 
         expect($dadosAvaliacao)->isInstanceOf('common\models\DadosAvaliacao');
 
-        expect($dadosAvaliacao->altura)->equals('some_altura');
-        expect($dadosAvaliacao->massa_corporal)->equals('some_massa_corporal');
-        expect($dadosAvaliacao->massa_gorda)->equals('some_massa_gorda');
-        expect($dadosAvaliacao->massa_muscular)->equals('some_massa_muscular');
-        expect($dadosAvaliacao->agua_no_organismo)->equals('some_agua_no_organismo');
+        expect($dadosAvaliacao->altura)->equals(1.89);
+        expect($dadosAvaliacao->massa_corporal)->equals(24.3);
+        expect($dadosAvaliacao->massa_gorda)->equals(30.1);
+        expect($dadosAvaliacao->massa_muscular)->equals(23.2);
+        expect($dadosAvaliacao->agua_no_organismo)->equals(60.7);
     }
 
-    public function testNotCorrectDadosAvaliacao()
+    public function testCreateDadosAvaliacaoNotCorrect()
     {
-        $model = new DadosAvaliacaoForm([
+        $form = new DadosAvaliacaoForm([
             'altura' => 'ss',
             'massa_corporal' => null,
             'massa_gorda' => 2,
@@ -50,13 +70,13 @@ class DadosAvaliacaoFormTest extends \Codeception\Test\Unit
             'agua_no_organismo' => 20,
         ]);
 
-        expect_not($model->save());
+        expect_not($form->save());
 
-        expect($model->getFirstError('altura'))
+        expect($form->getFirstError('altura'))
             ->equals('Altura must be a number.');
-        expect($model->getFirstError('massa_corporal'))
+        expect($form->getFirstError('massa_corporal'))
             ->equals('Massa Corporal cannot be blank.');
-        expect($model->getFirstError('massa_muscular'))
+        expect($form->getFirstError('massa_muscular'))
             ->equals('Massa Muscular must be a number.');
     }
 }

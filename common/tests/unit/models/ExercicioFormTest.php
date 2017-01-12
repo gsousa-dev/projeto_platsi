@@ -1,9 +1,8 @@
 <?php
 namespace common\tests\unit\models;
 
-use common\fixtures\ExercicioFixture;
 use backend\models\forms\ExercicioForm;
-use common\fixtures\TipoExercicioFixture;
+use common\models\Exercicio;
 
 class ExercicioFormTestTest extends \Codeception\Test\Unit
 {
@@ -14,33 +13,35 @@ class ExercicioFormTestTest extends \Codeception\Test\Unit
 
     public function _before()
     {
-        $this->tester->haveFixtures([
-            'tipo_exercicio' => [
-                'class' => TipoExercicioFixture::className(),
-                'dataFile' => codecept_data_dir() . 'tipo_exercicio.php'
-            ]
-        ]);
-        $this->tester->haveFixtures([
-            'exercicio' => [
-                'class' => ExercicioFixture::className(),
-                'dataFile' => codecept_data_dir() . 'exercicio.php'
-            ]
-        ]);
     }
 
-
-    public function testCriarExercicioValido()
+    public function _after()
     {
-        $exercicioForm = new ExercicioForm([
-            'descricao' => 'Teste',
+        Exercicio::deleteAll();
+    }
+
+    public function testCreateExercicioCorrect()
+    {
+        $form = new ExercicioForm([
+            'descricao' => 'Exercício Teste',
             'tipo_exercicio' => 1,
         ]);
 
-        expect('Exercício deverá ser criado', $exercicioForm->save())->true();
+        $exercicio = $form->save();
+        expect($exercicio)->isInstanceOf('common\models\Exercicio');
+
+        expect($exercicio->descricao)->equals('Exercício Teste');
+        expect($exercicio->tipo_exercicio)->equals(1);
     }
 
-    public function xxx ()
+    public function testCreateExercicioNotCorrect()
     {
+        $form = new ExercicioForm([
+            'descricao' => 'Exercício Teste',
+            'tipo_exercicio' => 3, //Tipo de exercício que não existe
+        ]);
 
+        expect_not($form->save());
+        expect_that($form->getErrors('tipo_exercicio'));
     }
 }

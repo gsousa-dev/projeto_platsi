@@ -2,8 +2,9 @@
 namespace common\tests\unit\models;
 
 use Yii;
-use backend\models\forms\LoginForm;
 use common\fixtures\UserFixture;
+use common\models\User;
+use backend\models\forms\LoginForm;
 
 class LoginFormTest extends \Codeception\Test\Unit
 {
@@ -11,13 +12,6 @@ class LoginFormTest extends \Codeception\Test\Unit
      * @var \frontend\tests\UnitTester
      */
     protected $tester;
-
-    public function fixtures()
-    {
-        return [
-            'users' => UserFixture::className(),
-        ];
-    }
 
     public function _before()
     {
@@ -27,6 +21,11 @@ class LoginFormTest extends \Codeception\Test\Unit
                 'dataFile' => codecept_data_dir() . 'user.php'
             ]
         ]);
+    }
+
+    public function _after ()
+    {
+        User::deleteAll();
     }
 
     public function testLoginNoUser()
@@ -43,7 +42,7 @@ class LoginFormTest extends \Codeception\Test\Unit
     public function testLoginWrongPassword()
     {
         $model = new LoginForm([
-            'username' => 'bayer.hudson',
+            'username' => 'admin',
             'password' => 'wrong_password',
         ]);
 
@@ -55,8 +54,8 @@ class LoginFormTest extends \Codeception\Test\Unit
     public function testLoginCorrect()
     {
         $model = new LoginForm([
-            'username' => 'bayer.hudson',
-            'password' => 'password_0',
+            'username' => 'admin',
+            'password' => '123456',
         ]);
 
         expect('model should login user', $model->login())->true();
