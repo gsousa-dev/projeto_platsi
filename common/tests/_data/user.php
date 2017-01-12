@@ -1,6 +1,6 @@
 <?php
 return [
-    [
+    'admin' => [
         'id' => 1,
         'user_type' => 1,
         'name' => 'Admin',
@@ -17,8 +17,24 @@ return [
         'gender' => 'M',
         'profile_picture' => 'assets/pages/img/avatars/default-avatar.png',
     ],
-    [
+    'personal-trainer' => [
         'id' => 2,
+        'user_type' => 3,
+        'name' => 'Personal Trainer',
+        'username' => 'personal_trainer',
+        'email' => 'test_pt@gmail.com',
+        'auth_key' => 'GAUBcwCjTJJIR7xV56amtTHQdPBg5DIV',
+        // 'password' => '123456',
+        'password_hash' => '$2y$13$GqolOm9RtrWPZHVspOgciOwIGrTM.zM.McEsGEdgcfQ.8vW8r11zO',
+        'password_reset_token' => '',
+        'status' => '10',
+        'created_at' => '1484232319',
+        'updated_at' => '1484232319',
+        'gender' => 'M',
+        'profile_picture' => 'assets/pages/img/avatars/default-avatar.png',
+    ],
+    'cliente' => [
+        'id' => 3,
         'user_type' => 1,
         'name' => 'Testing Cliente',
         'username' => 'testing_cliente',
@@ -34,8 +50,8 @@ return [
         'gender' => 'M',
         'profile_picture' => 'assets/pages/img/avatars/default-avatar.png',
     ],
-    [
-        'id' => 3,
+    'inactive-user' => [
+        'id' => 4,
         'user_type' => 3,
         'name' => 'Inactive User',
         'username' => 'testing_inactive_user',
@@ -51,8 +67,8 @@ return [
         'gender' => 'M',
         'profile_picture' => 'assets/pages/img/avatars/default-avatar.png',
     ],
-    [
-        'id' => 4,
+    'reset-password-user' => [
+        'id' => 5,
         'user_type' => 1,
         'name' => 'Okirlin',
         'username' => 'okirlin',
@@ -61,7 +77,7 @@ return [
         // 'password' => 'password_0',
         'password_hash' => '$2y$13$CXT0Rkle1EMJ/c1l5bylL.EylfmQ39O5JlHJVFpNn618OUS1HwaIi',
         'password_reset_token' => 't5GU9NwpuGYSfb7FEZMAxqtuz2PkEvv_' . time(),
-        //'status' => 10,
+        'status' => 10,
         'created_at' => '1391885313',
         'updated_at' => '1391885313',
         'birthday' => '1991-05-18',
