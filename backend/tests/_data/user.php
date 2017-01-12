@@ -30,6 +30,7 @@ return [
         'status' => '10',
         'created_at' => '1484232319',
         'updated_at' => '1484232319',
+        'birthday' => '1982-07-31',
         'gender' => 'M',
         'profile_picture' => 'assets/pages/img/avatars/default-avatar.png',
     ],

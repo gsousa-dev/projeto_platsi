@@ -1,5 +1,5 @@
 <?php
-namespace common\fixtures;
+namespace backend\fixtures;
 
 use yii\test\ActiveFixture;
 

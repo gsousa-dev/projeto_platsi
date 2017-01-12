@@ -1,5 +1,5 @@
 <?php
-namespace common\tests\unit\models;
+namespace frontend\tests\unit\models;
 
 use Yii;
 use backend\models\forms\PasswordResetRequestForm;
@@ -23,11 +23,6 @@ class PasswordResetRequestFormTest extends \Codeception\Test\Unit
         ]);
     }
 
-    public function _after()
-    {
-        User::deleteAll();
-    }
-
     public function testSendMessageWithWrongEmailAddress()
     {
         $model = new PasswordResetRequestForm();
@@ -37,7 +32,7 @@ class PasswordResetRequestFormTest extends \Codeception\Test\Unit
 
     public function testNotSendEmailsToInactiveUser()
     {
-        $user = $this->tester->grabFixture('user', 2);
+        $user = $this->tester->grabFixture('user', 'inactive-user');
         $model = new PasswordResetRequestForm();
         $model->email = $user['email'];
         expect_not($model->sendEmail());
@@ -45,7 +40,7 @@ class PasswordResetRequestFormTest extends \Codeception\Test\Unit
 
     public function testSendEmailSuccessfully()
     {
-        $userFixture = $this->tester->grabFixture('user', 3);
+        $userFixture = $this->tester->grabFixture('user', 'reset-token-user');
 
         $model = new PasswordResetRequestForm();
         $model->email = $userFixture['email'];

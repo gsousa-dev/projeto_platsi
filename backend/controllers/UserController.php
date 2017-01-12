@@ -17,11 +17,12 @@ use yii\data\ActiveDataProvider;
 use common\models\User;
 use common\models\Mensagem;
 //-
+use common\models\forms\LoginForm;
+use frontend\models\PasswordResetRequestForm;
+use frontend\models\ResetPasswordForm;
+
 use backend\models\forms\UserForm;
 use backend\models\forms\MensagemForm;
-use backend\models\forms\LoginForm;
-use backend\models\forms\PasswordResetRequestForm;
-use backend\models\forms\ResetPasswordForm;
 
 class UserController extends Controller
 {
@@ -42,7 +43,6 @@ class UserController extends Controller
                         'actions' => ['perfil', 'update', 'inbox', 'conversa'],
                         'roles' => ['personal_trainer']
                     ],
-
                 ],
             ],
             'verbs' => [
@@ -171,12 +171,12 @@ class UserController extends Controller
             } else {
                 Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
             }
-        } else {
-            return $this->render('login', [
-                'loginForm' => $loginForm,
-                'passwordResetRequestForm' => $passwordResetRequestForm,
-            ]);
         }
+
+        return $this->render('login', [
+            'loginForm' => $loginForm,
+            'passwordResetRequestForm' => $passwordResetRequestForm,
+        ]);
     }
 
     public function actionLogout()
@@ -197,9 +197,7 @@ class UserController extends Controller
         }
 
         if ($resetPasswordForm->load(Yii::$app->request->post()) && $resetPasswordForm->validate() && $resetPasswordForm->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'New password was saved.');
-
-            return $this->goHome();
+            return $this->redirect('site/index');
         }
 
         return $this->render('resetPassword', [

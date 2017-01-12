@@ -1,8 +1,8 @@
 <?php
-namespace common\tests\unit\models;
+namespace backend\tests\unit\models;
 
 use common\fixtures\UserFixture;
-use common\fixtures\ClienteFixture;
+use backend\fixtures\ClienteFixture;
 //-
 use backend\models\forms\DadosAvaliacaoForm;
 //-
@@ -13,11 +13,11 @@ use common\models\User;
 class DadosAvaliacaoFormTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \frontend\tests\UnitTester
+     * @var \backend\tests\UnitTester
      */
     protected $tester;
 
-    public function _before()
+    protected function _before()
     {
         $this->tester->haveFixtures([
             'user' => [

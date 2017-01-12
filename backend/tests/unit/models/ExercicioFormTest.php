@@ -1,21 +1,21 @@
 <?php
-namespace common\tests\unit\models;
+namespace backend\tests\unit\models;
 
 use backend\models\forms\ExercicioForm;
 use common\models\Exercicio;
 
-class ExercicioFormTestTest extends \Codeception\Test\Unit
+class ExercicioFormTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \frontend\tests\UnitTester
+     * @var \backend\tests\UnitTester
      */
     protected $tester;
 
-    public function _before()
+    protected function _before()
     {
     }
 
-    public function _after()
+    protected function _after()
     {
         Exercicio::deleteAll();
     }

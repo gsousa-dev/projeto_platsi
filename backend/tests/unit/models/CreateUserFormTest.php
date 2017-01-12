@@ -1,17 +1,18 @@
 <?php
-namespace common\tests\unit\models;
+namespace backend\tests\unit\models;
 
 use backend\models\forms\UserForm;
 use common\fixtures\UserFixture;
+use common\models\User;
 
 class CreateUserFormTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \frontend\tests\UnitTester
+     * @var \backend\tests\UnitTester
      */
     protected $tester;
 
-    public function _before()
+    protected function _before()
     {
         $this->tester->haveFixtures([
             'user' => [
@@ -23,7 +24,7 @@ class CreateUserFormTest extends \Codeception\Test\Unit
 
     protected function _after()
     {
-
+        User::deleteAll();
     }
 
     public function testCreateUserCorrect()

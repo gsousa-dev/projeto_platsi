@@ -1,19 +1,21 @@
 <?php
-namespace common\tests\unit\models;
+namespace backend\tests\unit\models;
 
 use Yii;
+//-
 use common\fixtures\UserFixture;
+//-
 use common\models\User;
 use backend\models\forms\LoginForm;
 
 class LoginFormTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \frontend\tests\UnitTester
+     * @var \backend\tests\UnitTester
      */
     protected $tester;
 
-    public function _before()
+    protected function _before()
     {
         $this->tester->haveFixtures([
             'user' => [
@@ -23,7 +25,7 @@ class LoginFormTest extends \Codeception\Test\Unit
         ]);
     }
 
-    public function _after ()
+    protected function _after()
     {
         User::deleteAll();
     }
