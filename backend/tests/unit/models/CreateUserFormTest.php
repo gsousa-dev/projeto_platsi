@@ -1,7 +1,7 @@
 <?php
 namespace backend\tests\unit\models;
 
-use backend\models\forms\UserForm;
+use backend\models\forms\CreateUserForm;
 use common\fixtures\UserFixture;
 use common\models\User;
 
@@ -29,7 +29,7 @@ class CreateUserFormTest extends \Codeception\Test\Unit
 
     public function testCreateUserCorrect()
     {
-        $form = new UserForm([
+        $form = new CreateUserForm([
             'user_type' => 1,
             'name' => 'some name',
             'username' => 'some_username',
@@ -53,7 +53,7 @@ class CreateUserFormTest extends \Codeception\Test\Unit
 
     public function testCreateUserThatAlreadyExists()
     {
-        $form = new UserForm([
+        $form = new CreateUserForm([
             'user_type' => 1,
             'name' => 'some name',
             'username' => 'admin',

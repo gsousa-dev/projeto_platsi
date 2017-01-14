@@ -21,20 +21,9 @@ class LoginForm extends Model
     {
         return [
             [['username', 'password'], 'required'],
-            [['username'], 'validateUser'],
             ['rememberMe', 'boolean'],
             ['password', 'validatePassword'],
         ];
-    }
-
-    public function validateUser($attribute, $params)
-    {
-        if (!$this->hasErrors()) {
-            $user = $this->getUser();
-            if($user && $user->user_type == 4) {
-                $this->addError($attribute, 'User without permissions to login.');
-            }
-        }
     }
 
     /**

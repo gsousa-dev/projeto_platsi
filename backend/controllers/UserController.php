@@ -21,7 +21,7 @@ use common\models\forms\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 
-use backend\models\forms\UserForm;
+use backend\models\forms\CreateUserForm;
 use backend\models\forms\MensagemForm;
 
 class UserController extends Controller
@@ -92,7 +92,7 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-        $form = new UserForm();
+        $form = new CreateUserForm();
 
         if ($form->load(Yii::$app->request->post())) {
             $form->imageFile = UploadedFile::getInstance($form, 'imageFile');

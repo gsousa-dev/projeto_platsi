@@ -3,9 +3,12 @@ namespace backend\tests\functional;
 
 use common\fixtures\UserFixture;
 use backend\tests\FunctionalTester;
+use common\models\User;
 
 class HomeCest
 {
+    private $admin;
+
     public function _before(FunctionalTester $I)
     {
         $I->haveFixtures([
@@ -14,9 +17,8 @@ class HomeCest
                 'dataFile' => codecept_data_dir() . 'user.php'
             ]
         ]);
-
-        $admin = \common\models\User::findByUsername('admin');
-        $I->amLoggedInAs($admin);
+        $this->admin= User::findByUsername('admin');
+        $I->amLoggedInAs($this->admin);
         $I->amOnPage('/');
     }
 
@@ -27,6 +29,7 @@ class HomeCest
 
     public function logout(FunctionalTester $I)
     {
+        $I->am('admin');
         $I->click('Logout');
         $I->dontSee('BEM-VINDO, ADMIN');
     }

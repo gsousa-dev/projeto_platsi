@@ -3,6 +3,7 @@ namespace backend\tests\functional;
 
 use backend\tests\FunctionalTester;
 use common\fixtures\UserFixture;
+use common\models\User;
 
 class CreateUserCest
 {
@@ -16,15 +17,22 @@ class CreateUserCest
                 'dataFile' => codecept_data_dir() . 'user.php'
             ]
         ]);
-
-        $admin = \common\models\User::findByUsername('admin');
+        $admin = User::findByUsername('admin');
         $I->amLoggedInAs($admin);
         $I->amOnPage('user/create');
     }
 
-    public function checkOpen(FunctionalTester $I)
+    protected function formParams($user_type, $name, $username, $password, $email, $birthday, $gender)
     {
-        $I->amOnRoute('user/create');
+        return [
+            'CreateUserForm[user_type]' => $user_type,
+            'CreateUserForm[name]' => $name,
+            'CreateUserForm[username]' => $username,
+            'CreateUserForm[password]' => $password,
+            'CreateUserForm[email]' => $email,
+            'CreateUserForm[birthday]' => $birthday,
+            'CreateUserForm[gender]' => $gender,
+        ];
     }
 
     public function createUserWithEmptyFields(FunctionalTester $I)
@@ -41,6 +49,7 @@ class CreateUserCest
 
     public function createUserWithWrongEmail(FunctionalTester $I)
     {
+        $I->submitForm('#login-form', $this->formParams('admin', '123456'));
         $I->submitForm(
             $this->formId, [
                 'UserForm[user_type]'  => 'tester_user_type',

@@ -3,6 +3,7 @@ namespace backend\tests\functional;
 
 use backend\tests\FunctionalTester;
 use common\fixtures\UserFixture;
+use common\models\User;
 
 class LoginCest
 {
@@ -14,8 +15,12 @@ class LoginCest
                 'dataFile' => codecept_data_dir() . 'user.php'
             ]
         ]);
+        $I->amOnPage('/user/login');
+    }
 
-        $I->amOnRoute('/user/login');
+    public function _after()
+    {
+        User::deleteAll();
     }
 
     protected function formParams($login, $password)
@@ -24,6 +29,34 @@ class LoginCest
             'LoginForm[username]' => $login,
             'LoginForm[password]' => $password,
         ];
+    }
+
+    public function loginAsAdmin(FunctionalTester $I)
+    {
+        $I->submitForm('#login-form', $this->formParams('admin', '123456'));
+        $I->see('BEM-VINDO, ADMIN');
+        $I->am('admin');
+    }
+
+    public function loginAsSecretaria(FunctionalTester $I)
+    {
+        $I->submitForm('#login-form', $this->formParams('secretaria', '123456'));
+        $I->see('BEM-VINDO, SECRETARIA');
+        $I->am('secretaria');
+    }
+
+    public function loginAsPersonalTrainer(FunctionalTester $I)
+    {
+        $I->submitForm('#login-form', $this->formParams('personal-trainer', '123456'));
+        $I->see('BEM-VINDO, PERSONAL-TRAINER');
+        $I->am('personal_trainer');
+    }
+
+    public function loginAsNotAllowedUser(FunctionalTester $I)
+    {
+        $I->submitForm('#login-form', $this->formParams('cliente', '123456'));
+        $I->click('login-button');
+        $I->seeValidationError('Incorrect username or password.');
     }
 
     public function checkEmpty(FunctionalTester $I)
@@ -37,25 +70,5 @@ class LoginCest
     {
         $I->submitForm('#login-form', $this->formParams('admin', 'wrong_password'));
         $I->seeValidationError('Incorrect username or password.');
-    }
-
-
-    public function checkValidLogin(FunctionalTester $I)
-    {
-        $I->submitForm('#login-form', $this->formParams('admin', '123456'));
-        $I->see('BEM-VINDO, ADMIN');
-        $I->dontSeeLink('Login');
-    }
-
-    /**
-     * @param FunctionalTester $I
-     */
-    public function loginUser(FunctionalTester $I)
-    {
-        $I->amOnPage('/user/login');
-        $I->fillField('Username', 'admin');
-        $I->fillField('Password', '123456');
-        $I->click('login-button');
-        $I->see('BEM-VINDO, ADMIN');
     }
 }

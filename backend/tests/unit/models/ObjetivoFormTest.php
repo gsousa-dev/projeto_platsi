@@ -41,10 +41,10 @@ class ObjetivoFormTest extends \Codeception\Test\Unit
     public function testCreateObjetivoCorrect()
     {
         $form = new ObjetivoForm([
+            'idCliente' => 4,
             'objetivo' => 'Objetivo Teste',
             'peso_pretendido' => 70,
         ]);
-        $form->idCliente = 2;
 
         $objetivo = $form->save();
         expect($objetivo)->isInstanceOf('common\models\Objetivo');

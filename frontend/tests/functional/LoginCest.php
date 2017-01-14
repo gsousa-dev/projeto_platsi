@@ -11,7 +11,7 @@ class LoginCest
         $I->haveFixtures([
             'user' => [
                 'class' => UserFixture::className(),
-                'dataFile' => codecept_data_dir() . 'login_data.php'
+                'dataFile' => codecept_data_dir() . 'user.php'
             ]
         ]);
         $I->amOnRoute('site/login');
@@ -40,8 +40,8 @@ class LoginCest
     
     public function checkValidLogin(FunctionalTester $I)
     {
-        $I->submitForm('#login-form', $this->formParams('testing_user', '123456'));
-        $I->see('Logout (testing_user)', 'form button[type=submit]');
+        $I->submitForm('#login-form', $this->formParams('login-user', '123456'));
+        $I->see('Logout (login-user)', 'form button[type=submit]');
         $I->dontSeeLink('Login');
         $I->dontSeeLink('Signup');
     }

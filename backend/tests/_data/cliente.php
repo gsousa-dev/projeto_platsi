@@ -1,8 +1,8 @@
 <?php
 return [
     [
-        'idCliente' => 2,
-        //'idPersonal_trainer' => ,
+        'idCliente' => 4,
+        'idPersonal_trainer' => 3,
     ],
 ];
 

@@ -7,7 +7,7 @@ use yii\web\UploadedFile;
 use common\models\User;
 use common\models\UserType;
 
-class UserForm extends Model
+class CreateUserForm extends Model
 {
     public $user_type;
     public $name;

@@ -41,7 +41,7 @@ class DadosAvaliacaoFormTest extends \Codeception\Test\Unit
     public function testCorrectDadosAvaliacao()
     {
         $model = new DadosAvaliacaoForm([
-            'idCliente' => 2,
+            'idCliente' => 4,
             'altura' => 1.89,
             'massa_corporal' => 24.3,
             'massa_gorda' => 30.1,
