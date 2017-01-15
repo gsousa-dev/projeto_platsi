@@ -1,12 +1,14 @@
 <?php
 namespace backend\tests\functional;
 
-use backend\fixtures\ClienteFixture;
 use backend\tests\FunctionalTester;
+//-
 use common\fixtures\UserFixture;
+use backend\fixtures\ClienteFixture;
+//-
 use common\models\DadosAvaliacao;
-use common\models\User;
 use common\models\Cliente;
+use common\models\User;
 
 class CreateDadosAvaliacaoCest
 {
@@ -25,12 +27,14 @@ class CreateDadosAvaliacaoCest
             ]
         ]);
 
-        $personal_trainer = User::findByUsername('personal-trainer');
+        $personal_trainer = User::findByUsername('personal_trainer');
         $I->amLoggedInAs($personal_trainer);
         $I->amOnPage('cliente/registar-avaliacao-fisica?idCliente=4');
+        $I->see('REGISTAR DADOS DA AVALIAÇÃO FÍSICA', 'h1');
     }
 
-    public function _after(){
+    public function _after()
+    {
         DadosAvaliacao::deleteAll();
         Cliente::deleteAll();
         User::deleteAll();
@@ -50,7 +54,6 @@ class CreateDadosAvaliacaoCest
 
     public function createDadosAvaliacaoWithEmptyFields(FunctionalTester $I)
     {
-        $I->see('REGISTAR DADOS DA AVALIAÇÃO FÍSICA', 'h1');
         $I->submitForm($this->formId, []);
         $I->seeValidationError('Altura cannot be blank.');
         $I->seeValidationError('Massa Corporal cannot be blank.');
@@ -61,51 +64,51 @@ class CreateDadosAvaliacaoCest
 
     public function createDadosAvaliacaoWithWrongAltura(FunctionalTester $I)
     {
-        $I->submitForm('#dados-avaliacao-form', $this->formParams(4, 'altura', 22, 22, 35, 35));
+        $I->submitForm($this->formId, $this->formParams(4, 'altura', 22, 22, 35, 35));
         $I->dontSee('Altura cannot be blank.', '.help-block');
+        $I->see('Altura must be a number.', '.help-block');
         $I->dontSee('Massa Corporal cannot be blank.', '.help-block');
         $I->dontSee('Massa Gorda cannot be blank.', '.help-block');
         $I->dontSee('Massa Muscular cannot be blank.', '.help-block');
         $I->dontSee('Agua No Organismo cannot be blank.', '.help-block');
-        $I->see('Altura must be a number.', '.help-block');
     }
 
     public function createDadosAvaliacaoWithWrongMassaCorporal(FunctionalTester $I)
     {
-        $I->submitForm('#dados-avaliacao-form', $this->formParams(4, 1.75, 'massa corporal', 35, 35, 35));
+        $I->submitForm($this->formId, $this->formParams(4, 1.75, 'massa corporal', 35, 35, 35));
         $I->dontSee('Altura cannot be blank.', '.help-block');
         $I->dontSee('Massa Corporal cannot be blank.', '.help-block');
+        $I->see('Massa Corporal must be a number.', '.help-block');
         $I->dontSee('Massa Gorda cannot be blank.', '.help-block');
         $I->dontSee('Massa Muscular cannot be blank.', '.help-block');
         $I->dontSee('Agua No Organismo cannot be blank.', '.help-block');
-        $I->see('Massa Corporal must be a number.', '.help-block');
     }
 
     public function createDadosAvaliacaoWithWrongMassaGorda(FunctionalTester $I)
     {
-        $I->submitForm('#dados-avaliacao-form', $this->formParams(4, 1.75, 45, 'massa gorda', 35, 35));
+        $I->submitForm($this->formId, $this->formParams(4, 1.75, 45, 'massa gorda', 35, 35));
         $I->dontSee('Altura cannot be blank.', '.help-block');
         $I->dontSee('Massa Corporal cannot be blank.', '.help-block');
         $I->dontSee('Massa Gorda cannot be blank.', '.help-block');
+        $I->see('Massa Gorda must be a number.', '.help-block');
         $I->dontSee('Massa Muscular cannot be blank.', '.help-block');
         $I->dontSee('Agua No Organismo cannot be blank.', '.help-block');
-        $I->see('Massa Gorda must be a number.', '.help-block');
     }
 
     public function createDadosAvaliacaoWithWrongMassaMuscular(FunctionalTester $I)
     {
-        $I->submitForm('#dados-avaliacao-form', $this->formParams(4, 1.75, 45, 35, 'massa muscular', 35));
+        $I->submitForm($this->formId, $this->formParams(4, 1.75, 45, 35, 'massa muscular', 35));
         $I->dontSee('Altura cannot be blank.', '.help-block');
         $I->dontSee('Massa Corporal cannot be blank.', '.help-block');
         $I->dontSee('Massa Gorda cannot be blank.', '.help-block');
         $I->dontSee('Massa Muscular cannot be blank.', '.help-block');
-        $I->dontSee('Agua No Organismo cannot be blank.', '.help-block');
         $I->see('Massa Muscular must be a number.', '.help-block');
+        $I->dontSee('Agua No Organismo cannot be blank.', '.help-block');
     }
 
     public function createDadosAvaliacaoWithWrongAguaNoOrganismo(FunctionalTester $I)
     {
-        $I->submitForm('#dados-avaliacao-form', $this->formParams(4, 1.75, 45, 35, 45, 'agua no organismo'));
+        $I->submitForm($this->formId, $this->formParams(4, 1.75, 45, 35, 45, 'agua no organismo'));
         $I->dontSee('Altura cannot be blank.', '.help-block');
         $I->dontSee('Massa Corporal cannot be blank.', '.help-block');
         $I->dontSee('Massa Gorda cannot be blank.', '.help-block');
@@ -116,17 +119,7 @@ class CreateDadosAvaliacaoCest
 
     public function createDadosAvaliacaoSuccessfully(FunctionalTester $I)
     {
-        $I->submitForm(
-            $this->formId, [
-                'DadosAvaliacaoForm[idCliente]'  => 4,
-                'DadosAvaliacaoForm[altura]'  => 1.80,
-                'DadosAvaliacaoForm[massa_corporal]'  => 45,
-                'DadosAvaliacaoForm[massa_gorda]'  => 35,
-                'DadosAvaliacaoForm[massa_muscular]'  => 43,
-                'DadosAvaliacaoForm[agua_no_organismo]'  => 75,
-            ]
-        );
-
+        $I->submitForm($this->formId, $this->formParams(4, 1.80, 45, 35, 43, 75));
         $I->seeRecord('common\models\DadosAvaliacao', [
             'altura' => 1.80,
             'massa_corporal' => 45,

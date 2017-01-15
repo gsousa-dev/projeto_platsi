@@ -27,8 +27,9 @@ class Objetivo extends ActiveRecord
     {
         return [
             [['idCliente', 'objetivo', 'peso_pretendido'], 'required'],
-            [['idCliente', 'peso_pretendido'], 'integer'],
+            [['idCliente'], 'integer'],
             [['objetivo'], 'string', 'max' => 255],
+            [['peso_pretendido'], 'number'],
             [['idCliente'], 'unique'],
             [['idCliente'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['idCliente' => 'idCliente']],
         ];

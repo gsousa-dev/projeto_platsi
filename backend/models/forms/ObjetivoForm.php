@@ -20,7 +20,7 @@ class ObjetivoForm extends Model
             [['objetivo', 'peso_pretendido'], 'required'],
             [['objetivo'], 'trim'],
             [['objetivo'], 'string', 'max' => 50],
-            [['peso_pretendido'], 'integer'],
+            [['peso_pretendido'], 'number'],
         ];
     }
 

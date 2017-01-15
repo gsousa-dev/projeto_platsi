@@ -1,12 +1,14 @@
 <?php
 namespace backend\tests\functional;
 
-use backend\fixtures\ClienteFixture;
 use backend\tests\FunctionalTester;
+//-
 use common\fixtures\UserFixture;
+use backend\fixtures\ClienteFixture;
+//-
 use common\models\Objetivo;
-use common\models\User;
 use common\models\Cliente;
+use common\models\User;
 
 class CreateObjetivoCest
 {
@@ -25,12 +27,14 @@ class CreateObjetivoCest
             ]
         ]);
 
-        $personal_trainer = User::findByUsername('personal-trainer');
+        $personal_trainer = User::findByUsername('personal_trainer');
         $I->amLoggedInAs($personal_trainer);
         $I->amOnPage('cliente/novo-objetivo?idCliente=4');
+        $I->see('CRIAR OBJETIVO', 'h1');
     }
 
-    public function _after(){
+    public function _after()
+    {
         Objetivo::deleteAll();
         Cliente::deleteAll();
         User::deleteAll();
@@ -47,7 +51,6 @@ class CreateObjetivoCest
 
     public function createObjetivoWithEmptyFields(FunctionalTester $I)
     {
-        $I->see('CRIAR OBJETIVO', 'h1');
         $I->submitForm($this->formId, []);
         $I->seeValidationError('Objetivo cannot be blank.');
         $I->seeValidationError('Peso Pretendido cannot be blank.');
@@ -55,30 +58,19 @@ class CreateObjetivoCest
 
     public function createObjetivoWithWrongObjetivo(FunctionalTester $I)
     {
-        $I->submitForm('#objetivo-form', $this->formParams(4, null, 'peso pretendido'));
-
+        $I->submitForm($this->formId, $this->formParams(4, null, 75));
         $I->See('Objetivo cannot be blank.', '.help-block');
-        $I->dontSee('Peso Pretendido cannot be blank.', '.help-block');
     }
 
     public function createObjetivoWithWrongPesoPretendido(FunctionalTester $I)
     {
-        $I->submitForm('#objetivo-form', $this->formParams(4, 'some_objetivo', 'peso pretendido'));
-
-        $I->dontSee('Objetivo cannot be blank.', '.help-block');
-        $I->see('Peso Pretendido must be an integer.', '.help-block');
+        $I->submitForm($this->formId, $this->formParams(4, 'some_objetivo', 'peso pretendido'));
+        $I->see('Peso Pretendido must be a number.', '.help-block');
     }
 
     public function createObjetivoSuccessfully(FunctionalTester $I)
     {
-        $I->submitForm(
-            $this->formId, [
-                'ObjetivoForm[idCliente]'  => 4,
-                'ObjetivoForm[objetivo]'  => 'tester_objetivo',
-                'ObjetivoForm[peso_pretendido]'  => 75,
-            ]
-        );
-
+        $I->submitForm($this->formId, $this->formParams(4, 'tester_objetivo', 75));
         $I->seeRecord('common\models\Objetivo', [
             'objetivo' => 'tester_objetivo',
             'peso_pretendido' => 75,
