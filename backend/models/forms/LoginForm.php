@@ -21,9 +21,23 @@ class LoginForm extends Model
     {
         return [
             [['username', 'password'], 'required'],
+            ['username', 'validateUser'],
             ['rememberMe', 'boolean'],
             ['password', 'validatePassword'],
         ];
+    }
+
+    public function validateUser($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            $user = $this->getUser();
+            if ($user) {
+                $user_permissions = Yii::$app->authManager->getPermissionsByUser($user->id);
+                if (!array_key_exists('login', $user_permissions)) {
+                    $this->addError($attribute, 'User without permissions to login.');
+                }
+            }
+        }
     }
 
     /**

@@ -165,11 +165,9 @@ class UserController extends Controller
             return $this->goBack();
         } elseif ($passwordResetRequestForm->load(Yii::$app->request->post()) && $passwordResetRequestForm->validate()) {
             if ($passwordResetRequestForm->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-
                 return $this->goHome();
             } else {
-                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+
             }
         }
 

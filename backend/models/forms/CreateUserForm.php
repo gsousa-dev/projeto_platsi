@@ -22,24 +22,22 @@ class CreateUserForm extends Model
      */
     public $imageFile;
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            [['user_type'], 'exist', 'skipOnError' => true, 'targetClass' => UserType::className(), 'targetAttribute' => ['user_type' => 'id']],
+            ['user_type', 'exist', 'skipOnError' => true, 'targetClass' => UserType::className(), 'targetAttribute' => ['user_type' => 'id']],
             [['user_type', 'username', 'password', 'email', 'name', 'birthday', 'gender'], 'required'],
-            [['username', 'email', 'name'], 'trim'],
-            ['user_type', 'integer'],
+            [['name', 'username', 'email'], 'trim'],
             ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
             ['username', 'string', 'min' => 2, 'max' => 32],
+            ['username', 'match', 'pattern' => '/^[a-z]\w*$/i'],
             ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
             ['password', 'string', 'min' => 6],
-            [['email'], 'email'],
-            [['name', 'gender'], 'string', 'max' => 255],
+            ['email', 'email'],
+            ['name', 'string', 'max' => 100],
             [['birthday'], 'date', 'format' => 'php:Y-m-d'],
-            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
+            ['gender', 'in', 'range' => ['M', 'F']],
+            ['imageFile', 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
         ];
     }
 

@@ -29,7 +29,7 @@ $this->title = 'Novo Plano';
 
         <?php ActiveForm::end(); ?>
     </div>
-    <div class="lista-exercicios">
+    <div class="exercicios-plano-form">
         <h2>Selecione os exercícios que quer adicionar a este plano de treino</h2>
         <?= GridView::widget([
             'dataProvider' => $exercicios,

@@ -4,7 +4,6 @@ namespace backend\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\data\ActiveDataProvider;
-use backend\models\filters\ClienteSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 //-
@@ -30,7 +29,6 @@ class ClienteController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    ['allow' => false, 'roles' => ['?']],
                     ['allow' => true, 'roles' => ['personal_trainer']],
                     ['allow' => false]
                 ],
@@ -39,8 +37,7 @@ class ClienteController extends Controller
     }
 
     /**
-     * Lists all Cliente models.
-     * @return mixed
+     * Lista de Clientes do Personal Trainer
      */
     public function actionIndex()
     {
@@ -154,7 +151,7 @@ class ClienteController extends Controller
             'dadosAvaliacao' => $dadosAvaliacaoDataProvider,
             'dadosAvaliacao_exists' => $dadosAvaliacao->count(),
             'planos' => $planosDataProvider,
-            'planos_exists' => $planos->count(),
+            'planos_cont' => $planos->count(),
         ]);
     }
 
@@ -199,7 +196,7 @@ class ClienteController extends Controller
         if (($model = Objetivo::findOne($idCliente)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException();
         }
     }
 
@@ -209,7 +206,7 @@ class ClienteController extends Controller
         $form->idCliente = $idCliente;
 
         if ($form->load(Yii::$app->request->post()) && $form->save()) {
-            return $this->goHome();
+            return $this->actionFicha($idCliente);
         }
 
         return $this->render('objetivos/create', [
@@ -222,7 +219,7 @@ class ClienteController extends Controller
         $model = $this->findObjetivoModel($idCliente);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->goHome();
+            return $this->actionFicha($idCliente);
         }
 
         return $this->render('objetivos/update', [
@@ -234,7 +231,7 @@ class ClienteController extends Controller
     {
         $this->findObjetivoModel($idCliente)->delete();
 
-        return $this->redirect(['index']);
+        return $this->actionFicha($idCliente);
     }
 
     protected function findDadosAvaliacaoModel($idCliente)
@@ -242,7 +239,7 @@ class ClienteController extends Controller
         if (($model = DadosAvaliacao::findOne($idCliente)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException();
         }
     }
 
@@ -252,7 +249,7 @@ class ClienteController extends Controller
         $form->idCliente = $idCliente;
 
         if ($form->load(Yii::$app->request->post()) && $form->save()) {
-            return $this->goHome();
+            return $this->actionFicha($idCliente);
         }
 
         return $this->render('dados-avaliacao/create', [
@@ -265,7 +262,7 @@ class ClienteController extends Controller
         $model = $this->findDadosAvaliacaoModel($idCliente);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->goHome();
+            return $this->actionFicha($idCliente);
         }
 
         return $this->render('dados-avaliacao/update', [
@@ -277,6 +274,6 @@ class ClienteController extends Controller
     {
         $this->findDadosAvaliacaoModel($idCliente)->delete();
 
-        return $this->redirect(['index']);
+        return $this->actionFicha($idCliente);
     }
 }

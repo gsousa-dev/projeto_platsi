@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\filters\ClienteSearch */
 
 /* @var $idCliente */
 /* @var $cliente yii\data\ActiveDataProvider */
@@ -13,7 +12,7 @@ use yii\grid\GridView;
 /* @var $dadosAvaliacao yii\data\ActiveDataProvider */
 /* @var $dadosAvaliacao_exists */
 /* @var $planos yii\data\ActiveDataProvider */
-/* @var $planos_exists */
+/* @var $planos_cont */
 
 $this->title = 'Ficha do Cliente';
 $this->params['breadcrumbs'][] = $this->title;
@@ -44,11 +43,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'template' => '{view}'
                 ],
                 //'idCliente',
-                'name',
-                'username',
-                'email',
-                'birthday',
-                'gender',
+                ['attribute' => 'Nome', 'value' => 'name'],
+                ['attribute' => 'Username', 'value' => 'username'],
+                ['attribute' => 'Email', 'value' => 'email'],
+                ['attribute' => 'Data de Nascimento', 'value' => 'birthday'],
+                ['attribute' => 'Género', 'value' => 'gender'],
                 //'idPersonal_trainer',
             ],
         ]); ?>
@@ -121,7 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ?>
         </div>
     </div>
-    <div class="planos">
+    <div class="planos-de-treino">
         <h2>Planos de Treino</h2>
         <?= GridView::widget([
             'dataProvider' => $planos,
@@ -141,7 +140,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ]); ?>
         <div class="form-group">
             <?php
-            if($planos_exists == 0) {
+            if($planos_cont < 3) {
                 echo Html::a('Criar Plano', '/cliente/novo-plano?idCliente='.$idCliente, ['class' => 'btn btn-primary']);
             }
             ?>

@@ -7,8 +7,6 @@ use common\models\User;
 
 class HomeCest
 {
-    private $admin;
-
     public function _before(FunctionalTester $I)
     {
         $I->haveFixtures([
@@ -17,8 +15,8 @@ class HomeCest
                 'dataFile' => codecept_data_dir() . 'user.php'
             ]
         ]);
-        $this->admin= User::findByUsername('admin');
-        $I->amLoggedInAs($this->admin);
+        $admin= User::findByUsername('admin');
+        $I->amLoggedInAs($admin);
         $I->amOnPage('/');
     }
 

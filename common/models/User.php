@@ -59,23 +59,14 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [['user_type', 'name', 'username', 'email', 'birthday', 'gender'], 'required'],
-
             [['user_type'], 'exist', 'skipOnError' => true, 'targetClass' => UserType::className(), 'targetAttribute' => ['user_type' => 'id']],
-
             [['user_type', 'status', 'created_at', 'updated_at'], 'integer'],
-
             [['username', 'auth_key'], 'string', 'max' => 32],
-
             [['password_hash', 'password_reset_token', 'email', 'name', 'profile_picture'], 'string', 'max' => 255],
-
             [['username'], 'unique'],
-
             [['email'], 'unique'],
-
             [['birthday'], 'safe'],
-
             [['gender'], 'string', 'max' => 1],
-
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
@@ -146,7 +137,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['user_type' => [1,2,3], 'username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
