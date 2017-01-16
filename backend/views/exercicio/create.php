@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Exercicio */
+/* @var $exercicioForm backend\models\forms\ExercicioForm */
 
 $this->title = 'Novo Exercício';
 $this->params['breadcrumbs'][] = ['label' => 'Exercicios', 'url' => ['index']];
@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
     <?= $this->render('_form', [
-        'model' => $model,
+        'exercicioForm' => $exercicioForm,
     ]) ?>
 
 </div>

@@ -45,7 +45,7 @@ class ExercicioAerobicoPlano extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdExercicio()
+    public function getExercicio()
     {
         return $this->hasOne(ExerciciosPlano::className(), ['idExercicio_plano' => 'idExercicio']);
     }

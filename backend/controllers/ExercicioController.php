@@ -7,6 +7,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 //-
+use backend\models\forms\ExercicioForm;
 use common\models\Exercicio;
 
 class ExercicioController extends Controller
@@ -62,13 +63,13 @@ class ExercicioController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Exercicio();
+        $form = new ExercicioForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->idExercicio]);
+        if ($form->load(Yii::$app->request->post()) && $form->save()) {
+
         } else {
             return $this->render('create', [
-                'model' => $model,
+                'exercicioForm' => $form,
             ]);
         }
     }
