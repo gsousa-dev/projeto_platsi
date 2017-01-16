@@ -2,9 +2,6 @@
 <div class="breadcrumbs">
     <h1>Dashboard em construção</h1>
     <ol class="breadcrumb">
-        <li>
-            <a href="#">Utilizador</a>
-        </li>
         <li class="active">Dashboard</li>
     </ol>
 </div>

@@ -3,23 +3,9 @@ namespace backend\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\filters\AccessControl;
 
 class SiteController extends Controller
 {
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    ['actions' => ['error'], 'allow' => true, 'roles' => ['@', '?']],
-                    ['actions' => ['index'], 'allow' => true, 'roles' => ['@']],
-                ],
-            ],
-        ];
-    }
-
     public function actions()
     {
         return [
@@ -45,6 +31,14 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        if (Yii::$app->user->can('admin')) {
+            return $this->redirect('/user/dashboard');
+        } elseif (Yii::$app->user->can('secretaria')) {
+            return $this->redirect('/user');
+        } elseif (Yii::$app->user->can('personal_trainer')) {
+            return $this->redirect('/cliente');
+        } else {
+            return $this->redirect('/user/login');
+        }
     }
 }

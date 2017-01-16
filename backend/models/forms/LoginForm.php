@@ -21,13 +21,13 @@ class LoginForm extends Model
     {
         return [
             [['username', 'password'], 'required'],
-            ['username', 'validateUser'],
+            ['username', 'checkUserPermissions'],
             ['rememberMe', 'boolean'],
             ['password', 'validatePassword'],
         ];
     }
 
-    public function validateUser($attribute, $params)
+    public function checkUserPermissions($attribute, $params)
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();

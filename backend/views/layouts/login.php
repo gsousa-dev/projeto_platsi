@@ -21,9 +21,6 @@ MetronicAsset::register($this);
 
     <body class=" login">
     <?php $this->beginBody() ?>
-        <div class="logo">
-            <?= Html::a('<img src="../assets/pages/img/logo-big.png" />'); ?>
-        </div>
         <?= $content ?>
         <div class="copyright"><?= date('Y') ?> © FitApp.</div>
     <?php $this->endBody() ?>

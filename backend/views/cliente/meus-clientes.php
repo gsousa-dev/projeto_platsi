@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\filters\ClienteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Os Meus Clientes';
@@ -22,7 +21,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             //'idCliente',

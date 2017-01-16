@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\filters\ClienteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Exercícios do Plano';
@@ -34,11 +33,18 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'formatter' => ['class' => 'yii\i18n\Formatter','nullDisplay' => ''],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             //'idExercicio_plano',
             //'idPlano',
             'exercicio.descricao',
+            [
+                'attribute' => 'Duração (min)',
+                'value' => 'exercicioAerobicoPlano.duracao',
+            ],
+            'exercicioAnaerobicoPlano.series',
+            'exercicioAnaerobicoPlano.repeticoes',
             //'idExercicio',
             ['class' => 'yii\grid\ActionColumn'],
         ],

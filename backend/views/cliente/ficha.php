@@ -56,8 +56,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <h2>Objetivo</h2>
         <?= GridView::widget([
             'dataProvider' => $objetivo,
-            //'filterModel' => $searchModel,
-
             'columns' => [
                 //['class' => 'yii\grid\SerialColumn'],
                 //'idCliente',
@@ -89,7 +87,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <h2>Avaliação Física</h2>
         <?= GridView::widget([
             'dataProvider' => $dadosAvaliacao,
-            //'filterModel' => $searchModel,
             'columns' => [
                 //['class' => 'yii\grid\SerialColumn'],
                 //'idCliente',

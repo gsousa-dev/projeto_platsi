@@ -4,14 +4,12 @@ namespace backend\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\data\ActiveDataProvider;
-use backend\models\filters\ExerciciosPlanoSearch;
+//-
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 //-
 use common\models\PlanoPessoal;
 use common\models\ExerciciosPlano;
-//-
-use backend\models\forms\ExercicioPlanoForm as Form;
 
 class ExerciciosPlanoController extends Controller
 {
@@ -30,21 +28,6 @@ class ExerciciosPlanoController extends Controller
                 ],
             ],
         ];
-    }
-
-    /**
-     * Lists all ExerciciosPlano models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new ExerciciosPlanoSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
     }
 
     /**
@@ -141,18 +124,5 @@ class ExerciciosPlanoController extends Controller
         return $this->render('exercicios-plano', [
             'dataProvider' => $dataProvider,
         ]);
-    }
-
-    public function actionAdicionarExercicio($idPlano)
-    {
-        $form = new Form();
-
-        if ($form->load(Yii::$app->request->post()) && $form->save()) {
-            return $this->redirect(['view', 'idPlano' => $form->idPlano, 'idExercicio' => $form->idExercicio]);
-        } else {
-            return $this->render('create', [
-                'model' => $form,
-            ]);
-        }
     }
 }

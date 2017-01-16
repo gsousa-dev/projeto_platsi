@@ -4,9 +4,10 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\filters\ClienteSearch */
+
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $idCliente */
+/* @var $planosCount */
 
 $this->title = 'Planos de Treino';
 $this->params['breadcrumbs'][] = $this->title;
@@ -28,7 +29,11 @@ $this->params['breadcrumbs'][] = $this->title;
         </ol>
     </div>
     <p>
-        <?= Html::a('Criar Plano de Treino', ['/cliente/novo-plano?idCliente='.$idCliente], ['class' => 'btn btn-success']) ?>
+        <?php
+        if($planosCount < 3) {
+            echo Html::a('Criar Plano de Treino', '/cliente/novo-plano?idCliente='.$idCliente, ['class' => 'btn btn-primary']);
+        }
+        ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -44,6 +49,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'template' => '{view}'
             ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttons' => [
+                        'delete' => function ($url, $model, $key) {
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', '/cliente/apagar-plano-de-treino?idPlano='.$key, []);
+                        }
+                ],
+                'template' => '{update} {delete}'],
         ],
     ]); ?>
 </div>

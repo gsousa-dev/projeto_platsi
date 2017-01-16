@@ -5,6 +5,8 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
+use yii\bootstrap\Alert;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
@@ -17,27 +19,24 @@ use yii\data\ActiveDataProvider;
 use common\models\User;
 use common\models\Mensagem;
 //-
-use common\models\forms\LoginForm;
+use backend\models\forms\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
-
+//-
 use backend\models\forms\CreateUserForm;
 use backend\models\forms\MensagemForm;
 
 class UserController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
     public function behaviors()
     {
         return [
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    ['allow' => true, 'actions' => ['login', 'reset-password'], 'roles' => ['?']],
-                    ['allow' => true, 'actions' => ['logout'], 'roles' => ['@']],
                     ['allow' => true, 'roles' => ['admin', 'secretaria']],
+                    ['allow' => true, 'actions' => ['login', 'reset-password'], 'roles' => ['?']],
+                    ['allow' => false, 'actions' => ['dashboard'], 'roles' => ['secretaria', 'personal_trainer']],
                     [
                         'allow' => true,
                         'actions' => ['perfil', 'update', 'inbox', 'conversa'],
@@ -54,14 +53,19 @@ class UserController extends Controller
         ];
     }
 
+    public function actionDashboard()
+    {
+        return $this->render('dashboard');
+    }
+
     /**
-     * Lists all User models.
+     * Lista de utilizadores ativos que não são admins e que não o utilizador logado
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => User::find()->where(['<>', 'id', Yii::$app->user->id])->andWhere(['status' => 10]),
+            'query' => User::find()->where(['<>', 'id', Yii::$app->user->id])->andWhere(['<>', 'user_type', 1])->andWhere(['status' => 10]),
         ]);
 
         return $this->render('index', [
@@ -130,10 +134,10 @@ class UserController extends Controller
 
     public function actionApagar($id)
     {
-        $model = $this->findModel($id);
-        $model->status = 0;
+        $user = $this->findModel($id);
+        $user->status = 0;
 
-        if($model->save()) {
+        if($user->save()) {
             return $this->goHome();
         }
     }
@@ -162,12 +166,16 @@ class UserController extends Controller
         $passwordResetRequestForm = new PasswordResetRequestForm();
 
         if ($loginForm->load(Yii::$app->request->post()) && $loginForm->login()) {
-            return $this->goBack();
+            return $this->goHome();
         } elseif ($passwordResetRequestForm->load(Yii::$app->request->post()) && $passwordResetRequestForm->validate()) {
             if ($passwordResetRequestForm->sendEmail()) {
-                return $this->goHome();
+                Alert::begin(['options' => ['class' => 'alert-success']]);
+                echo 'Email enviado com sucesso.';
+                Alert::end();
             } else {
-
+                Alert::begin(['options' => ['class' => 'alert-warning']]);
+                echo 'Falha no envio do email.';
+                Alert::end();
             }
         }
 
@@ -195,7 +203,7 @@ class UserController extends Controller
         }
 
         if ($resetPasswordForm->load(Yii::$app->request->post()) && $resetPasswordForm->validate() && $resetPasswordForm->resetPassword()) {
-            return $this->redirect('site/index');
+            return $this->redirect('/site/index');
         }
 
         return $this->render('resetPassword', [

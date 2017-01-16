@@ -167,6 +167,7 @@ class ClienteController extends Controller
         return $this->render('planos/index', [
             'dataProvider' => $dataProvider,
             'idCliente' => $idCliente,
+            'planosCount' => $planos->count(),
         ]);
     }
 
