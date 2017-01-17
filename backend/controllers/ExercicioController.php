@@ -3,9 +3,12 @@ namespace backend\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
-use yii\data\ActiveDataProvider;
+use yii\filters\VerbFilter;
+//-
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+//-
+use yii\data\ActiveDataProvider;
 //-
 use backend\models\forms\ExercicioForm;
 use common\models\Exercicio;
@@ -22,9 +25,15 @@ class ExercicioController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     ['allow' => false, 'roles' => ['?']],
-                    ['allow' => true, 'roles' => ['@']], //TODO: alterar para personal_trainer
+                    ['allow' => true, 'roles' => ['personal_trainer']],
                     ['allow' => false]
                 ]
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
             ],
         ];
     }
@@ -66,7 +75,7 @@ class ExercicioController extends Controller
         $form = new ExercicioForm();
 
         if ($form->load(Yii::$app->request->post()) && $form->save()) {
-
+            return $this->goBack();
         } else {
             return $this->render('create', [
                 'exercicioForm' => $form,
@@ -82,15 +91,28 @@ class ExercicioController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $form = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->idExercicio]);
+        if ($form->load(Yii::$app->request->post()) && $form->save()) {
+            return $this->redirect(['view', 'id' => $form->idExercicio]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                'exercicioForm' => $form,
             ]);
         }
+    }
+
+    /**
+     * Deletes an existing Exercicio model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionDelete($id)
+    {
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['index']);
     }
 
     /**

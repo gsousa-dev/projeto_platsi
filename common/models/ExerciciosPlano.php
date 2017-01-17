@@ -49,6 +49,16 @@ class ExerciciosPlano extends ActiveRecord
         ];
     }
 
+    public function beforeDelete()
+    {
+        if (parent::beforeDelete()) {
+            ExercicioAerobicoPlano::deleteAll(['idExercicio' => $this->idExercicio_plano]);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

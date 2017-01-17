@@ -192,6 +192,22 @@ class ClienteController extends Controller
         ]);
     }
 
+    protected function findPlanoModel($idPlano)
+    {
+        if (($model = PlanoPessoal::findOne($idPlano)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException();
+        }
+    }
+
+    public function actionApagarPlano($idPlano)
+    {
+        $this->findPlanoModel($idPlano)->delete();
+
+        return $this->goBack();
+    }
+
     protected function findObjetivoModel($idCliente)
     {
         if (($model = Objetivo::findOne($idCliente)) !== null) {

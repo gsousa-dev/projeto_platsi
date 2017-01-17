@@ -47,6 +47,16 @@ class PlanoPessoal extends ActiveRecord
         ];
     }
 
+    public function beforeDelete()
+    {
+        if (parent::beforeDelete()) {
+            ExerciciosPlano::deleteAll(['idPlano' => $this->idPlano], []);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

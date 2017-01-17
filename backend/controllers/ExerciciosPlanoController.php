@@ -3,12 +3,10 @@ namespace backend\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
-use yii\data\ActiveDataProvider;
 //-
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 //-
-use common\models\PlanoPessoal;
 use common\models\ExerciciosPlano;
 
 class ExerciciosPlanoController extends Controller
@@ -110,19 +108,5 @@ class ExerciciosPlanoController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }
-
-    public function actionPlanoDeTreino($idPlano)
-    {
-        $plano = PlanoPessoal::findOne($idPlano);
-        $exercicios_plano = $plano->getExerciciosPlano()->orderBy('idExercicio_plano');
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $exercicios_plano,
-        ]);
-
-        return $this->render('exercicios-plano', [
-            'dataProvider' => $dataProvider,
-        ]);
     }
 }

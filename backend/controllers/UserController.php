@@ -40,7 +40,7 @@ class UserController extends Controller
                     ['allow' => false, 'actions' => ['dashboard'], 'roles' => ['secretaria', 'personal_trainer']],
                     [
                         'allow' => true,
-                        'actions' => ['perfil', 'update', 'inbox', 'conversa', 'logout'],
+                        'actions' => ['perfil', 'editar-perfil', 'update', 'inbox', 'conversa', 'logout'],
                         'roles' => ['personal_trainer']
                     ],
                 ],

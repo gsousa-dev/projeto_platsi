@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\User */
 
-$this->title = 'Meu perfil';
+$this->title = 'Perfil';
 ?>
 <div class="user-view">
     <div class="breadcrumbs">
@@ -16,12 +16,21 @@ $this->title = 'Meu perfil';
         </ol>
     </div>
     <p>
-        <?= Html::a('Editar', ['editar', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Apagar', ['apagar', 'id' => $model->id], ['class' => 'btn btn-danger']) ?>
+        <?= Html::a('Editar', ['editar-perfil', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?php
+        if ($model->id != Yii::$app->user->id) {
+            echo Html::a('Apagar', ['apagar', 'id' => $model->id], ['class' => 'btn btn-danger']);
+        }
+        ?>
     </p>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
+            [
+                'attribute' => '',
+                'value' => '/'.$model->profile_picture,
+                'format' => ['image',['width'=>'100','height'=>'100']],
+            ],
             //'id',
             'name',
             'username',

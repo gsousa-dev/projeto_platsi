@@ -5,33 +5,31 @@ use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\User */
+/* @var $updateUserForm backend\models\forms\UpdateUserForm */
 
-$this->title = 'Editar o Meu Perfil';
+$this->title = 'Editar dados do utilizador';
 ?>
 <div class="user-update">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="breadcrumbs">
+        <h1><?= Html::encode($this->title) ?></h1>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#"></a>
+            </li>
+            <li class="active"></li>
+        </ol>
+    </div>
+    <p></p>
 
-    <?php $form = ActiveForm::begin(['options' => ['role' => 'form']]); ?>
+    <?php $form = ActiveForm::begin(['options' => ['id' => 'update-user-form', 'role' => 'form']]); ?>
 
-    <?= $form->field($model, 'username')->textInput() ?>
+    <?= $form->field($updateUserForm, 'name')->textInput(['value' => $model->name])->label('Nome completo') ?>
 
-    <?= $form->field($model, 'password')->passwordInput() ?>
+    <?= $form->field($updateUserForm, 'username')->textInput(['value' => $model->username])->label() ?>
 
-    <?= $form->field($model, 'email')->textInput() ?>
+    <?= $form->field($updateUserForm, 'new_password')->passwordInput(['placeholder' => '********'])->label() ?>
 
-    <?= $form->field($model, 'name')->textInput() ?>
-
-    <?= $form->field($model, 'birthday')->widget(dosamigos\datepicker\DatePicker::className(), [
-        'inline' => false,
-        'clientOptions' => [
-            'autoclose' => true,
-            'format' => 'yyyy-mm-dd',
-        ],
-    ]) ?>
-
-    <?= $form->field($model, 'gender')->dropDownList(['F' => 'Feminino', 'M' => 'Masculino']) ?>
-
-    <?= $form->field($model, 'imageFile')->fileInput() ?>
+    <?= $form->field($updateUserForm, 'email')->textInput(['value' => $model->email])->label() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Submeter', ['class' => 'btn btn-primary']) ?>
