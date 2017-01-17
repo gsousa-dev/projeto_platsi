@@ -24,6 +24,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 //-
 use backend\models\forms\CreateUserForm;
+use backend\models\forms\UpdateUserForm;
 use backend\models\forms\MensagemForm;
 
 class UserController extends Controller
@@ -39,7 +40,7 @@ class UserController extends Controller
                     ['allow' => false, 'actions' => ['dashboard'], 'roles' => ['secretaria', 'personal_trainer']],
                     [
                         'allow' => true,
-                        'actions' => ['perfil', 'update', 'inbox', 'conversa'],
+                        'actions' => ['perfil', 'update', 'inbox', 'conversa', 'logout'],
                         'roles' => ['personal_trainer']
                     ],
                 ],
@@ -89,11 +90,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Creates a new User model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
         $form = new CreateUserForm();
@@ -244,5 +240,23 @@ class UserController extends Controller
             'dataProvider' => $dataProvider,
             'model' => $form,
         ]);
+    }
+
+    public function actionEditarPerfil($id)
+    {
+        $model = $this->findModel($id);
+
+        $form = new UpdateUserForm();
+        $form->id = $id;
+        $form->username = $model->username;
+
+        if ($form->load(Yii::$app->request->post()) && $form->save()) {
+            return $this->redirect(['perfil', 'id' => $model->id]);
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+                'updateUserForm' => $form,
+            ]);
+        }
     }
 }
