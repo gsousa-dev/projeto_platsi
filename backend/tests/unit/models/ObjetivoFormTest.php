@@ -56,16 +56,16 @@ class ObjetivoFormTest extends \Codeception\Test\Unit
     public function testCreateObjetivoNotCorrect()
     {
         $form = new ObjetivoForm([
-            'objetivo' => null,
+            'objetivo' => '',
             'peso_pretendido' => 'some text',
         ]);
-        $form->idCliente = 2;
+        $form->idCliente = 4;
 
         expect_not($form->save());
 
         expect($form->getFirstError('objetivo'))
             ->equals('Objetivo cannot be blank.');
         expect($form->getFirstError('peso_pretendido'))
-            ->equals('Peso Pretendido must be an integer.');
+            ->equals('Peso Pretendido must be a number.');
     }
 }
