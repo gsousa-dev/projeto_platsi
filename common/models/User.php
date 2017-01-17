@@ -95,6 +95,14 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getUserType()
+    {
+        return $this->hasOne(UserType::className(), ['id' => 'user_type']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getClientes()
     {
         return $this->hasMany(Cliente::className(), ['idPersonal_trainer' => 'id']);
