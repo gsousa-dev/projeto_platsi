@@ -2,7 +2,6 @@
 namespace backend\models\forms;
 
 use yii\base\Model;
-use yii\web\UploadedFile;
 //-
 use common\models\User;
 use common\models\UserType;
@@ -16,11 +15,6 @@ class CreateUserForm extends Model
     public $password;
     public $birthday;
     public $gender;
-    public $profile_picture;
-    /**
-     * @var UploadedFile
-     */
-    public $imageFile;
 
     public function rules()
     {
@@ -37,18 +31,7 @@ class CreateUserForm extends Model
             ['name', 'string', 'max' => 100],
             [['birthday'], 'date', 'format' => 'php:Y-m-d'],
             ['gender', 'in', 'range' => ['M', 'F']],
-            ['imageFile', 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
         ];
-    }
-
-    public function upload()
-    {
-        if (empty($this->imageFile)) {
-            return false;
-        } else {
-            $this->imageFile->saveAs('uploads/' . $this->username . '_avatar.' . $this->imageFile->extension);
-            return true;
-        }
     }
 
     public function save()
@@ -66,9 +49,6 @@ class CreateUserForm extends Model
         $user->setPassword($this->password);
         $user->birthday = $this->birthday;
         $user->gender = $this->gender;
-        if(!empty($this->imageFile)) {
-            $user->profile_picture = 'uploads/' . $this->username . '_avatar.' . $this->imageFile->extension;
-        }
 
         return $user->save() ? $user : null;
     }
