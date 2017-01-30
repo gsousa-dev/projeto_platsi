@@ -8,9 +8,9 @@ use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 //-
-use yii\data\ActiveDataProvider;
-//-
 use backend\models\forms\ExercicioForm;
+use backend\models\filters\ExercicioSearch;
+//-
 use common\models\Exercicio;
 
 class ExercicioController extends Controller
@@ -44,11 +44,11 @@ class ExercicioController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Exercicio::find(),
-        ]);
+        $searchModel = new ExercicioSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

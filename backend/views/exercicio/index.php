@@ -1,9 +1,14 @@
+
 <?php
 
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
+//-
+use common\models\TipoExercicio;
 
 /* @var $this yii\web\View */
+/* @var $searchModel backend\models\filters\ExercicioSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Exercícios';
@@ -19,13 +24,22 @@ $this->params['breadcrumbs'][] = $this->title;
             <li class="active">Lista de <?= Html::encode($this->title) ?></li>
         </ol>
     </div>
+
+    <p>
+        <?= Html::a('Criar Exercício', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            //'idExercicio',
             'descricao',
-            'tipoExercicio.tipo',
+            [
+                'attribute' => 'tipo_exercicio',
+                'value' => 'tipoExercicio.tipo',
+                'filter' => Html::activeDropDownList($searchModel, 'tipo_exercicio',
+                    ArrayHelper::map(TipoExercicio::find()->asArray()->all(), 'id', 'tipo'), ['class' => 'form-control', 'prompt' => 'Selecione o tipo de exercício']),
+            ],
             ['class' => 'yii\grid\ActionColumn', 'template'=>'{update} {delete}'],
         ],
     ]); ?>
