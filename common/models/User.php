@@ -92,6 +92,11 @@ class User extends ActiveRecord implements IdentityInterface
         }
     }
 
+    public function UserType()
+    {
+        return UserType::findOne($this->user_type)->user_type;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

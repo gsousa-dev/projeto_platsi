@@ -22,38 +22,34 @@ $this->params['current_user'] = Yii::$app->user->id;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
-            //'id',
+            ['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute' => 'Tipo de utilizador',
                 'value' => 'userType.user_type',
             ],
             'name',
             'username',
-            //'auth_key',
-            //'password_hash',
-            //'password_reset_token',
             'email:email',
-            //'status',
             'birthday',
             'gender',
-            // 'created_at',
-            // 'updated_at',
-            //'profile_picture',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ['perfil', 'id' => $model->id], []);
-                    },
-                    'update' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', ['editar', 'id' => $model->id], []);
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ['profile', 'id' => $model->id], []);
                     },
                     'delete' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', ['apagar', 'id' => $model->id], []);
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', ['delete', 'id' => $model->id],
+                            [
+                                'data' => [
+                                    'confirm' => 'Tem a certeza que quer eliminar este utilizador?',
+                                    'method' => 'post',
+                                ],
+                            ]
+                        );
                     },
                 ],
-                'template' => '{view} {update} {delete}'
+                'template' => '{view} {delete}'
             ],
         ],
     ]); ?>

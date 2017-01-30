@@ -2,17 +2,16 @@
 namespace backend\controllers;
 
 use Yii;
+
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
-use yii\bootstrap\Alert;
-
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\BadRequestHttpException;
 use yii\web\UploadedFile;
 
 use yii\base\InvalidParamException;
-use yii\web\BadRequestHttpException;
 
 use yii\data\ActiveDataProvider;
 //-
@@ -40,7 +39,15 @@ class UserController extends Controller
                     ['allow' => false, 'actions' => ['dashboard'], 'roles' => ['secretaria', 'personal_trainer']],
                     [
                         'allow' => true,
-                        'actions' => ['perfil', 'editar-perfil', 'update', 'inbox', 'conversa', 'logout'],
+                        'actions' => [
+                            'profile',
+                            'update-personal-info',
+                            'change-avatar',
+                            'change-password',
+                            'inbox',
+                            'conversa',
+                            'logout'
+                        ],
                         'roles' => ['personal_trainer']
                     ],
                 ],
@@ -54,9 +61,13 @@ class UserController extends Controller
         ];
     }
 
-    public function actionDashboard()
+    protected function findModel($id)
     {
-        return $this->render('dashboard');
+        if (($model = User::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 
     /**
@@ -69,85 +80,103 @@ class UserController extends Controller
             'query' => User::find()->where(['<>', 'id', Yii::$app->user->id])->andWhere(['<>', 'user_type', 1])->andWhere(['status' => 10]),
         ]);
 
-        return $this->render('index', [
+        return $this->render('active-users', [
             'dataProvider' => $dataProvider,
         ]);
     }
 
-    /**
-     * Finds the User model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return User the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = User::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
-
     public function actionCreate()
     {
-        $form = new CreateUserForm();
+        $model = new CreateUserForm();
 
-        if ($form->load(Yii::$app->request->post())) {
-            $form->imageFile = UploadedFile::getInstance($form, 'imageFile');
-            if ($form->save()) {
-                if($form->upload()) {
-                    return $this->goHome();
-                }
-                return $this->goHome();
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            //User created successfully
+            //TODO: User created successfully confirmation
         }
 
-        return $this->render('create', [
-            'model' => $form,
+        return $this->render('new-user', [
+            'model' => $model,
         ]);
     }
 
-    /**
-     * Updates an existing User model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
+    public function actionDelete($id)
     {
-        $model = $this->findModel($id);
+        $user = $this->findModel($id);
+        $user->status = 0;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        return $user->save() ? true : false;
+    }
+
+    public function actionProfile($id)
+    {
+        return $this->render('profile', [
+            'user' => $this->findModel($id)
+        ]);
+    }
+
+    public function actionUpdatePersonalInfo()
+    {
+        $id = Yii::$app->user->identity->getId();
+        $user = $this->findModel($id);
+
+        $model = new UpdateUserForm($user, ['scenario' => UpdateUserForm::SCENARIO_UPDATE_PERSONAL_INFO]);
+
+        if ($model->load(Yii::$app->request->post()) && $model->updatePersonalInfo()) {
+            //Success
+            return $this->refresh(); //TODO: Success confirmation
         } else {
-            return $this->render('update', [
+            return $this->render('account-layout', [
+                'user' => $user,
                 'model' => $model,
             ]);
         }
     }
 
-    public function actionApagar($id)
+    public function actionChangeAvatar()
     {
+        $id = Yii::$app->user->identity->getId();
         $user = $this->findModel($id);
-        $user->status = 0;
 
-        if($user->save()) {
-            return $this->goHome();
+        $model = new UpdateUserForm($user, ['scenario' => UpdateUserForm::SCENARIO_CHANGE_AVATAR]);
+
+        if (Yii::$app->request->isPost) {
+            $model->avatar = UploadedFile::getInstance($model, 'avatar');
+            if ($model->upload() && $model->saveAvatarInDb()) {
+                //File is uploaded successfully and saved in db
+                return $this->refresh();
+            } else {
+                //Error uploading avatar
+                //TODO: Error uploading avatar confirmation
+            }
+        } else {
+            return $this->render('account-layout', [
+                'user' => $user,
+                'model' => $model,
+            ]);
         }
     }
 
-    /**
-     * Displays a single User model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionPerfil($id)
+    public function actionChangePassword()
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $id = Yii::$app->user->identity->getId();
+        $user = $this->findModel($id);
+
+        $model = new UpdateUserForm($user, ['scenario' => UpdateUserForm::SCENARIO_CHANGE_PASSWORD]);
+
+        if ($model->load(Yii::$app->request->post()) && $model->changePassword()) {
+            //Success
+            return $this->refresh(); //TODO: Success confirmation
+        } else {
+            return $this->render('account-layout', [
+                'user' => $user,
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionDashboard()
+    {
+        return $this->render('dashboard');
     }
 
     public function actionLogin()
@@ -165,13 +194,11 @@ class UserController extends Controller
             return $this->goHome();
         } elseif ($passwordResetRequestForm->load(Yii::$app->request->post()) && $passwordResetRequestForm->validate()) {
             if ($passwordResetRequestForm->sendEmail()) {
-                Alert::begin(['options' => ['class' => 'alert-success']]);
-                echo 'Email enviado com sucesso.';
-                Alert::end();
+                // Email sent successfully
+                //TODO: Email sent successfully confirmation
             } else {
-                Alert::begin(['options' => ['class' => 'alert-warning']]);
-                echo 'Falha no envio do email.';
-                Alert::end();
+                //Email not sent
+                //TODO: Email not sent confirmation
             }
         }
 
@@ -216,7 +243,7 @@ class UserController extends Controller
             'query' => $inbox_messages,
         ]);
 
-        return $this->render('mensagens/inbox', [
+        return $this->render('messages/inbox', [
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -234,28 +261,10 @@ class UserController extends Controller
 
         if ($form->load(Yii::$app->request->post()) && $form->save()) {
             return $this->refresh();
-        }
-
-        return $this->render('mensagens/chat', [
-            'dataProvider' => $dataProvider,
-            'model' => $form,
-        ]);
-    }
-
-    public function actionEditarPerfil($id)
-    {
-        $model = $this->findModel($id);
-
-        $form = new UpdateUserForm();
-        $form->id = $id;
-        $form->username = $model->username;
-
-        if ($form->load(Yii::$app->request->post()) && $form->save()) {
-            return $this->redirect(['perfil', 'id' => $model->id]);
         } else {
-            return $this->render('update', [
-                'model' => $model,
-                'updateUserForm' => $form,
+            return $this->render('messages/chat', [
+                'dataProvider' => $dataProvider,
+                'model' => $form,
             ]);
         }
     }
