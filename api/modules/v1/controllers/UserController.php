@@ -73,7 +73,7 @@ final class UserController extends ActiveController
         }
 
         if (!$user->save()) {
-            throw new ServerErrorHttpException('Server error. Unable to create session id.');
+            throw new ServerErrorHttpException('Server error. Unable to create user.');
         }
 
         return $user;
