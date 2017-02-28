@@ -1,7 +1,5 @@
 <?php
 
-use yii\helpers\Html;
-
 /* @var $this yii\web\View */
 /* @var $user common\models\User */
 /* @var $model backend\models\forms\UpdateUserForm */
@@ -25,12 +23,6 @@ use yii\helpers\Html;
                         <div class="profile-usertitle-job"> <?= $user->UserType() ?> </div>
                     </div>
                     <!-- END SIDEBAR USER TITLE -->
-                    <!-- SIDEBAR BUTTONS -->
-                    <div class="profile-userbuttons">
-                        <button type="button" class="btn btn-circle green btn-sm">Follow</button>
-                        <button type="button" class="btn btn-circle red btn-sm">Message</button>
-                    </div>
-                    <!-- END SIDEBAR BUTTONS -->
                     <!-- SIDEBAR MENU -->
                     <div class="profile-usermenu">
                         <ul class="nav">

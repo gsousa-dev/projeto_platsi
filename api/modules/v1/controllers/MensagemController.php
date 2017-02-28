@@ -1,6 +1,7 @@
 <?php
 namespace api\modules\v1\controllers;
 
+use Codeception\Lib\Console\Message;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\Cors;
@@ -30,6 +31,35 @@ class MensagemController extends ActiveController
         ];
 
         return $behaviors;
+    }
+
+    public function actions()
+    {
+        $actions = parent::actions();
+        unset($actions['create']);
+
+        return $actions;
+    }
+
+    public function actionCreate()
+    {
+        $request = Yii::$app->request;
+
+        $content = $request->post('mensagem');
+        $idEmissor = $request->post('idEmissor');
+        $idReceptor = $request->post('idReceptor');
+
+        if (empty($content) || empty($idEmissor) || empty($idReceptor)) {
+            throw new UnauthorizedHttpException('Missing credentials.');
+        }
+
+        $mensagem = new Mensagem();
+        $mensagem->mensagem = $content;
+        $mensagem->idEmissor = $idEmissor;
+        $mensagem->idReceptor = $idReceptor;
+        $mensagem->save();
+
+        Mensagem::updateAll(['estado' => 'respondida'],['idEmissor' => $idReceptor]);
     }
 
     /**

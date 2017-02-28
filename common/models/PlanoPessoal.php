@@ -36,28 +36,6 @@ class PlanoPessoal extends ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'idPlano' => 'Id Plano',
-            'descricao' => 'Descrição',
-            'idCliente' => 'Id Cliente',
-        ];
-    }
-
-    public function beforeDelete()
-    {
-        if (parent::beforeDelete()) {
-            ExerciciosPlano::deleteAll(['idPlano' => $this->idPlano], []);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * @return \yii\db\ActiveQuery
      */
     public function getExerciciosPlano()

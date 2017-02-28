@@ -36,22 +36,9 @@ class Pesagem extends ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'idPesagem' => 'Id Pesagem',
-            'data_pesagem' => 'Data da Pesagem',
-            'peso' => 'Peso',
-            'idCliente' => 'Id Cliente',
-        ];
-    }
-
-    /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdCliente()
+    public function getCliente()
     {
         return $this->hasOne(Cliente::className(), ['idCliente' => 'idCliente']);
     }

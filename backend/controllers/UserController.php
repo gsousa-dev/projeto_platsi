@@ -1,10 +1,14 @@
 <?php
 namespace backend\controllers;
 
+use common\models\Cliente;
 use Yii;
 
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -36,7 +40,6 @@ class UserController extends Controller
                 'rules' => [
                     ['allow' => true, 'roles' => ['admin', 'secretaria']],
                     ['allow' => true, 'actions' => ['login', 'reset-password'], 'roles' => ['?']],
-                    ['allow' => false, 'actions' => ['dashboard'], 'roles' => ['secretaria', 'personal_trainer']],
                     [
                         'allow' => true,
                         'actions' => [
@@ -89,9 +92,21 @@ class UserController extends Controller
     {
         $model = new CreateUserForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            //User created successfully
-            //TODO: User created successfully confirmation
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->save()) {
+                if($user->user_type == 4) {
+                    //User created was a client
+                    $cliente = new Cliente();
+                    $cliente->idCliente = $user->id;
+                    $cliente->idPersonal_trainer = $model->idPersonal_trainer;
+                    if($cliente->save()) {
+                        return $this->redirect('../user/profile?id=' . $user->id);
+                    }
+                } else {
+                    //User created successfully
+                    return $this->redirect('../user/profile?id=' . $user->id);
+                }
+            }
         }
 
         return $this->render('new-user', [
@@ -99,12 +114,27 @@ class UserController extends Controller
         ]);
     }
 
+    public function actionGetPersonalTrainers()
+    {
+        if (isset($_POST['depdrop_parents'])) {
+            $user_types = $_POST['depdrop_parents'];
+            if ($user_types[0] == 4)
+            {
+                $personal_trainers = User::findAll(['user_type' => 3]);
+                echo Json::encode(['output' => $personal_trainers, 'selected'=> '']);
+
+                return;
+            }
+        }
+    }
+
     public function actionDelete($id)
     {
         $user = $this->findModel($id);
         $user->status = 0;
+        $user->save();
 
-        return $user->save() ? true : false;
+        return $this->actionIndex();
     }
 
     public function actionProfile($id)
@@ -172,11 +202,6 @@ class UserController extends Controller
                 'model' => $model,
             ]);
         }
-    }
-
-    public function actionDashboard()
-    {
-        return $this->render('dashboard');
     }
 
     public function actionLogin()

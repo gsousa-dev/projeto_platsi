@@ -23,6 +23,8 @@ class DadosAvaliacaoForm extends Model
             [['altura', 'massa_corporal', 'massa_gorda', 'massa_muscular', 'agua_no_organismo'], 'required'],
             [['altura', 'massa_corporal', 'massa_gorda', 'massa_muscular', 'agua_no_organismo'], 'trim'],
             [['altura', 'massa_corporal', 'massa_gorda', 'massa_muscular', 'agua_no_organismo'], 'number', 'numberPattern' => '/^\s*[-+]?[0-9]*[.,]?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
+            [['altura'], 'number', 'min' => 1.50],
+            [['massa_corporal', 'massa_gorda', 'massa_muscular', 'agua_no_organismo'], 'number', 'min' => 30],
         ];
     }
 

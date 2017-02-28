@@ -37,23 +37,16 @@ class Exercicio extends ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'idExercicio' => 'Id Exercicio',
-            'descricao' => 'Descrição',
-            'tipo_exercicio' => 'Tipo de Exercício',
-        ];
-    }
-
-    /**
      * @return \yii\db\ActiveQuery
      */
     public function getTipoExercicio()
     {
         return $this->hasOne(TipoExercicio::className(), ['id' => 'tipo_exercicio']);
+    }
+
+    public function getTipo()
+    {
+        return TipoExercicio::findOne($this->tipo_exercicio)->tipo;
     }
 
     /**

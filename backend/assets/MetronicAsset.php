@@ -24,9 +24,11 @@ class MetronicAsset extends AssetBundle
         'assets/layouts/layout5/css/layout.min.css',
         'assets/layouts/layout5/css/custom.min.css',
         'assets/pages/css/error.min.css',
+        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
+        'assets/pages/css/profile.min.css',
     ];
     public $js = [
-        //'assets/global/plugins/jquery.min.js', //TODO:
+        //'assets/global/plugins/jquery.min.js', //TODO: comment
         'assets/global/plugins/bootstrap/js/bootstrap.min.js',
         'assets/global/plugins/js.cookie.min.js',
         'assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js',
@@ -41,6 +43,10 @@ class MetronicAsset extends AssetBundle
         'assets/pages/scripts/login.min.js',
         'assets/layouts/layout5/scripts/layout.min.js',
         'assets/layouts/global/scripts/quick-sidebar.min.js',
+        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
+        'assets/global/plugins/jquery.sparkline.min.js',
+        'assets/pages/scripts/profile.min.js',
+        'assets/global/plugins/bootbox/bootbox.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

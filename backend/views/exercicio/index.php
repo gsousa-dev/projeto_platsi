@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => Html::activeDropDownList($searchModel, 'tipo_exercicio',
                     ArrayHelper::map(TipoExercicio::find()->asArray()->all(), 'id', 'tipo'), ['class' => 'form-control', 'prompt' => 'Selecione o tipo de exercício']),
             ],
-            ['class' => 'yii\grid\ActionColumn', 'template'=>'{update} {delete}'],
+            ['class' => 'yii\grid\ActionColumn', 'template'=> '{view} {update} {delete}'],
         ],
     ]); ?>
 </div>

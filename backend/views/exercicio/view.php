@@ -24,15 +24,22 @@ $this->params['breadcrumbs'][] = $this->title;
         </ol>
     </div>
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->idExercicio], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Editar', ['update', 'id' => $model->idExercicio], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Apagar', ['delete', 'id' => $model->idExercicio], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => 'Tem a certeza que quer eliminar este exercício?',
+                    'method' => 'post',
+                ],
+            ]);
+        ?>
     </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'idExercicio',
-            'descricao',
-            'tipo_exercicio',
+            ['attribute' => 'Descrição', 'value' => $model->descricao],
+            ['attribute' => 'Tipo de exercício', 'value' => $model->getTipo()]
         ],
     ]) ?>
 

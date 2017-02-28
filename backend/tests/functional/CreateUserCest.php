@@ -42,13 +42,8 @@ class CreateUserCest
         $I->see('Preencha os seguintes campos para criar um novo utilizador:');
 
         $I->submitForm($this->formId, []);
-        $I->seeValidationError('User Type cannot be blank.');
-        $I->seeValidationError('Name cannot be blank.');
-        $I->seeValidationError('Username cannot be blank.');
-        $I->seeValidationError('Password cannot be blank.');
-        $I->seeValidationError('Email cannot be blank.');
-        $I->seeValidationError('Birthday cannot be blank.');
-        $I->seeValidationError('Gender cannot be blank.');
+        $I->seeValidationError('Tem que selecionar um tipo de utilizador');
+        $I->seeValidationError('Tem que selecionar um género');
     }
 
     public function createUserWithInvalidUsername(FunctionalTester $I)

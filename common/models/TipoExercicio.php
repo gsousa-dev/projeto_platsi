@@ -34,17 +34,6 @@ class TipoExercicio extends ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'tipo' => 'Tipo de Exercício',
-        ];
-    }
-
-    /**
      * @return \yii\db\ActiveQuery
      */
     public function getExercicios()

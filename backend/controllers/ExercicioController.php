@@ -74,8 +74,8 @@ class ExercicioController extends Controller
     {
         $form = new ExercicioForm();
 
-        if ($form->load(Yii::$app->request->post()) && $form->save()) {
-            return $this->goBack();
+        if ($form->load(Yii::$app->request->post()) && $exercicio = $form->save()) {
+            return $this->redirect('../exercicio/view?id=' . $exercicio->idExercicio);
         } else {
             return $this->render('create', [
                 'exercicioForm' => $form,

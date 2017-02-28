@@ -1,22 +1,25 @@
 <?php
 namespace backend\controllers;
 
+use common\models\Pesagem;
 use Yii;
 use yii\filters\AccessControl;
+
 use yii\data\ActiveDataProvider;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 //-
 use common\models\User;
 use common\models\Cliente;
-use common\models\PlanoPessoal;
-use common\models\Exercicio;
 use common\models\Objetivo;
 use common\models\DadosAvaliacao;
+use common\models\PlanoPessoal;
 //-
-use backend\models\forms\PlanoDeTreinoForm;
 use backend\models\forms\ObjetivoForm;
 use backend\models\forms\DadosAvaliacaoForm;
+use backend\models\forms\PesagemForm;
+use backend\models\forms\PlanoPessoalForm;
 
 class ClienteController extends Controller
 {
@@ -137,9 +140,12 @@ class ClienteController extends Controller
             'query' => $dadosAvaliacao,
         ]);
 
-        $planos = $cliente->getPlanos()->orderBy('descricao');
-        $planosDataProvider = new ActiveDataProvider([
-            'query' => $planos,
+        $pesagens = $cliente->getPesagens()->orderBy('data_pesagem DESC');
+        $pesagensDataProvider = new ActiveDataProvider([
+            'query' => $pesagens,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
         ]);
 
 
@@ -150,8 +156,7 @@ class ClienteController extends Controller
             'objetivo_exists' => $objetivo->count(),
             'dadosAvaliacao' => $dadosAvaliacaoDataProvider,
             'dadosAvaliacao_exists' => $dadosAvaliacao->count(),
-            'planos' => $planosDataProvider,
-            'planos_cont' => $planos->count(),
+            'pesagens' => $pesagensDataProvider,
         ]);
     }
 
@@ -171,27 +176,6 @@ class ClienteController extends Controller
         ]);
     }
 
-    public function actionNovoPlano($idCliente)
-    {
-        $form = new PlanoDeTreinoForm();
-        $form->idCliente = $idCliente;
-
-        $exercicios = Exercicio::find();
-        $exerciciosDataProvider = new ActiveDataProvider([
-            'query' => $exercicios,
-            'pagination' => false,
-        ]);
-
-        if ($form->load(Yii::$app->request->post()) && $form->save()) {
-
-        }
-
-        return $this->render('planos/create', [
-            'exercicios' => $exerciciosDataProvider,
-            'planoPessoalModel' => $form,
-        ]);
-    }
-
     protected function findPlanoModel($idPlano)
     {
         if (($model = PlanoPessoal::findOne($idPlano)) !== null) {
@@ -201,9 +185,9 @@ class ClienteController extends Controller
         }
     }
 
-    public function actionApagarPlano($idPlano)
+    public function actionApagarPlano($id)
     {
-        $this->findPlanoModel($idPlano)->delete();
+        $this->findPlanoModel($id)->delete();
 
         return $this->goBack();
     }
@@ -290,6 +274,52 @@ class ClienteController extends Controller
     public function actionApagarDadosAvaliacao($idCliente)
     {
         $this->findDadosAvaliacaoModel($idCliente)->delete();
+
+        return $this->actionFicha($idCliente);
+    }
+
+    public function actionNovoPlano($idCliente)
+    {
+        $model = new PlanoPessoalForm($idCliente);
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($plano_pessoal = $model->savePlanoPessoal()) {
+                //O plano é guardado na tabela `plano_pessoal` e
+                //o objeto instanciado é devolvido é guardado na variável $plano_pessoal
+                return $this->redirect('/exercicios-plano/create?idPlano=' . $plano_pessoal->idPlano);
+            }
+        }
+
+        return $this->render('planos/create', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionRegistarPesagem($idCliente)
+    {
+        $model = new PesagemForm($idCliente);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->actionFicha($idCliente);
+        }
+
+        return $this->render('pesagens/create', [
+            'model' => $model
+        ]);
+    }
+
+    protected function findPesagemModel($id)
+    {
+        if (($model = Pesagem::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException();
+        }
+    }
+
+    public function actionApagarPesagem($id, $idCliente)
+    {
+        $this->findPesagemModel($id)->delete();
 
         return $this->actionFicha($idCliente);
     }

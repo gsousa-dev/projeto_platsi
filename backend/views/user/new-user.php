@@ -1,8 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
+//-
+use yii\widgets\ActiveForm;
+use kartik\depdrop\DepDrop;
 //-
 use common\models\UserType;
 
@@ -29,18 +31,34 @@ if (Yii::$app->user->can('admin')) {
 </div>
 <div class="create-user-form">
     <p>Preencha os seguintes campos para criar um novo utilizador:</p>
+    <p style="color: red">(*) campos de preenchimento obrigatório</p>
 
     <?php $form = ActiveForm::begin(['options' => ['id' => 'create-user-form', 'role' => 'form']]); ?>
 
-    <?= $form->field($model, 'user_type')->dropDownList(Yii::$app->view->params['user_types'], ['prompt' => 'Selecione o tipo de utilizador'])->label(false) ?>
+    <?= $form->field($model, 'user_type')->dropDownList(Yii::$app->view->params['user_types'], [
+            'id' => 'user-types',
+            'prompt' => 'Selecione o tipo de utilizador',
+            'onchange' => 'myFunction()',
+        ])->label('Tipo de Utilizador <span style="color:red">*</span>')
+    ?>
 
-    <?= $form->field($model, 'name')->textInput(['placeholder' => 'Nome completo'])->label(false) ?>
+    <?= $form->field($model, 'idPersonal_trainer')->widget(DepDrop::classname(), [
+            'pluginOptions'=> [
+                'depends'=> ['user-types'],
+                'loading' => false,
+                'placeholder'=> 'Selecione um personal trainer para este cliente',
+                'url'=> ['/user/get-personal-trainers']
+            ]
+        ])->label(false)
+    ?>
 
-    <?= $form->field($model, 'username')->textInput(['placeholder' => 'Username'])->label(false) ?>
+    <?= $form->field($model, 'name')->textInput()->label('Nome <span style="color:red">*</span>') ?>
 
-    <?= $form->field($model, 'password')->passwordInput(['placeholder' => '********'])->label(false) ?>
+    <?= $form->field($model, 'username')->textInput()->label('Username <span style="color:red">*</span>') ?>
 
-    <?= $form->field($model, 'email')->textInput(['placeholder' => 'example@mail.com'])->label(false) ?>
+    <?= $form->field($model, 'password')->passwordInput(['placeholder' => '********'])->label('Password <span style="color:red">*</span>') ?>
+
+    <?= $form->field($model, 'email')->textInput(['placeholder' => 'example@mail.com'])->label('Email <span style="color:red">*</span>') ?>
 
     <?= $form->field($model, 'birthday')->widget(dosamigos\datepicker\DatePicker::className(), [
             'inline' => false,
@@ -48,10 +66,13 @@ if (Yii::$app->user->can('admin')) {
                 'autoclose' => true,
                 'format' => 'yyyy-mm-dd',
             ],
-        ])->label('Data de Nascimento')
+        ])->label('Data de Nascimento <span style="color:red">*</span>')
     ?>
 
-    <?= $form->field($model, 'gender')->dropDownList(['F' => 'Feminino', 'M' => 'Masculino'], ['prompt' => 'Selecione o género do utilizador'])->label(false) ?>
+    <?= $form->field($model, 'gender')->dropDownList(['F' => 'Feminino', 'M' => 'Masculino'], [
+            'prompt' => 'Selecione o género do utilizador'
+        ])->label('Género <span style="color:red">*</span>')
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton('Submeter', ['class' => 'btn btn-primary']) ?>

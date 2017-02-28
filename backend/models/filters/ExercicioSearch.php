@@ -43,6 +43,7 @@ class ExercicioSearch extends Exercicio
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            //'pagination' => false,
         ]);
 
         $this->load($params);

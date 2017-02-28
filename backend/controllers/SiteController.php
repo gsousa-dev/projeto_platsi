@@ -32,13 +32,13 @@ class SiteController extends Controller
     public function actionIndex()
     {
         if (Yii::$app->user->can('admin')) {
-            return $this->redirect('/user/dashboard');
+            return $this->redirect('admin');
         } elseif (Yii::$app->user->can('secretaria')) {
-            return $this->redirect('/user');
+            return $this->redirect('user');
         } elseif (Yii::$app->user->can('personal_trainer')) {
-            return $this->redirect('/cliente');
+            return $this->redirect('cliente');
         } else {
-            return $this->redirect('/user/login');
+            return $this->redirect('user/login');
         }
     }
 }

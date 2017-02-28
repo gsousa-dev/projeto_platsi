@@ -23,13 +23,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            //'idCliente',
-            'cliente.name',
-            'cliente.username',
-            'cliente.email',
-            'cliente.birthday',
-            'cliente.gender',
-            //'idPersonal_trainer',
+            ['attribute' => 'Nome', 'value' => 'cliente.name'],
+            ['attribute' => 'Username', 'value' => 'cliente.username'],
+            ['attribute' => 'Email', 'value' => 'cliente.email'],
+            ['attribute' => 'Data de Nascimento', 'value' => 'cliente.birthday'],
+            ['attribute' => 'Género', 'value' => 'cliente.gender'],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
@@ -43,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
-                        return Html::a('Ver Planos', '/cliente/planos?idCliente='.$key, []);
+                        return Html::a('Ver Planos de Treino', '/cliente/planos?idCliente='.$key, []);
                     }
                 ],
                 'template' => '{view}'

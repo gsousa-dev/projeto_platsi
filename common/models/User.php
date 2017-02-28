@@ -84,10 +84,6 @@ class User extends ActiveRecord implements IdentityInterface
             } elseif ($this->user_type == 3) {
                 $role = $auth->getRole('personal_trainer');
                 $auth->assign($role, $this->getId());
-            } elseif ($this->user_type == 4) {
-                $cliente = new Cliente();
-                $cliente->idCliente = $this->id;
-                $cliente->save();
             }
         }
     }
@@ -110,7 +106,11 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getClientes()
     {
-        return $this->hasMany(Cliente::className(), ['idPersonal_trainer' => 'id']);
+        $clientes = Cliente::find();
+        $clientes->join('INNER JOIN', 'user', 'cliente.idCliente = user.id');
+        $clientes->where(['idPersonal_trainer' => $this->id])->andWhere(['status' => 10]);
+
+        return $clientes;
     }
 
     /**

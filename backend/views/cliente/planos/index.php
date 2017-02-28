@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                         'delete' => function ($url, $model, $key) {
-                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', '/cliente/apagar-plano-de-treino?idPlano='.$key, []);
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', '/cliente/apagar-plano?id='.$key, []);
                         }
                 ],
                 'template' => '{update} {delete}'],

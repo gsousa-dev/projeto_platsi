@@ -38,28 +38,6 @@ class ExerciciosPlano extends ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'idExercicio_plano' => 'Id Exercício Plano',
-            'idPlano' => 'Id Plano',
-            'idExercicio' => 'Id Exercício',
-        ];
-    }
-
-    public function beforeDelete()
-    {
-        if (parent::beforeDelete()) {
-            ExercicioAerobicoPlano::deleteAll(['idExercicio' => $this->idExercicio_plano]);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * @return \yii\db\ActiveQuery
      */
     public function getExercicioAerobicoPlano()

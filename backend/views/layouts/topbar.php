@@ -24,7 +24,7 @@ if ($unreadMessages > 0) {
                 'items' => [
                         [
                             'label' => '<i class="icon-user"></i> Meu Perfil',
-                            'url' => ['/user/perfil?id='.Yii::$app->user->identity->getId()],
+                            'url' => ['/user/profile?id='.Yii::$app->user->identity->getId()],
                         ],
                         [
                             'label' => '<i class="icon-envelope-open"></i> Caixa de Entrada <span class="badge badge-danger">'.Yii::$app->view->params['unread_messages'].'</span>',

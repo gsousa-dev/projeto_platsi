@@ -14,12 +14,23 @@ class ExercicioForm extends Model
     /**
      * @inheritdoc
      */
+    public function attributeLabels()
+    {
+        return [
+            'descricao' => 'Descrição',
+            'tipo_exercicio' => 'Tipo de Exercício',
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
             [['descricao', 'tipo_exercicio'], 'required'],
             [['descricao'], 'trim'],
-            //[['descricao'], 'unique'],
+            [['descricao'], 'unique', 'targetClass' => '\common\models\Exercicio', 'message' => 'Este exercício já existe.'],
             [['descricao'], 'string', 'max' => 45],
             [['tipo_exercicio'], 'integer'],
             [['tipo_exercicio'], 'exist', 'skipOnError' => true, 'targetClass' => TipoExercicio::className(), 'targetAttribute' => ['tipo_exercicio' => 'id']],

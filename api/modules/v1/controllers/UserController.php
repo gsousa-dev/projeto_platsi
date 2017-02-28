@@ -34,51 +34,6 @@ final class UserController extends ActiveController
         return $behaviors;
     }
 
-    public function actions()
-    {
-        $actions = parent::actions();
-        unset($actions['create']);
-
-        return $actions;
-    }
-
-    public function actionCreate()
-    {
-        $request = Yii::$app->request;
-
-        $user_type = $request->post('user_type');
-        $name = $request->post('name');
-        $username = $request->post('username');
-        $email = $request->post('email');
-        $password = $request->post('password');
-        $birthday = $request->post('birthday');
-        $gender = $request->post('gender');
-        $profile_picture = $request->post('profile_picture');
-
-        if (empty($user_type) || empty($name) || empty($username) || empty($email) || empty($password) || empty($gender)) {
-            throw new UnauthorizedHttpException('Missing credentials.');
-        }
-
-        $user = new User();
-        $user->user_type = $user_type;
-        $user->name = $name;
-        $user->username = $username;
-        $user->email = $email;
-        $user->generateAuthKey();
-        $user->setPassword($password);
-        $user->birthday = $birthday;
-        $user->gender = $gender;
-        if (!empty($profile_picture)) {
-            $user->profile_picture = $profile_picture;
-        }
-
-        if (!$user->save()) {
-            throw new ServerErrorHttpException('Server error. Unable to create user.');
-        }
-
-        return $user;
-    }
-
     public function actionChangePassword()
     {
         $request = Yii::$app->request;

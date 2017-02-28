@@ -11,8 +11,7 @@ use yii\grid\GridView;
 /* @var $objetivo_exists */
 /* @var $dadosAvaliacao yii\data\ActiveDataProvider */
 /* @var $dadosAvaliacao_exists */
-/* @var $planos yii\data\ActiveDataProvider */
-/* @var $planos_cont */
+/* @var $pesagens yii\data\ActiveDataProvider */
 
 $this->title = 'Ficha do Cliente';
 $this->params['breadcrumbs'][] = $this->title;
@@ -117,30 +116,25 @@ $this->params['breadcrumbs'][] = $this->title;
             ?>
         </div>
     </div>
-    <div class="planos-de-treino">
-        <h2>Planos de Treino</h2>
+    <div class="pesagens">
+        <h2>Pesagens</h2>
         <?= GridView::widget([
-            'dataProvider' => $planos,
+            'dataProvider' => $pesagens,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-                'descricao',
+                'data_pesagem',
+                ['attribute' => 'Peso (Kg)', 'value' => 'peso'],
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'buttons' => [
-                        'view' => function ($url, $model, $key) {
-                            return Html::a('Ver Lista de Exercícios', '/exercicios-plano/plano-de-treino?idPlano='.$key, []);
-                        }
+                        'delete' => function ($url, $model, $key) {
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', '/cliente/apagar-pesagem?id='.$key.'&idCliente='.$model->idCliente, []);
+                        },
                     ],
-                    'template' => '{view}'
+                    'template' => '{delete}'
                 ],
             ],
         ]); ?>
-        <div class="form-group">
-            <?php
-            if($planos_cont < 3) {
-                echo Html::a('Criar Plano', '/cliente/novo-plano?idCliente='.$idCliente, ['class' => 'btn btn-primary']);
-            }
-            ?>
-        </div>
+        <?= Html::a('Registar Pesagem', '/cliente/registar-pesagem?idCliente='.$idCliente, ['class' => 'btn btn-primary']); ?>
     </div>
 </div>

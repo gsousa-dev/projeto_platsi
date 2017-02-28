@@ -28,25 +28,31 @@ $this->params['breadcrumbs'][] = $this->title;
             <li class="active">Exercícios do Plano</li>
         </ol>
     </div>
-    <p>
-        <?= Html::a('Adicionar exercício', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'formatter' => ['class' => 'yii\i18n\Formatter','nullDisplay' => ''],
+        'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => ''],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             //'idExercicio_plano',
             //'idPlano',
             'exercicio.descricao',
-            [
-                'attribute' => 'Duração (min)',
-                'value' => 'exercicioAerobicoPlano.duracao',
-            ],
-            'exercicioAnaerobicoPlano.series',
-            'exercicioAnaerobicoPlano.repeticoes',
-            //'idExercicio',
-            ['class' => 'yii\grid\ActionColumn'],
+//            [
+//                'attribute' => 'Duração (min)',
+//                'value' => 'exercicioAerobicoPlano.duracao',
+//            ],
+//            'exercicioAnaerobicoPlano.series',
+//            'exercicioAnaerobicoPlano.repeticoes',
+//
+//            [
+//                'class' => 'yii\grid\ActionColumn',
+//                'buttons' => [
+//                    'update' => function ($url, $model, $key) {
+//                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', ['update', 'id' => $model->idExercicio_plano], []);
+//                    },
+//                ],
+//                'template' => '{update}',
+//            ]
         ],
     ]); ?>
 </div>
